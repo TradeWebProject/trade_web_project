@@ -5,7 +5,8 @@ import Login from "./pages/signIn/LoginPage";
 import Signup from "./components/userAccount/Signup";
 import DetailPage from "./pages/detail/DetailedPage";
 import { Route, Routes } from "react-router-dom";
-import AppLayout from "./components/common/AppLayout";
+import AppLayout from './components/common/AppLayout';
+import ProductWritePage from './pages/productWritePage/ProductWritePage';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my-page" element={<MyPage />} />
+        <Route path="/write" element={<ProductWritePage />} />
       </Routes>
     </AppLayout>
   );
