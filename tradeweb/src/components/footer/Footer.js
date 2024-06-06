@@ -25,7 +25,7 @@ const Footer = () => {
           </Menubox>
         </FooterMenu>
         <CustomerService>
-          <ServiceTitle>고객센터 1588-1588</ServiceTitle>
+          <ServiceTitle>고객센터 1588 - 1588</ServiceTitle>
           <ServiceTime>
             운영시간 평일 10:00 - 18:00 (토 · 일, 공휴일 휴무)
           </ServiceTime>
