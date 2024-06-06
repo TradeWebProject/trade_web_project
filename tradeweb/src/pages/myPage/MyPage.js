@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-// import styled from "styled-components";
-// import { styled } from '@mui/system';
 import styled from '@emotion/styled';
-
 import {Box, Tab, Tabs, Button  } from "@mui/material";
+
 const MyPage = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
 
@@ -14,9 +12,6 @@ const MyPage = () => {
 
     return (
         <ContentLayout>
-            <NavWrapper>
-                <h1>Navbar</h1>   
-            </NavWrapper>
             <Wrapper>
                 <Box sx={{display: 'flex', alignItems: 'flex-start', width: 1230}}>
                     <Tabs value={currentTabIndex} onChange={handleTabChange} variant="fullWidth">
@@ -98,13 +93,6 @@ const ContentLayout = styled.div`
     flex-direction: column;
 `;
 
-const NavWrapper = styled.div`
-    width: 1230px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-`;
-
 const Wrapper = styled.div`
     width: 1230px;
     height: fit-content;
@@ -112,7 +100,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     border: 1px solid red;
-    margin-top: 40px;
+    margin-top: 150px;
 `;
 
 const BoxWrapper = styled.div`
@@ -121,14 +109,6 @@ const BoxWrapper = styled.div`
     flex-direction: column;
     align-item: center;
 `;
-
-// const ButtonWrapper = styled.div`
-//     width: 1230px;
-//     margin-right: 10px
-//     display: flex;
-//     justify-content: flex-end;
-//     border: 1px solid green;
-// `;
 
 const ContentWrapper = styled.div`
     width: 1230px;
