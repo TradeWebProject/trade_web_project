@@ -1,34 +1,23 @@
 import React from "react";
 import styled from "styled-components";
-import { ThemeProvider } from "styled-components";
-import { theme } from "../../styles/theme"; // 외부 theme 파일 불러오기
+import { theme } from "../../styles/theme";
 
 const Login = () => {
   const moveToHome = () => {};
   const moveToSignup = () => {};
 
   return (
-    <ThemeProvider theme={theme}>
-      <Wrapper>
-        <Title onClick={moveToHome}>super24</Title>
-        <Form>
-          <InputWrapper>
-            <StyledInput
-              type="text"
-              placeholder="아이디(이메일)"
-              name="email"
-            />
-            <StyledInput
-              type="password"
-              placeholder="비밀번호"
-              name="password"
-            />
-          </InputWrapper>
-          <SubmitButton type="submit">Login</SubmitButton>
-          <SignupButton onClick={moveToSignup}>Sign up</SignupButton>
-        </Form>
-      </Wrapper>
-    </ThemeProvider>
+    <Wrapper>
+      <Title onClick={moveToHome}>super24</Title>
+      <Form>
+        <InputWrapper>
+          <StyledInput type="text" placeholder="아이디(이메일)" name="email" />
+          <StyledInput type="password" placeholder="비밀번호" name="password" />
+        </InputWrapper>
+        <SubmitButton type="submit">Login</SubmitButton>
+        <SignupButton onClick={moveToSignup}>Sign up</SignupButton>
+      </Form>
+    </Wrapper>
   );
 };
 
@@ -48,7 +37,7 @@ const Title = styled.h2`
   font-size: 36px;
   height: 44px;
   cursor: pointer;
-  color: ${({ theme }) => theme.mainColor}; /* 테마에서 메인 컬러 가져오기 */
+  color: ${theme.mainColor};
 `;
 
 const Form = styled.form`
@@ -73,7 +62,7 @@ const StyledInput = styled.input`
   font-size: 18px;
   margin-bottom: 15px;
   padding: 0 15px;
-  border: 1px solid ${({ theme }) => theme.mainColor}; /* 테마에서 메인 컬러 가져오기 */
+  border: 1px solid ${theme.mainColor};
   border-radius: 10px;
   box-sizing: border-box;
 `;
@@ -85,9 +74,8 @@ const SubmitButton = styled.button`
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  background-color: ${({ theme }) =>
-    theme.mainColor}; /* 테마에서 메인 컬러 가져오기 */
-  border: 1px solid ${({ theme }) => theme.mainColor}; /* 테마에서 메인 컬러 가져오기 */
+  background-color: ${theme.mainColor};
+  border: 1px solid ${theme.mainColor};
   border-radius: 10px;
   margin-bottom: 15px;
   color: white;
@@ -100,9 +88,8 @@ const SignupButton = styled.button`
   font-weight: 700;
   font-size: 18px;
   cursor: pointer;
-  background-color: ${({ theme }) =>
-    theme.subColor}; /* 테마에서 서브 컬러 가져오기 */
-  border: 1px solid ${({ theme }) => theme.subColor}; /* 테마에서 서브 컬러 가져오기 */
+  background-color: ${theme.subColor};
+  border: 1px solid ${theme.subColor};
   color: white;
   border-radius: 10px;
 `;
