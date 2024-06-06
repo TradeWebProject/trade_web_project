@@ -63,19 +63,19 @@ const ProductWritePage = () => {
                     <div>
                         <div>
                             <div>가격</div>
-                            <input type="number" value="56000"/>
+                            <Input type="number" value="56000"/>
                         </div>
                         <div>
                             <div>재고</div>
-                            <input type="number" value="10"/>
+                            <Input type="number" value="10"/>
                         </div>
                         <div>
                             <div>판매 시작 날짜</div>
-                            <input type="date" value="2024-06-07"/>
+                            <Input type="date" value="2024-06-07"/>
                         </div>
                         <div>
                             <div>판매 종료 날짜</div>
-                            <input type="date" value="2024-06-30"/>
+                            <Input type="date" value="2024-06-30"/>
                         </div>
                     </div>
                     <div>
@@ -213,6 +213,7 @@ const ProductNameElement = styled.div`
 
 const ProductNameInput = styled.input`
     width: 1200px;
+    height: 36px;
 `;
 
 const ProductInfoWrapper = styled.div`
@@ -228,6 +229,7 @@ const ProductInfoWrapper = styled.div`
 
 const FileUploadButtonWrapper = styled.div`
     width: 200px;
+    cursor: pointer;
 `;
 
 const FileUploadButton = styled.button`
@@ -259,4 +261,9 @@ const TextWrapper = styled.div`
 
 const TextCol = styled.div`
     margin-top: 100px;
+`;
+
+const Input  = styled.input`
+    height: 36px;
+
 `;
