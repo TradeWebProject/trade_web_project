@@ -1,15 +1,17 @@
 //components
 import { useLocation } from "react-router-dom";
-import React from 'react';
+import React from "react";
+import Nav from "../nav/Nav";
 
 const AppLayout = ({ children }) => {
-    const location = useLocation();
+  const location = useLocation();
 
-    return (
-        <>
-            {children}
-      </>
-    );
+  return (
+    <>
+      {<Nav />}
+      {children}
+    </>
+  );
 };
 
 export default AppLayout;
