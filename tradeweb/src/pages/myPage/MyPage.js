@@ -15,7 +15,7 @@ const MyPage = () => {
     return (
         <ContentLayout>
             <NavWrapper>
-                <h1>Navbar</h1>    
+                <h1>Navbar</h1>   
             </NavWrapper>
             <Wrapper>
                 <Box sx={{display: 'flex', alignItems: 'flex-start', width: 1230}}>
@@ -27,9 +27,24 @@ const MyPage = () => {
                 </Box>
                 {currentTabIndex === 0 && (
                     <Box sx={{ p: 3 }}>
-                        <div>A</div>
-                        <div>A</div>
-                        <div>A</div>
+                        <Container>
+                            <InfoWrapper>
+                                <div>이메일</div>
+                                <input type="email" value="tkgksw@naver.com" disabled/>
+                            </InfoWrapper>
+                            <InfoWrapper>
+                                <div>주소</div>
+                                <input type="text" value="경기도 의왕시 내손로" disabled/>
+                            </InfoWrapper>
+                            <InfoWrapper>
+                                <div>전화번호</div>
+                                <input type="tel" value="010-5518-4698" disabled/>
+                            </InfoWrapper>
+                            <InfoWrapper>
+                                <div>프로필 이미지</div>
+                                <img src="https://placehold.jp/50x50.png"/>
+                            </InfoWrapper>
+                        </Container>   
                     </Box>
                 )}
                 {currentTabIndex === 1 && (
@@ -42,20 +57,27 @@ const MyPage = () => {
                 {currentTabIndex === 2 && (
                     <Box sx={{ p: 3 }}>
                         <BoxWrapper>
-                            <ButtonWrapper>
-                                <Button  sx={{ mr: 2 }} variant="contained" size="medium">
+                          
+                                <Button  sx={{ mr: 2 }} variant="contained" size="small">
                                     상품 등록
                                 </Button>
-                            </ButtonWrapper>
+                            
                             <ContentWrapper>
                                 <div>
                                     <Tab style={{width: '160px'}} label='상품 관리'/>
+                                    <div>
+                                        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                    </div>
                                     <Tab style={{width: '160px'}} label='상품판매 현황'/>
+                                    <div>
+                                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                    </div>
                                     <Tab style={{width: '160px'}} label='리뷰 관리'/>
-                                </div>
-                                <div>
+                                    <div>
                                     It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
                                 </div>
+                                </div>
+                               
                             </ContentWrapper>
                         </BoxWrapper>
                     </Box>
@@ -100,16 +122,30 @@ const BoxWrapper = styled.div`
     align-item: center;
 `;
 
-const ButtonWrapper = styled.div`
-    width: 1230px;
-    margin-right: 10px;
-    display: flex;
-    justify-content: flex-end;
-    border: 1px solid green;
-`;
+// const ButtonWrapper = styled.div`
+//     width: 1230px;
+//     margin-right: 10px
+//     display: flex;
+//     justify-content: flex-end;
+//     border: 1px solid green;
+// `;
 
 const ContentWrapper = styled.div`
     width: 1230px;
     display: flex;
     justify-content: space-around;
+`;
+
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid red;
+`;
+
+const InfoWrapper = styled.div`
+    width: 644px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
 `;
