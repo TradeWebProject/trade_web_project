@@ -2,6 +2,7 @@
 import { useLocation } from "react-router-dom";
 import React from "react";
 import Nav from "../nav/Nav";
+import Chat from "../chatlist/ChatControl";
 import Footer from "../footer/Footer";
 import styled from "styled-components";
 
@@ -12,6 +13,7 @@ const AppLayout = ({ children }) => {
     <Container>
       {<Nav />}
       {children}
+      {<Chat />}
       {<Footer />}
     </Container>
   );

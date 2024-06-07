@@ -1,4 +1,6 @@
 import logo from "./logo.svg";
+import { theme } from "./styles/theme";
+import { ThemeProvider } from "styled-components";
 import "./App.css";
 import MyPage from "./pages/myPage/MyPage";
 import Login from "./pages/signIn/LoginPage";
@@ -14,7 +16,6 @@ function App() {
     <AppLayout>
       <Routes>
         <Route path="/detail" element={<DetailPage />} />
-
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my-page" element={<MyPage />} />
