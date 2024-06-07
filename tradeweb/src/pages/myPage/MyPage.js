@@ -2,9 +2,41 @@ import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import {Box, Tab, Tabs, Button  } from "@mui/material";
 import profile from "../../assets/profile.svg";
+import plus from "../../assets/plus.svg";
 
 const MyPage = () => {
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
+
+    const data = [
+        {
+          files: plus,
+          title: "나이키 신발",
+          price: 240000,
+          description: "나이키 운동화 사이즈 300",
+          productId: 1,
+        },
+        {
+          files: plus,
+          title: "아디다스 신발",
+          price: 340000,
+          description: "아디다스 삼선 슬리퍼 사이즈260",
+          productId: 2,
+        },
+        {
+          files: plus,
+          title: "닥터마틴 로퍼",
+          price: 270000,
+          description: "닥터마틴 로퍼 사이즈 270",
+          productId: 3,
+        },
+        {
+          files: plus,
+          title: "흰색 셔츠",
+          price: 20000,
+          description: "미개봉 흰색 셔츠",
+          productId: 4,
+        },
+      ];
 
     const handleTabChange = (e, tabIndex) => {
         console.log(tabIndex);
@@ -109,8 +141,9 @@ const MyPage = () => {
                                     <td>결제완료</td>
                                 </tr>
                              </table>
-
-                              <Title>내가 작성한 리뷰</Title>
+                        </Container>
+                        <Container>
+                        <Title>내가 작성한 리뷰</Title>
                               <table>
                                 <tr>
                                     <th>리뷰 작성일</th>
@@ -190,9 +223,25 @@ const MyPage = () => {
                                     <td>2024.05.06</td>
                                 </tr>
                              </table>
-                              <Title>찜목록</Title>
-                              
+                        </Container>
+                        <Container>
+                            <Title>찜목록</Title>
+                            <SearchResultList>
+                                {data.map((product) => (
+                                    <SearchItem key={product.productId}>
+                                        <ItemImageBox>
+                                            <ItemImage src={product.files} alt={product.title} />
+                                        </ItemImageBox>
 
+                                        <ItemTitle>{product.title}</ItemTitle>
+                                        <ItemInfo>{product.description}</ItemInfo>
+                                        <ItemPrice>
+                                            {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                        </ItemPrice>
+                                        <Icon>❤️</Icon>
+                                    </SearchItem>
+                                ))}
+                            </SearchResultList>
                         </Container>
                         
                     </Box>
@@ -324,34 +373,41 @@ const InfoText  = styled.div`
 
 `;
 
-
-const Header = styled.div`
-    width: 1000px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid red; 
-
+const SearchResultList = styled.div`
+    display: grid;
+    row-gap: 40px;
+    column-gap: 20px;
+    grid-template-columns: 150px 150px 150px 150px;
 `;
 
-
-const TableContent = styled.div`
-    width: 1000px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid green; 
-
+const SearchItem = styled.div`
+    width: 120px;
 `;
 
+const ItemImageBox = styled.div`
+    border-radius: 10px;
+    background-color: rgb(244, 244, 244);
+`;
+const ItemImage = styled.img`
+    width: 120px;
+`;
 
-const TableContentWrapper = styled.div`
-    width: 1000px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid green; 
+const ItemTitle = styled.div`
+    width: 120px;
+    font-weight: bold;
+`;
 
+const ItemInfo = styled.div`
+    width: 120px;
+    height: 24px;
+    font-size: 14px;
+    margin-bottom: 20px;
+`;
+
+const ItemPrice = styled.div`
+    font-weight: bold;
+`;
+const Icon = styled.div`
+    /* 아이콘 스타일 */
+    margin-right: 5px;
 `;
