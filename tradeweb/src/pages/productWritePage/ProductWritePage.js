@@ -50,24 +50,24 @@ const ProductWritePage = () => {
                 <SubContentWrapper>
                     <ProductNameWrapper>
                         <ProductNameElement>상품명:</ProductNameElement>
-                        <ProductNameInput type="text" value="아디다스 반팔티"/>
+                        <ProductNameInput type="text"  defaultValue="아디다스 반팔티"/>
                     </ProductNameWrapper>
                     <ProductNameWrapper>
                         <ProductNameElement>가격:</ProductNameElement>
-                        <ProductNameInput type="number" value="56000"/>
+                        <ProductNameInput type="text" defaultValue="56000"/>
                     </ProductNameWrapper>
                     <ProductNameWrapper>
                         <ProductNameElement>재고:</ProductNameElement>
-                        <ProductNameInput type="number" value="10"/>
+                        <ProductNameInput type="text" defaultValue="10"/>
                     </ProductNameWrapper>
                     <ProductSellDateWrapper>
                         <SellStartDateWrapper>
                                 <DateStartText>판매 시작 날짜</DateStartText>
-                                <StartDateInput type="date" value="2024-06-07"/>
+                                <StartDateInput type="date" defaultValue="2024-06-07"/>
                         </SellStartDateWrapper>
                         <SellEndDateWrapper>
                                 <DateStartText>판매 종료 날짜</DateStartText>
-                                <EndDateInput type="date" value="2024-06-30"/>
+                                <EndDateInput type="date" defaultValue="2024-06-30"/>
                         </SellEndDateWrapper>
                     </ProductSellDateWrapper>
                     <ProductSellDateWrapper>
@@ -110,13 +110,6 @@ const ProductWritePage = () => {
                 <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px" }}
                               modules={modules}  
                               placeholder="상품에 대한 상세설명을 작성해주세요!"  />
-                {/* <div>
-                    <div>썸네일 이미지</div>
-                    <img src="https://placehold.jp/200x200.png"/>
-                    <FileUploadButtonWrapper>
-                        <FileUploadButton>파일업로드</FileUploadButton>
-                    </FileUploadButtonWrapper>
-                </div>      */}
                 <ImageWrapper>
                     <SubTitle><h3>이미지</h3></SubTitle>
                     <MainImage>
