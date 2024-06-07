@@ -283,7 +283,6 @@ const MyPage = () => {
                                                     <ItemPrice>
                                                         {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                                                     </ItemPrice>
-                                                    <Icon>❤️</Icon>
                                                 </SearchItem>
                                             ))}
                                         </SearchResultList>
