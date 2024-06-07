@@ -5,18 +5,21 @@ import Login from "./pages/signIn/LoginPage";
 import Signup from "./components/userAccount/Signup";
 import DetailPage from "./pages/detail/DetailedPage";
 import { Route, Routes } from "react-router-dom";
-import AppLayout from './components/common/AppLayout';
-import ProductWritePage from './pages/productWritePage/ProductWritePage';
+import AppLayout from "./components/common/AppLayout";
+import ProductWritePage from "./pages/productWritePage/ProductWritePage";
+import SearchResultPage from "./pages/search/SearchResultPage";
 
 function App() {
   return (
     <AppLayout>
       <Routes>
         <Route path="/detail" element={<DetailPage />} />
+
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/write" element={<ProductWritePage />} />
+        <Route path="/search" element={<SearchResultPage />} />
       </Routes>
     </AppLayout>
   );
