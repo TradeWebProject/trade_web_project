@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from '@emotion/styled';
 import {Box, Tab, Tabs, Button  } from "@mui/material";
+
 import profile from "../../assets/profile.svg";
 import plus from "../../assets/plus.svg";
 
 const MyPage = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
+    const [navigateUrl, setNavigateUrl] = useState("");
 
     const data = [
         {
@@ -38,10 +43,19 @@ const MyPage = () => {
         },
       ];
 
+
+    
+
     const handleTabChange = (e, tabIndex) => {
         console.log(tabIndex);
         setCurrentTabIndex(tabIndex);
     };
+
+    const productAddPageButtonClick = () => {
+        setNavigateUrl("/write");
+        navigate(navigateUrl);
+
+    }
 
     return (
         <ContentLayout>
@@ -249,25 +263,41 @@ const MyPage = () => {
                 {currentTabIndex === 2 && (
                     <Box sx={{ p: 3 }}>
                         <BoxWrapper>
-                          
-                                <Button  sx={{ mr: 2 }} variant="contained" size="small">
-                                    상품 등록
-                                </Button>
-                            
+                            <Button style={{width: "100px",}} onClick={productAddPageButtonClick}  sx={{ mr: 2, color: "white", backgroundColor: "black", }} variant="contained" size="small">
+                                상품 등록
+                            </Button>
                             <ContentWrapper>
                                 <div>
-                                    <Tab style={{width: '160px'}} label='상품 관리'/>
+                                    {/* <Tab style={{width: '160px'}} label='등록된 상품 목록'/> */}
+                                    <Container>
+                                    <Title>등록된 상품 목록</Title>
+                                        <SearchResultList>
+                                            {data.map((product) => (
+                                                <SearchItem key={product.productId}>
+                                                    <ItemImageBox>
+                                                        <ItemImage src={product.files} alt={product.title} />
+                                                    </ItemImageBox>
+
+                                                    <ItemTitle>{product.title}</ItemTitle>
+                                                    <ItemInfo>{product.description}</ItemInfo>
+                                                    <ItemPrice>
+                                                        {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                                    </ItemPrice>
+                                                    <Icon>❤️</Icon>
+                                                </SearchItem>
+                                            ))}
+                                        </SearchResultList>
+                                    </Container>
+                                    {/* <Tab style={{width: '160px'}} label='상품판매 현황'/> */}
+                                    <Title>상품판매 현황</Title>
                                     <div>
-                                        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                       차트라이브러리 
                                     </div>
-                                    <Tab style={{width: '160px'}} label='상품판매 현황'/>
+                                    {/* <Tab style={{width: '160px'}} label='리뷰 관리'/> */}
+                                    <Title>리뷰 관리</Title>
                                     <div>
-                                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                        댓글 UI
                                     </div>
-                                    <Tab style={{width: '160px'}} label='리뷰 관리'/>
-                                    <div>
-                                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                                </div>
                                 </div>
                                
                             </ContentWrapper>
@@ -304,7 +334,7 @@ const BoxWrapper = styled.div`
     width: 1230px;
     display: flex;
     flex-direction: column;
-    align-item: center;
+    align-items: center;
 `;
 
 const ContentWrapper = styled.div`
