@@ -97,146 +97,168 @@ const MyPage = () => {
                     <Box sx={{ p: 3 }}>
                         <Container>
                              <Title>결제내역</Title>
-                             <table>
+                             <Table>
                                 <tr>
-                                    <th>결제일</th>
-                                    <th>상품명</th>
-                                    <th>결제금액</th>
-                                    <th>결제번호</th>
-                                    <th>결제상태</th>
+                                    <TableTh>결제일</TableTh>
+                                    <TableTh>상품명</TableTh>
+                                    <TableTh>결제금액</TableTh>
+                                    <TableTh>결제번호</TableTh>
+                                    <TableTh>결제상태</TableTh>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.08</td>
-                                    <td>아디다스 슬리퍼</td>
-                                    <td>43,000원</td>
-                                    <td>0000003</td>
-                                    <td>결제예정</td>
+                                    <TableTd>2024.06.08</TableTd>
+                                    <TableTd>아디다스 슬리퍼</TableTd>
+                                    <TableTd>43,000원</TableTd>
+                                    <TableTd>0000003</TableTd>
+                                    <TableTd>결제예정</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.06</td>
-                                    <td>나이키 신발</td>
-                                    <td>89,000원</td>
-                                    <td>0000002</td>
-                                    <td>결제완료</td>
+                                    <TableTd>2024.06.06</TableTd>
+                                    <TableTd>나이키 신발</TableTd>
+                                    <TableTd>89,000원</TableTd>
+                                    <TableTd>0000002</TableTd>
+                                    <TableTd>결제완료</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.05</td>
-                                    <td>나이키 티셔츠</td>
-                                    <td>56,000원</td>
-                                    <td>0000001</td>
-                                    <td>결제완료</td>
+                                    <TableTd>2024.06.05</TableTd>
+                                    <TableTd>나이키 티셔츠</TableTd>
+                                    <TableTd>56,000원</TableTd>
+                                    <TableTd>0000001</TableTd>
+                                    <TableTd>결제완료</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.04</td>
-                                    <td>아디다스 슬리퍼2</td>
-                                    <td>43,000원</td>
-                                    <td>0000003</td>
-                                    <td>결제예정</td>
+                                    <TableTd>2024.06.04</TableTd>
+                                    <TableTd>아디다스 슬리퍼2</TableTd>
+                                    <TableTd>43,000원</TableTd>
+                                    <TableTd>0000003</TableTd>
+                                    <TableTd>결제예정</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.03</td>
-                                    <td>나이키 신발2</td>
-                                    <td>89,000원</td>
-                                    <td>0000002</td>
-                                    <td>결제완료</td>
+                                    <TableTd>2024.06.03</TableTd>
+                                    <TableTd>나이키 신발2</TableTd>
+                                    <TableTd>89,000원</TableTd>
+                                    <TableTd>0000002</TableTd>
+                                    <TableTd>결제완료</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.02</td>
-                                    <td>나이키 티셔츠2</td>
-                                    <td>56,000원</td>
-                                    <td>0000001</td>
-                                    <td>결제완료</td>
+                                    <TableTd>2024.06.02</TableTd>
+                                    <TableTd>나이키 티셔츠2</TableTd>
+                                    <TableTd>56,000원</TableTd>
+                                    <TableTd>0000001</TableTd>
+                                    <TableTd>결제완료</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.01</td>
-                                    <td>나이키 티셔츠3</td>
-                                    <td>56,000원</td>
-                                    <td>0000001</td>
-                                    <td>결제완료</td>
+                                    <TableTd>2024.06.01</TableTd>
+                                    <TableTd>나이키 티셔츠3</TableTd>
+                                    <TableTd>56,000원</TableTd>
+                                    <TableTd>0000001</TableTd>
+                                    <TableTd>결제완료</TableTd>
                                 </tr>
-                             </table>
+                             </Table>
+                             <div class="pagination">
+                                <a href="#">&laquo;</a>
+                                <a href="#">1</a>
+                                <a href="#">2</a>
+                                <a href="#">3</a>
+                                <a href="#">4</a>
+                                <a href="#">5</a>
+                                <a href="#">6</a>
+                                <a href="#">&raquo;</a>
+                            </div>
+
                         </Container>
                         <Container>
                         <Title>내가 작성한 리뷰</Title>
-                              <table>
+                              <Table>
                                 <tr>
-                                    <th>리뷰 작성일</th>
-                                    <th>상품명</th>
-                                    <th>리뷰 내용</th>
-                                    <th>별점</th>
-                                    <th>결제날짜</th>
+                                    <TableTh>리뷰 작성일</TableTh>
+                                    <TableTh>상품명</TableTh>
+                                    <TableTh>리뷰 내용</TableTh>
+                                    <TableTh>별점</TableTh>
+                                    <TableTh>결제날짜</TableTh>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.11</td>
-                                    <td>아디다스 슬리퍼</td>
-                                    <td> 신기 편해요...</td>
-                                    <td> 4</td>
-                                    <td>2024.06.08</td>
+                                    <TableTd>2024.06.11</TableTd>
+                                    <TableTd>아디다스 슬리퍼</TableTd>
+                                    <TableTd> 신기 편해요...</TableTd>
+                                    <TableTd> 4</TableTd>
+                                    <TableTd>2024.06.08</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.10</td>
-                                    <td>나이키 신발</td>
-                                    <td>색이 예쁘고 발이 편해요...</td>
-                                    <td>5</td>
-                                    <td>2024.06.06</td>
+                                    <TableTd>2024.06.10</TableTd>
+                                    <TableTd>나이키 신발</TableTd>
+                                    <TableTd>색이 예쁘고 발이 편해요...</TableTd>
+                                    <TableTd>5</TableTd>
+                                    <TableTd>2024.06.06</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.09</td>
-                                    <td>아디다스 슬리퍼</td>
-                                    <td> 신기 편해요...</td>
-                                    <td> 4</td>
-                                    <td>2024.06.05</td>
+                                    <TableTd>2024.06.09</TableTd>
+                                    <TableTd>아디다스 슬리퍼</TableTd>
+                                    <TableTd> 신기 편해요...</TableTd>
+                                    <TableTd> 4</TableTd>
+                                    <TableTd>2024.06.05</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.08</td>
-                                    <td>나이키 신발</td>
-                                    <td>색이 예쁘고 발이 편해요...</td>
-                                    <td>5</td>
-                                    <td>2024.06.04</td>
+                                    <TableTd>2024.06.08</TableTd>
+                                    <TableTd>나이키 신발</TableTd>
+                                    <TableTd>색이 예쁘고 발이 편해요...</TableTd>
+                                    <TableTd>5</TableTd>
+                                    <TableTd>2024.06.04</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.07</td>
-                                    <td>아디다스 슬리퍼</td>
-                                    <td> 신기 편해요...</td>
-                                    <td> 4</td>
-                                    <td>2024.06.03</td>
+                                    <TableTd>2024.06.07</TableTd>
+                                    <TableTd>아디다스 슬리퍼</TableTd>
+                                    <TableTd> 신기 편해요...</TableTd>
+                                    <TableTd> 4</TableTd>
+                                    <TableTd>2024.06.03</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.06</td>
-                                    <td>나이키 신발</td>
-                                    <td>색이 예쁘고 발이 편해요...</td>
-                                    <td>5</td>
-                                    <td>2024.06.02</td>
+                                    <TableTd>2024.06.06</TableTd>
+                                    <TableTd>나이키 신발</TableTd>
+                                    <TableTd>색이 예쁘고 발이 편해요...</TableTd>
+                                    <TableTd>5</TableTd>
+                                    <TableTd>2024.06.02</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.05</td>
-                                    <td>아디다스 슬리퍼</td>
-                                    <td> 신기 편해요...</td>
-                                    <td> 4</td>
-                                    <td>2024.06.01</td>
+                                    <TableTd>2024.06.05</TableTd>
+                                    <TableTd>아디다스 슬리퍼</TableTd>
+                                    <TableTd> 신기 편해요...</TableTd>
+                                    <TableTd> 4</TableTd>
+                                    <TableTd>2024.06.01</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.04</td>
-                                    <td>나이키 신발</td>
-                                    <td>색이 예쁘고 발이 편해요...</td>
-                                    <td>5</td>
-                                    <td>2024.05.08</td>
+                                    <TableTd>2024.06.04</TableTd>
+                                    <TableTd>나이키 신발</TableTd>
+                                    <TableTd>색이 예쁘고 발이 편해요...</TableTd>
+                                    <TableTd>5</TableTd>
+                                    <TableTd>2024.05.08</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.03</td>
-                                    <td>아디다스 슬리퍼</td>
-                                    <td> 신기 편해요...</td>
-                                    <td> 4</td>
-                                    <td>2024.05.07</td>
+                                    <TableTd>2024.06.03</TableTd>
+                                    <TableTd>아디다스 슬리퍼</TableTd>
+                                    <TableTd> 신기 편해요...</TableTd>
+                                    <TableTd> 4</TableTd>
+                                    <TableTd>2024.05.07</TableTd>
                                 </tr>
                                 <tr>
-                                    <td>2024.06.02</td>
-                                    <td>나이키 신발</td>
-                                    <td>색이 예쁘고 발이 편해요...</td>
-                                    <td>5</td>
-                                    <td>2024.05.06</td>
+                                    <TableTd>2024.06.02</TableTd>
+                                    <TableTd>나이키 신발</TableTd>
+                                    <TableTd>색이 예쁘고 발이 편해요...</TableTd>
+                                    <TableTd>5</TableTd>
+                                    <TableTd>2024.05.06</TableTd>
                                 </tr>
-                             </table>
+                             </Table>
+                             <div class="pagination">
+                                <a href="#">&laquo;</a>
+                                <a href="#">1</a>
+                                <a href="#">2</a>
+                                <a href="#">3</a>
+                                <a href="#">4</a>
+                                <a href="#">5</a>
+                                <a href="#">6</a>
+                                <a href="#">&raquo;</a>
+                            </div>
+
                         </Container>
                         <Container>
                             <Title>찜목록</Title>
@@ -268,7 +290,6 @@ const MyPage = () => {
                             </Button>
                             <ContentWrapper>
                                 <div>
-                                    {/* <Tab style={{width: '160px'}} label='등록된 상품 목록'/> */}
                                     <Container>
                                     <Title>등록된 상품 목록</Title>
                                         <SearchResultList>
@@ -286,13 +307,21 @@ const MyPage = () => {
                                                 </SearchItem>
                                             ))}
                                         </SearchResultList>
+                                        <div class="pagination">
+                                            <a href="#">&laquo;</a>
+                                            <a href="#">1</a>
+                                            <a href="#">2</a>
+                                            <a href="#">3</a>
+                                            <a href="#">4</a>
+                                            <a href="#">5</a>
+                                            <a href="#">6</a>
+                                            <a href="#">&raquo;</a>
+                                        </div>
                                     </Container>
-                                    {/* <Tab style={{width: '160px'}} label='상품판매 현황'/> */}
                                     <Title>상품판매 현황</Title>
                                     <div>
                                        차트라이브러리 
                                     </div>
-                                    {/* <Tab style={{width: '160px'}} label='리뷰 관리'/> */}
                                     <Title>리뷰 관리</Title>
                                     <div>
                                         댓글 UI
@@ -365,9 +394,7 @@ const ProfileContainer = styled.div`
     margin-bottom: 30px;
     padding: 0 20px;
     gap: 10px;
-    // border: 1px solid red;
     background-color: #F4F4F4;
-
 `;
 
 const ChangeImgButton = styled.button`
@@ -378,8 +405,6 @@ const ChangeImgButton = styled.button`
     color: white;
     border: 1px solid black;
     cursor: pointer;
-
-
 `;
 
 const InfoWrapper = styled.div`
@@ -439,4 +464,22 @@ const ItemPrice = styled.div`
 const Icon = styled.div`
     /* 아이콘 스타일 */
     margin-right: 5px;
+`;
+
+const Table = styled.table`
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+`;
+
+const TableTh = styled.th`
+    padding: 6px 15px;
+    background: #42444e;
+    color: #fff;
+    text-align: left;
+
+`;
+
+const TableTd = styled.td`
+    padding: 6px 15px;
 `;
