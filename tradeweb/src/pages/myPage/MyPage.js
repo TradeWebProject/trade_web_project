@@ -53,9 +53,125 @@ const MyPage = () => {
                 )}
                 {currentTabIndex === 1 && (
                     <Box sx={{ p: 3 }}>
-                        <div>B</div>
-                        <div>B</div>
-                        <div>B</div>
+                        <Container>
+                             <Title>결제내역</Title>
+                              <Header>
+                                    <div>결제일</div>
+                                    <div>상품명</div>
+                                    <div>결제금액</div>
+                                    <div>결제번호</div>
+                                    <div>결제상태</div>
+                              </Header>  
+                              <TableContent>
+                                  <TableContentWrapper>
+                                      <div>2024.06.05</div>
+                                      <div>
+                                          나이키 티셔츠
+                                      </div>
+                                      <div>
+                                          56,000원
+                                      </div>
+                                      <div>
+                                          0000001
+                                      </div>
+                                      <div>
+                                          결제완료
+                                      </div>
+                                  </TableContentWrapper>
+                                  {/* <TableContentWrapper>
+                                      <div>2024.06.07</div>
+                                      <div>
+                                          아디다스 티셔츠
+                                      </div>
+                                      <div>
+                                          0000002
+                                      </div>
+                                      <div>
+                                          결제예정
+                                      </div>
+                                  </TableContentWrapper> */}
+
+                              </TableContent>
+
+                              <Title>내가 작성한 리뷰</Title>
+                              <Header>
+                                    <div>결제일</div>
+                                    <div>상품명</div>
+                                    <div>결제금액</div>
+                                    <div>결제번호</div>
+                                    <div>결제상태</div>
+                              </Header>  
+                              <TableContent>
+                                  <TableContentWrapper>
+                                      <div>2024.06.05</div>
+                                      <div>
+                                          나이키 티셔츠
+                                      </div>
+                                      <div>
+                                          56,000원
+                                      </div>
+                                      <div>
+                                          0000001
+                                      </div>
+                                      <div>
+                                          결제완료
+                                      </div>
+                                  </TableContentWrapper>
+                                  {/* <TableContentWrapper>
+                                      <div>2024.06.07</div>
+                                      <div>
+                                          아디다스 티셔츠
+                                      </div>
+                                      <div>
+                                          0000002
+                                      </div>
+                                      <div>
+                                          결제예정
+                                      </div>
+                                  </TableContentWrapper> */}
+
+                              </TableContent>
+                              <Title>찜목록</Title>
+                              <Header>
+                                    <div>결제일</div>
+                                    <div>상품명</div>
+                                    <div>결제금액</div>
+                                    <div>결제번호</div>
+                                    <div>결제상태</div>
+                              </Header>  
+                              <TableContent>
+                                  <TableContentWrapper>
+                                      <div>2024.06.05</div>
+                                      <div>
+                                          나이키 티셔츠
+                                      </div>
+                                      <div>
+                                          56,000원
+                                      </div>
+                                      <div>
+                                          0000001
+                                      </div>
+                                      <div>
+                                          결제완료
+                                      </div>
+                                  </TableContentWrapper>
+                                  {/* <TableContentWrapper>
+                                      <div>2024.06.07</div>
+                                      <div>
+                                          아디다스 티셔츠
+                                      </div>
+                                      <div>
+                                          0000002
+                                      </div>
+                                      <div>
+                                          결제예정
+                                      </div>
+                                  </TableContentWrapper> */}
+
+                              </TableContent>
+
+                        </Container>
+                        
                     </Box>
                 )}
                 {currentTabIndex === 2 && (
@@ -182,5 +298,37 @@ const InfoText  = styled.div`
     border: 1px solid #D1D4D8;
     color: #b1b5b9;
     overflow-x: auto;
+
+`;
+
+
+const Header = styled.div`
+    width: 1000px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid red; 
+
+`;
+
+
+const TableContent = styled.div`
+    width: 1000px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid green; 
+
+`;
+
+
+const TableContentWrapper = styled.div`
+    width: 1000px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid green; 
 
 `;
