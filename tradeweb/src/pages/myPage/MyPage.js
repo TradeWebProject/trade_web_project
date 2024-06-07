@@ -44,10 +44,6 @@ const MyPage = () => {
                                 <div>전화번호</div>
                                 <InfoText>010-1234-4698</InfoText>
                             </InfoWrapper>
-                            {/* <InfoWrapper>
-                                <div>프로필 이미지</div>
-                                <img src="https://placehold.jp/50x50.png"/>
-                            </InfoWrapper> */}
                         </Container>   
                     </Box>
                 )}
@@ -55,120 +51,147 @@ const MyPage = () => {
                     <Box sx={{ p: 3 }}>
                         <Container>
                              <Title>결제내역</Title>
-                              <Header>
-                                    <div>결제일</div>
-                                    <div>상품명</div>
-                                    <div>결제금액</div>
-                                    <div>결제번호</div>
-                                    <div>결제상태</div>
-                              </Header>  
-                              <TableContent>
-                                  <TableContentWrapper>
-                                      <div>2024.06.05</div>
-                                      <div>
-                                          나이키 티셔츠
-                                      </div>
-                                      <div>
-                                          56,000원
-                                      </div>
-                                      <div>
-                                          0000001
-                                      </div>
-                                      <div>
-                                          결제완료
-                                      </div>
-                                  </TableContentWrapper>
-                                  {/* <TableContentWrapper>
-                                      <div>2024.06.07</div>
-                                      <div>
-                                          아디다스 티셔츠
-                                      </div>
-                                      <div>
-                                          0000002
-                                      </div>
-                                      <div>
-                                          결제예정
-                                      </div>
-                                  </TableContentWrapper> */}
-
-                              </TableContent>
+                             <table>
+                                <tr>
+                                    <th>결제일</th>
+                                    <th>상품명</th>
+                                    <th>결제금액</th>
+                                    <th>결제번호</th>
+                                    <th>결제상태</th>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.08</td>
+                                    <td>아디다스 슬리퍼</td>
+                                    <td>43,000원</td>
+                                    <td>0000003</td>
+                                    <td>결제예정</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.06</td>
+                                    <td>나이키 신발</td>
+                                    <td>89,000원</td>
+                                    <td>0000002</td>
+                                    <td>결제완료</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.05</td>
+                                    <td>나이키 티셔츠</td>
+                                    <td>56,000원</td>
+                                    <td>0000001</td>
+                                    <td>결제완료</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.04</td>
+                                    <td>아디다스 슬리퍼2</td>
+                                    <td>43,000원</td>
+                                    <td>0000003</td>
+                                    <td>결제예정</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.03</td>
+                                    <td>나이키 신발2</td>
+                                    <td>89,000원</td>
+                                    <td>0000002</td>
+                                    <td>결제완료</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.02</td>
+                                    <td>나이키 티셔츠2</td>
+                                    <td>56,000원</td>
+                                    <td>0000001</td>
+                                    <td>결제완료</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.01</td>
+                                    <td>나이키 티셔츠3</td>
+                                    <td>56,000원</td>
+                                    <td>0000001</td>
+                                    <td>결제완료</td>
+                                </tr>
+                             </table>
 
                               <Title>내가 작성한 리뷰</Title>
-                              <Header>
-                                    <div>결제일</div>
-                                    <div>상품명</div>
-                                    <div>결제금액</div>
-                                    <div>결제번호</div>
-                                    <div>결제상태</div>
-                              </Header>  
-                              <TableContent>
-                                  <TableContentWrapper>
-                                      <div>2024.06.05</div>
-                                      <div>
-                                          나이키 티셔츠
-                                      </div>
-                                      <div>
-                                          56,000원
-                                      </div>
-                                      <div>
-                                          0000001
-                                      </div>
-                                      <div>
-                                          결제완료
-                                      </div>
-                                  </TableContentWrapper>
-                                  {/* <TableContentWrapper>
-                                      <div>2024.06.07</div>
-                                      <div>
-                                          아디다스 티셔츠
-                                      </div>
-                                      <div>
-                                          0000002
-                                      </div>
-                                      <div>
-                                          결제예정
-                                      </div>
-                                  </TableContentWrapper> */}
-
-                              </TableContent>
+                              <table>
+                                <tr>
+                                    <th>리뷰 작성일</th>
+                                    <th>상품명</th>
+                                    <th>리뷰 내용</th>
+                                    <th>별점</th>
+                                    <th>결제날짜</th>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.11</td>
+                                    <td>아디다스 슬리퍼</td>
+                                    <td> 신기 편해요...</td>
+                                    <td> 4</td>
+                                    <td>2024.06.08</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.10</td>
+                                    <td>나이키 신발</td>
+                                    <td>색이 예쁘고 발이 편해요...</td>
+                                    <td>5</td>
+                                    <td>2024.06.06</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.09</td>
+                                    <td>아디다스 슬리퍼</td>
+                                    <td> 신기 편해요...</td>
+                                    <td> 4</td>
+                                    <td>2024.06.05</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.08</td>
+                                    <td>나이키 신발</td>
+                                    <td>색이 예쁘고 발이 편해요...</td>
+                                    <td>5</td>
+                                    <td>2024.06.04</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.07</td>
+                                    <td>아디다스 슬리퍼</td>
+                                    <td> 신기 편해요...</td>
+                                    <td> 4</td>
+                                    <td>2024.06.03</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.06</td>
+                                    <td>나이키 신발</td>
+                                    <td>색이 예쁘고 발이 편해요...</td>
+                                    <td>5</td>
+                                    <td>2024.06.02</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.05</td>
+                                    <td>아디다스 슬리퍼</td>
+                                    <td> 신기 편해요...</td>
+                                    <td> 4</td>
+                                    <td>2024.06.01</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.04</td>
+                                    <td>나이키 신발</td>
+                                    <td>색이 예쁘고 발이 편해요...</td>
+                                    <td>5</td>
+                                    <td>2024.05.08</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.03</td>
+                                    <td>아디다스 슬리퍼</td>
+                                    <td> 신기 편해요...</td>
+                                    <td> 4</td>
+                                    <td>2024.05.07</td>
+                                </tr>
+                                <tr>
+                                    <td>2024.06.02</td>
+                                    <td>나이키 신발</td>
+                                    <td>색이 예쁘고 발이 편해요...</td>
+                                    <td>5</td>
+                                    <td>2024.05.06</td>
+                                </tr>
+                             </table>
                               <Title>찜목록</Title>
-                              <Header>
-                                    <div>결제일</div>
-                                    <div>상품명</div>
-                                    <div>결제금액</div>
-                                    <div>결제번호</div>
-                                    <div>결제상태</div>
-                              </Header>  
-                              <TableContent>
-                                  <TableContentWrapper>
-                                      <div>2024.06.05</div>
-                                      <div>
-                                          나이키 티셔츠
-                                      </div>
-                                      <div>
-                                          56,000원
-                                      </div>
-                                      <div>
-                                          0000001
-                                      </div>
-                                      <div>
-                                          결제완료
-                                      </div>
-                                  </TableContentWrapper>
-                                  {/* <TableContentWrapper>
-                                      <div>2024.06.07</div>
-                                      <div>
-                                          아디다스 티셔츠
-                                      </div>
-                                      <div>
-                                          0000002
-                                      </div>
-                                      <div>
-                                          결제예정
-                                      </div>
-                                  </TableContentWrapper> */}
-
-                              </TableContent>
+                              
 
                         </Container>
                         
