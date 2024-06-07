@@ -38,11 +38,11 @@ const MyPage = () => {
                             </InfoWrapper>
                             <InfoWrapper>
                                 <div>주소</div>
-                                <InfoText>경기도 의왕시 내손로</InfoText>
+                                <InfoText>경기도 인천시 연수구</InfoText>
                             </InfoWrapper>
                             <InfoWrapper>
                                 <div>전화번호</div>
-                                <InfoText>010-5518-4698</InfoText>
+                                <InfoText>010-1234-4698</InfoText>
                             </InfoWrapper>
                             {/* <InfoWrapper>
                                 <div>프로필 이미지</div>
