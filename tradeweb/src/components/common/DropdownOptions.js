@@ -35,7 +35,7 @@ export default DropdownOptions;
 const CustomOptions = styled.div`
   position: relative;
   width: 100%;
-  margin: 20px 0 20px 0;
+  margin: 20px 4px 20px 0;
 `;
 
 const SelectedOption = styled.div`
