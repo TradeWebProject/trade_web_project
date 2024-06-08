@@ -156,14 +156,14 @@ const MyPage = () => {
                                 </tr>
                              </Table>
                              <div class="pagination">
-                                <a href="#">&laquo;</a>
-                                <a href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">4</a>
-                                <a href="#">5</a>
-                                <a href="#">6</a>
-                                <a href="#">&raquo;</a>
+                                <button>&laquo;</button>
+                                <button>1</button>
+                                <button>2</button>
+                                <button>3</button>
+                                <button>4</button>
+                                <button>5</button>
+                                <button>6</button>
+                                <button>&raquo;</button>
                             </div>
 
                         </Container>
@@ -249,14 +249,14 @@ const MyPage = () => {
                                 </tr>
                              </Table>
                              <div class="pagination">
-                                <a href="#">&laquo;</a>
-                                <a href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">4</a>
-                                <a href="#">5</a>
-                                <a href="#">6</a>
-                                <a href="#">&raquo;</a>
+                                <button>&laquo;</button>
+                                <button>1</button>
+                                <button>2</button>
+                                <button>3</button>
+                                <button>4</button>
+                                <button>5</button>
+                                <button>6</button>
+                                <button>&raquo;</button>
                             </div>
 
                         </Container>
@@ -279,14 +279,14 @@ const MyPage = () => {
                                 ))}
                             </SearchResultList>
                             <div class="pagination">
-                                <a href="#">&laquo;</a>
-                                <a href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#">4</a>
-                                <a href="#">5</a>
-                                <a href="#">6</a>
-                                <a href="#">&raquo;</a>
+                                <button>&laquo;</button>
+                                <button>1</button>
+                                <button>2</button>
+                                <button>3</button>
+                                <button>4</button>
+                                <button>5</button>
+                                <button>6</button>
+                                <button>&raquo;</button>
                             </div>
                         </Container>
                         
@@ -318,14 +318,14 @@ const MyPage = () => {
                                             ))}
                                         </SearchResultList>
                                         <div class="pagination">
-                                            <a href="#">&laquo;</a>
-                                            <a href="#">1</a>
-                                            <a href="#">2</a>
-                                            <a href="#">3</a>
-                                            <a href="#">4</a>
-                                            <a href="#">5</a>
-                                            <a href="#">6</a>
-                                            <a href="#">&raquo;</a>
+                                            <button>&laquo;</button>
+                                            <button>1</button>
+                                            <button>2</button>
+                                            <button>3</button>
+                                            <button>4</button>
+                                            <button>5</button>
+                                            <button>6</button>
+                                            <button>&raquo;</button>
                                         </div>
                                     </Container>
                                     <Title>상품판매 현황</Title>

@@ -118,23 +118,23 @@ const ProductWritePage = () => {
                     )} */}
                         <img src="https://placehold.jp/200x200.png"/>
                     </MainImage>
-                    <ImageInputWrapper>
-                        <ImageButton>
-                            {/* <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleImageChange}
-                            style={{ display: "none" }}
-                            ref={fileInputRef}
-                            disabled={remainingfiles <= 0}
-                            /> */}
-                            <PlusIcon />
-                            {/* <div>
-                            {files.length}/{maxfiles}
-                            </div> */}
-                        </ImageButton>
-                    {/* <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper> */}
+                        <ImageInputWrapper>
+                            <ImageButton>
+                                <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                // onChange={handleImageChange}
+                                // style={{ display: "none" }}
+                                // ref={fileInputRef}
+                                // disabled={remainingfiles <= 0}
+                                />
+                                <PlusIcon />
+                                <div>
+                                {/* {files.length}/{maxfiles} */}
+                                </div>
+                            </ImageButton>
+                            {/* <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper> */}
                     </ImageInputWrapper>
                 </ImageWrapper>
                 <SaveButtonWrapper>
