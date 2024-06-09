@@ -2,8 +2,25 @@ import React from 'react';
 import styled from "styled-components";
 import ReactQuill from "react-quill";
 import "quill/dist/quill.core.css";
+import DropdownOptions from "../../components/common/DropdownOptions";
+import plusIcon from "../../assets/plus.svg";
 
 const ProductWritePage = () => {
+    const data = {
+        productOptions: ["의류", "전자제품"],
+        productSellStatusOptions: ["새 상품", "중고 상품"],
+    };
+
+    const {
+        productOptions,
+        productSellStatusOptions,
+    } = data;
+
+     // 옵션 선택 시
+    const handleOptionSelect = (option) => {
+        console.log(option);
+    };
+
     const modules = {
         toolbar: {
             container: [
@@ -22,23 +39,6 @@ const ProductWritePage = () => {
         },
     };
 
-    const modules2 = {
-        toolbar: {
-            container: [
-            // ["image", "link"],
-            // [{ header: [1, 2, 3, 4, 5, false] }],
-            // ["bold", "underline", "italic", "strike" ,"color"],
-            [
-                { list: 'ordered' },
-                // { list: 'bullet' },
-                // { indent: '-1' },
-                // { indent: '+1' },
-            ],
-            // ['blockquote', 'code-block'],
-            // [{ 'color': [] }, { 'background': [] }],
-            ],
-        },
-    };
 
     return (
         <ContentLayout>
@@ -47,96 +47,57 @@ const ProductWritePage = () => {
                 <SubTitle>
                     <h3>상품 정보</h3>
                 </SubTitle>
-                <ProductNameWrapper>
-                    <ProductNameElement>상품명:</ProductNameElement>
-                    <ProductNameInput type="text" value="아디다스 반팔티"/>
-                </ProductNameWrapper>
-                <ProductInfoWrapper>
-                    <div>
-                        <div>썸네일 이미지</div>
-                        <img src="https://placehold.jp/200x200.png"/>
-                        <FileUploadButtonWrapper>
-                            <FileUploadButton>파일업로드</FileUploadButton>
-                        </FileUploadButtonWrapper>
-                        
-                    </div>
-                    <div>
-                        <div>
-                            <div>가격</div>
-                            <Input type="number" value="56000"/>
-                        </div>
-                        <div>
-                            <div>재고</div>
-                            <Input type="number" value="10"/>
-                        </div>
-                        <div>
-                            <div>판매 시작 날짜</div>
-                            <Input type="date" value="2024-06-07"/>
-                        </div>
-                        <div>
-                            <div>판매 종료 날짜</div>
-                            <Input type="date" value="2024-06-30"/>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <div>
-                                <button type="button">
-                                    카테고리
-                                </button>
-                                <div>
-                                    <ul>
-                                        <li>의류</li>
-                                        <li>전자제품</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <button type="button" >
-                                    제품 상태를 선택하세요
-                                </button>
-                                <div>
-                                    <ul>
-                                        <li>미개봉</li>
-                                        <li>약간 사용감 있음</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            <div>
-                                <button type="button">
-                                    메인1
-                                </button>
-                                <div>
-                                    <ul>
-                                        <li>서브옵션1-1</li>
-                                        <li>서브옵션1-2</li>
-                                        <li>서브옵션1-3</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div>
-                                <button type="button">
-                                    메인2
-                                </button>
-                                <div>
-                                    <ul>
-                                        <li>서브옵션2-1</li>
-                                        <li>서브옵션2-2</li>
-                                        <li>서브옵션2-3</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </ProductInfoWrapper>
+                <SubContentWrapper>
+                    <ProductNameWrapper>
+                        <ProductNameElement>상품명:</ProductNameElement>
+                        <ProductNameInput type="text"  defaultValue="아디다스 반팔티"/>
+                    </ProductNameWrapper>
+                    <ProductNameWrapper>
+                        <ProductNameElement>가격:</ProductNameElement>
+                        <ProductNameInput type="text" defaultValue="56000"/>
+                    </ProductNameWrapper>
+                    <ProductNameWrapper>
+                        <ProductNameElement>재고:</ProductNameElement>
+                        <ProductNameInput type="text" defaultValue="10"/>
+                    </ProductNameWrapper>
+                    <ProductSellDateWrapper>
+                        <SellStartDateWrapper>
+                                <DateStartText>판매 시작 날짜</DateStartText>
+                                <StartDateInput type="date" defaultValue="2024-06-07"/>
+                        </SellStartDateWrapper>
+                        <SellEndDateWrapper>
+                                <DateStartText>판매 종료 날짜</DateStartText>
+                                <EndDateInput type="date" defaultValue="2024-06-30"/>
+                        </SellEndDateWrapper>
+                    </ProductSellDateWrapper>
+                    <ProductSellDateWrapper>
+                        <SellStartDateWrapper>
+                            <OptionTitleText>카테고리</OptionTitleText>
+                            <DropdownOptions
+                                options={productOptions}
+                                title="카테고리 선택"
+                                onSelect={handleOptionSelect}
+                            />
+                        </SellStartDateWrapper>
+                        <SellStartDateWrapper>
+                            <OptionTitleText>제품 상태</OptionTitleText>
+                            <DropdownOptions
+                                options={productSellStatusOptions}
+                                title="제품 상태 선택"
+                                onSelect={handleOptionSelect}
+                            />
+                        </SellStartDateWrapper>
+                    </ProductSellDateWrapper>
+                    <ProductSellDateWrapper>
+                        <OptionTitleText>옵션명:</OptionTitleText>
+                        <input type="text" placeholder="옵션명을 입력하세요"/>
+                        <button>옵션 추가</button>
+                    </ProductSellDateWrapper>
+                    <ProductSellDateWrapper>
+                        <OptionTitleText>옵션 내용:</OptionTitleText>
+                        <input type="text" placeholder="옵션 내용을 입력하세요"/>
+                    </ProductSellDateWrapper>
+                </SubContentWrapper>
                 
                 <link
                     rel="stylesheet"
@@ -144,28 +105,41 @@ const ProductWritePage = () => {
                 />
 
                 <SubTitle>
-                    <h3>상품 옵션</h3>
-                </SubTitle>
-                <ReactQuill  style={{ width: "1280px", height: "500px", margin: "4px" }}
-                              modules={modules2}  
-                              placeholder="상품에 대한 옵션을 등록해주세요"  />
-
-
-
-                <SubTitle>
                     <h3>상품 상세 설명</h3>
                 </SubTitle>
                 <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px" }}
                               modules={modules}  
                               placeholder="상품에 대한 상세설명을 작성해주세요!"  />
+                <ImageWrapper>
+                    <SubTitle><h3>이미지</h3></SubTitle>
+                    <MainImage>
+                    {/* {files.length > 0 && (
+                        <img src={files[0]} alt="Main product" />
+                    )} */}
+                        <img src="https://placehold.jp/200x200.png"/>
+                    </MainImage>
+                        <ImageInputWrapper>
+                            <ImageButton>
+                                <input
+                                type="file"
+                                accept="image/*"
+                                multiple
+                                // onChange={handleImageChange}
+                                // style={{ display: "none" }}
+                                // ref={fileInputRef}
+                                // disabled={remainingfiles <= 0}
+                                />
+                                <PlusIcon />
+                                <div>
+                                {/* {files.length}/{maxfiles} */}
+                                </div>
+                            </ImageButton>
+                            {/* <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper> */}
+                    </ImageInputWrapper>
+                </ImageWrapper>
                 <SaveButtonWrapper>
-                    <SaveButton>저장</SaveButton>
-                </SaveButtonWrapper>              
-                <TextWrapper>
-                    <TextCol>
-                        Footer
-                    </TextCol>
-                </TextWrapper>
+                    <SaveButton>작성 완료</SaveButton>
+                </SaveButtonWrapper>  
             </Wrapper>
         </ContentLayout>
     );
@@ -189,7 +163,14 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 120px;
-    // border: 1px solid red;
+`;
+
+const SubContentWrapper  = styled.div`
+    width: 1280px;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
 `;
 
 const SubTitle = styled.div`
@@ -204,27 +185,79 @@ const ProductNameWrapper = styled.div`
     width: 1280px;
     display: flex;
     align-items: center;
-    // border: 1px solid black;
 `;
 
 const ProductNameElement = styled.div`
+    width: 70px;
+    height: 30px;
     margin-right: 10px;
 `;
 
 const ProductNameInput = styled.input`
     width: 1200px;
-    height: 36px;
+    height: 24px;
+    border: 1px solid #ccc;
+    padding: 12px 20px;
 `;
 
-const ProductInfoWrapper = styled.div`
+const ProductSellDateWrapper = styled.div`
     width: 1280px;
-    height: fit-content;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    // border: 1px solid blue;
     display: flex;
-    justify-content: flex-start;
-    gap: 200px;
+`;
+
+const SellStartDateWrapper = styled.div`
+    width: 1140px;
+    display: flex;
+`;
+
+const SellEndDateWrapper = styled.div`
+    width: 1140px;
+    display: flex;
+`;
+
+const DateStartText = styled.div`
+    width: 110px;
+    height: 24px;
+    margin-right: 4px;
+    margin-top: 14px;
+    background-size: cover;
+    cursor: pointer;
+`;
+
+const StartDateInput = styled.input`
+    width: 480px;
+    height: 24px;
+    margin-right: 4px;
+    position: relative;
+    appearance: none; /* 기본 스타일 제거 */
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+`;
+
+const EndDateInput = styled.input`
+    width: 483px;
+    height: 24px;
+    position: relative;
+    appearance: none; /* 기본 스타일 제거 */
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+`;
+
+const OptionTitleText = styled.div`
+    // width: 100px;
+    width: 110px;
+    height: 24px;
+    margin-right: 24px;
+    margin-top: 30px;
+    background-size: cover;
+    // border: 1px solid red;
+    cursor: pointer;
 `;
 
 const FileUploadButtonWrapper = styled.div`
@@ -241,29 +274,66 @@ const FileUploadButton = styled.button`
 `;
 
 
+
+const ImageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const MainImage = styled.div`
+  position: relative;
+
+  width: 400px;
+  height: 400px;
+  border: 1px solid #ccc;
+  margin-bottom: 7px;
+  background-color: #f4f4f4;
+  img {
+    width: 400px;
+    height: 400px;
+  }
+`;
+
+const ImageInputWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 405px;
+  height: 80px;
+  padding: 10px 0 10px 0;
+  overflow-x: scroll;
+`;
+
+const ImageButton = styled.label`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 55px;
+  height: 55px;
+  border: 1px solid #ccc;
+  background-color: #f4f4f4;
+  color: #ccc;
+  cursor: pointer;
+`;
+
+const PlusIcon = styled.div`
+  width: 15px;
+  height: 15px;
+  background-image: url(${plusIcon});
+  background-size: cover;
+`;
+
 const SaveButtonWrapper = styled.div`
     width: 1280px;
     margin-top: 80px;
-    // background-color: gray;
 `;
 
 const SaveButton = styled.button`
-    width: 100%;
+    width: 30%;
     height: 45px;
+    margin-left: 32%;
     background-color: black;
     color: white;
     border-radius: 5px;
-`;
-
-const TextWrapper = styled.div`
-  display: flex;
-`;
-
-const TextCol = styled.div`
-    margin-top: 100px;
-`;
-
-const Input  = styled.input`
-    height: 36px;
-
 `;
