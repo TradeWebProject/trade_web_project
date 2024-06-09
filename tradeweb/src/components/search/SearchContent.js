@@ -1,153 +1,52 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-
-import plus from "../../assets/plus.svg";
+import data from "./dummyData";
 
 const SearchContent = () => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const loader = useRef(null);
 
-  const products = listData.map((item) => ({
-    image: item.files,
-    title: item.title,
-    price: item.price,
-    description: item.description,
-    productId: item.productId,
-  }));
+  // const products = listData.map((item) => ({
+  //   image: item.files,
+  //   title: item.title,
+  //   price: item.price,
+  //   description: item.description,
+  //   productId: item.productId,
+  // }));
   //임시 데이터
-  const data = [
-    {
-      files: plus,
-      title: "나이키 신발",
-      price: 240000,
-      description: "나이키 운동화 사이즈 300",
-      productId: 1,
-    },
-    {
-      files: plus,
-      title: "아디다스 신발",
-      price: 340000,
-      description: "아디다스 삼선 슬리퍼 사이즈260",
-      productId: 2,
-    },
-    {
-      files: plus,
-      title: "닥터마틴 로퍼",
-      price: 270000,
-      description: "닥터마틴 로퍼 사이즈 270",
-      productId: 3,
-    },
-    {
-      files: plus,
-      title: "흰색 셔츠",
-      price: 20000,
-      description: "미개봉 흰색 셔츠",
-      productId: 4,
-    },
-    {
-      files: plus,
-      title: "나이키 신발",
-      price: 240000,
-      description: "나이키 운동화 사이즈 300",
-      productId: 5,
-    },
-    {
-      files: plus,
-      title: "아디다스 신발",
-      price: 340000,
-      description: "아디다스 삼선 슬리퍼 사이즈260",
-      productId: 6,
-    },
-    {
-      files: plus,
-      title: "닥터마틴 로퍼",
-      price: 270000,
-      description: "닥터마틴 로퍼 사이즈 270",
-      productId: 7,
-    },
-    {
-      files: plus,
-      title: "흰색 셔츠",
-      price: 20000,
-      description: "미개봉 흰색 셔츠",
-      productId: 8,
-    },
-    {
-      files: plus,
-      title: "나이키 신발",
-      price: 240000,
-      description: "나이키 운동화 사이즈 300",
-      productId: 9,
-    },
-    {
-      files: plus,
-      title: "아디다스 신발",
-      price: 340000,
-      description: "아디다스 삼선 슬리퍼 사이즈260",
-      productId: 10,
-    },
-    {
-      files: plus,
-      title: "닥터마틴 로퍼",
-      price: 270000,
-      description: "닥터마틴 로퍼 사이즈 270",
-      productId: 11,
-    },
-    {
-      files: plus,
-      title: "흰색 셔츠",
-      price: 20000,
-      description: "미개봉 흰색 셔츠",
-      productId: 12,
-    },
-    {
-      files: plus,
-      title: "나이키 신발",
-      price: 240000,
-      description: "나이키 운동화 사이즈 300",
-      productId: 13,
-    },
-    {
-      files: plus,
-      title: "아디다스 신발",
-      price: 340000,
-      description: "아디다스 삼선 슬리퍼 사이즈260",
-      productId: 14,
-    },
-    {
-      files: plus,
-      title: "닥터마틴 로퍼",
-      price: 270000,
-      description: "닥터마틴 로퍼 사이즈 270",
-      productId: 15,
-    },
-    {
-      files: plus,
-      title: "흰색 셔츠",
-      price: 20000,
-      description: "미개봉 흰색 셔츠",
-      productId: 16,
-    },
-  ];
 
-  const ListData = (data) => {
-    setListData(data);
-    console.log(data);
-  };
+  // const ListData = (data) => {
+  //   setListData(data);
+  //   console.log(data);
+  // };
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     const startIndex = (page - 1) * 8;
     const endIndex = startIndex + 8;
-    setListData((prev) => [...prev, ...data.slice(startIndex, endIndex)]);
-    setPage((prev) => prev + 1);
-  };
+
+    const newItems = data.slice(startIndex, endIndex);
+
+    if (newItems.length === 0) {
+      setHasMore(false);
+    } else {
+      setListData((prev) => [...prev, ...newItems]);
+      setPage((prev) => prev + 1);
+    }
+  }, [page]);
 
   useEffect(() => {
     loadMore();
   }, []);
 
   useEffect(() => {
+    if (!hasMore) return;
+
+    console.log("useEffect");
+
+    let currentLoader = loader.current;
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -157,16 +56,16 @@ const SearchContent = () => {
       { threshold: 1 }
     );
 
-    if (loader.current) {
-      observer.observe(loader.current);
+    if (currentLoader) {
+      observer.observe(currentLoader);
     }
 
     return () => {
-      if (loader.current) {
-        observer.unobserve(loader.current);
+      if (currentLoader) {
+        observer.unobserve(currentLoader);
       }
     };
-  }, [loader]);
+  }, [loadMore, hasMore]);
 
   return (
     <>
