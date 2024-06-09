@@ -10,6 +10,7 @@ import { Route, Routes } from "react-router-dom";
 import AppLayout from "./components/common/AppLayout";
 import ProductWritePage from "./pages/productWritePage/ProductWritePage";
 import SearchResultPage from "./pages/search/SearchResultPage";
+import ProductDetailManagementPage from "./pages/productDetailManagementPage/ProductDetailManagementPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/write" element={<ProductWritePage />} />
+        <Route path="/product/management/detail" element={<ProductDetailManagementPage />} />
         <Route path="/search" element={<SearchResultPage />} />
       </Routes>
     </AppLayout>

@@ -3,14 +3,19 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from '@emotion/styled';
 import {Box, Tab, Tabs, Button  } from "@mui/material";
 
+
+
 import profile from "../../assets/profile.svg";
 import plus from "../../assets/plus.svg";
+import Modal from '../../components/common/Modal/Modal';
 
 const MyPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [isVisible, setIsVisible] = useState(true);
     const [currentTabIndex, setCurrentTabIndex] = useState(0);
     const [navigateUrl, setNavigateUrl] = useState("");
+    const [reviewList, setReviewList] = useState([]);
 
     const data = [
         {
@@ -41,10 +46,119 @@ const MyPage = () => {
           description: "미개봉 흰색 셔츠",
           productId: 4,
         },
+        {
+            files: plus,
+            title: "나이키 신발",
+            price: 240000,
+            description: "나이키 운동화 사이즈 300",
+            productId: 1,
+          },
+          {
+            files: plus,
+            title: "아디다스 신발",
+            price: 340000,
+            description: "아디다스 삼선 슬리퍼 사이즈260",
+            productId: 2,
+          },
+          {
+            files: plus,
+            title: "닥터마틴 로퍼",
+            price: 270000,
+            description: "닥터마틴 로퍼 사이즈 270",
+            productId: 3,
+          },
+          {
+            files: plus,
+            title: "흰색 셔츠",
+            price: 20000,
+            description: "미개봉 흰색 셔츠",
+            productId: 4,
+          },
       ];
 
 
-    
+      const reviewData = [
+            {
+                files: profile,
+                nickName: "nickname",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname2",
+                starRate: 5,
+                reviewContent: "색이 예쁘고 발이 편해요",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname3",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요...",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname4",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요...",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname5",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요...",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname6",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요...",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname7",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요...",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname8",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요...",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname9",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요...",
+                date: "2024.06.08",
+                productId: 2,
+            },
+            {
+                files: profile,
+                nickName: "nickname10",
+                starRate: 4,
+                reviewContent: "색이 예쁘고 발이 편해요...",
+                date: "2024.06.08",
+                productId: 2,
+            },
+      ];
 
     const handleTabChange = (e, tabIndex) => {
         console.log(tabIndex);
@@ -56,6 +170,25 @@ const MyPage = () => {
         navigate(navigateUrl);
 
     }
+
+    const productNameOnClick = () => {
+        setNavigateUrl("/product/management/detail");
+        navigate(navigateUrl);
+    }
+
+    const reviewButtonOnClick = () => {
+        setReviewList(reviewData);
+        navigate("/detail");
+    }
+
+    const closeModal = () => {
+        setIsVisible(false);
+    }
+
+    const navigateToPage = () => {
+        setNavigateUrl("/product/management/detail");
+        navigate(navigateUrl);
+    };
 
     return (
         <ContentLayout>
@@ -90,7 +223,35 @@ const MyPage = () => {
                                 <div>전화번호</div>
                                 <InfoText>010-1234-4698</InfoText>
                             </InfoWrapper>
-                        </Container>   
+                        </Container> 
+                        <Container>
+                            <Title>찜목록</Title>
+                            <SearchResultList>
+                                {data.map((product) => (
+                                    <SearchItem key={product.productId}>
+                                        <ItemImageBox>
+                                            <ItemImage src={product.files} alt={product.title} />
+                                        </ItemImageBox>
+                                        <ItemTitle>{product.title}</ItemTitle>
+                                        <ItemInfo>{product.description}</ItemInfo>
+                                        <ItemPrice>
+                                            {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                        </ItemPrice>
+                                        <Icon>❤️</Icon>
+                                    </SearchItem>
+                                ))}
+                            </SearchResultList>
+                            <div class="pagination">
+                                <button>&laquo;</button>
+                                <button>1</button>
+                                <button>2</button>
+                                <button>3</button>
+                                <button>4</button>
+                                <button>5</button>
+                                <button>6</button>
+                                <button>&raquo;</button>
+                            </div>
+                        </Container>  
                     </Box>
                 )}
                 {currentTabIndex === 1 && (
@@ -260,7 +421,7 @@ const MyPage = () => {
                             </div>
 
                         </Container>
-                        <Container>
+                        {/* <Container>
                             <Title>찜목록</Title>
                             <SearchResultList>
                                 {data.map((product) => (
@@ -268,7 +429,6 @@ const MyPage = () => {
                                         <ItemImageBox>
                                             <ItemImage src={product.files} alt={product.title} />
                                         </ItemImageBox>
-
                                         <ItemTitle>{product.title}</ItemTitle>
                                         <ItemInfo>{product.description}</ItemInfo>
                                         <ItemPrice>
@@ -288,7 +448,7 @@ const MyPage = () => {
                                 <button>6</button>
                                 <button>&raquo;</button>
                             </div>
-                        </Container>
+                        </Container> */}
                         
                     </Box>
                 )}
@@ -301,23 +461,89 @@ const MyPage = () => {
                             <ContentWrapper>
                                 <div>
                                     <Container>
-                                    <Title>등록된 상품 목록</Title>
-                                        <SearchResultList>
-                                            {data.map((product) => (
-                                                <SearchItem key={product.productId}>
-                                                    <ItemImageBox>
-                                                        <ItemImage src={product.files} alt={product.title} />
-                                                    </ItemImageBox>
-
-                                                    <ItemTitle>{product.title}</ItemTitle>
-                                                    <ItemInfo>{product.description}</ItemInfo>
-                                                    <ItemPrice>
-                                                        {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                                    </ItemPrice>
-                                                </SearchItem>
-                                            ))}
-                                        </SearchResultList>
-                                        <div class="pagination">
+                                        <Title>등록된 상품 목록</Title>
+                                        <Table>
+                                            <tr>
+                                                <TableTh>상품번호</TableTh>
+                                                <TableTh>상품명</TableTh>
+                                                <TableTh>카테고리</TableTh>
+                                                <TableTh>상품상태</TableTh>
+                                                <TableTh>댓글 조회</TableTh>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>1</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>아디다스 슬리퍼</a></TableTd>
+                                                <TableTd>의류</TableTd>
+                                                <TableTd>새 생품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>2</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>나이키 신발</a></TableTd>
+                                                <TableTd>의류</TableTd>
+                                                <TableTd>중고 상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>3</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>아디다스 반팔티</a></TableTd>
+                                                <TableTd>의류</TableTd>
+                                                <TableTd>새상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>4</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>갤럭시 탭s7</a></TableTd>
+                                                <TableTd>가전</TableTd>
+                                                <TableTd>중고 상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>5</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>애플워치</a></TableTd>
+                                                <TableTd>가전</TableTd>
+                                                <TableTd>중고상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>6</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>청바지</a></TableTd>
+                                                <TableTd>의류</TableTd>
+                                                <TableTd>새 상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>7</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>긴팔 티셔츠</a></TableTd>
+                                                <TableTd>의류</TableTd>
+                                                <TableTd>새상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>8</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>아이패드</a></TableTd>
+                                                <TableTd>가전 제품</TableTd>
+                                                <TableTd>중고 상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>9</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>모니터</a></TableTd>
+                                                <TableTd>가전 제품</TableTd>
+                                                <TableTd>새 상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                            <tr>
+                                                <TableTd>10</TableTd>
+                                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>반바지</a></TableTd>
+                                                <TableTd>의류</TableTd>
+                                                <TableTd>중고상품</TableTd>
+                                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
+                                            </tr>
+                                        </Table>
+                                       
+                                         
+                                        <Pagination class="pagination">
                                             <button>&laquo;</button>
                                             <button>1</button>
                                             <button>2</button>
@@ -326,15 +552,16 @@ const MyPage = () => {
                                             <button>5</button>
                                             <button>6</button>
                                             <button>&raquo;</button>
-                                        </div>
+                                        </Pagination>
                                     </Container>
                                     <Title>상품판매 현황</Title>
                                     <div>
-                                       차트라이브러리 
-                                    </div>
-                                    <Title>리뷰 관리</Title>
-                                    <div>
-                                        댓글 UI
+                                        차트api
+
+
+
+
+
                                     </div>
                                 </div>
                                
@@ -382,6 +609,7 @@ const ContentWrapper = styled.div`
 `;
 
 const Container = styled.div`
+    width: 1230px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -389,9 +617,16 @@ const Container = styled.div`
 `;
 
 const Title  = styled.div`
-    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
+`;
+
+const Pagination = styled.div`
+   
+
+
 `;
 
 const ProfileContainer = styled.div`
@@ -480,6 +715,7 @@ const Table = styled.table`
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
+    margin-bottom: 40px;
 `;
 
 const TableTh = styled.th`
