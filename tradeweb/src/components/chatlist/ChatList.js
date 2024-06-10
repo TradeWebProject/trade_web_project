@@ -1,27 +1,77 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
+import MessageTime from "./MessageTime";
 import { theme } from "../../styles/theme";
+
+const dummyData = [
+  {
+    name: "현서",
+    photo: "https://via.placeholder.com/40",
+    messages: [
+      {
+        sender: "me",
+        text: "Hi, how are you?",
+        time: new Date("2024-06-09T10:00:00").toISOString(),
+      },
+      {
+        sender: "buyer",
+        text: "I'm good, thanks!",
+        time: new Date("2024-06-09T10:05:00").toISOString(),
+      },
+    ],
+  },
+  {
+    name: "영호",
+    photo: "https://via.placeholder.com/40",
+    messages: [
+      {
+        sender: "me",
+        text: "Hello!",
+        time: new Date("2024-06-09T10:10:00").toISOString(),
+      },
+      {
+        sender: "buyer",
+        text: "Hi!",
+        time: new Date("2024-06-09T10:15:00").toISOString(),
+      },
+    ],
+  },
+  {
+    name: "Buyer 3",
+    photo: "https://via.placeholder.com/40",
+    messages: [],
+  },
+];
+
+const sortMessagesByTime = (messages) => {
+  return messages.sort((a, b) => {
+    return new Date(a.time) - new Date(b.time);
+  });
+};
 
 const ChatList = ({ visible, onClose }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [rooms] = useState(["Room 1", "Room 2", "Room 3"]);
-  const [messages, setMessages] = useState({});
+  const [rooms] = useState(dummyData);
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const chatRef = useRef(null);
 
   const handleRoomClick = (room) => {
     setSelectedRoom(room);
+    setMessages(sortMessagesByTime(room.messages));
   };
 
   const handleSendMessage = () => {
     if (inputValue.trim() && selectedRoom) {
-      const newMessages = { ...messages };
-      if (!newMessages[selectedRoom]) {
-        newMessages[selectedRoom] = [];
-      }
-      newMessages[selectedRoom].push(inputValue);
+      const newMessage = {
+        sender: "me",
+        text: inputValue,
+        time: new Date().toISOString(),
+      };
+      const newMessages = sortMessagesByTime([...messages, newMessage]);
       setMessages(newMessages);
       setInputValue("");
+      selectedRoom.messages = newMessages;
     }
   };
 
@@ -43,6 +93,15 @@ const ChatList = ({ visible, onClose }) => {
     };
   }, [visible, onClose]);
 
+  const chatMessagesRef = useRef(null);
+
+  useEffect(() => {
+    // 채팅 메시지가 업데이트될 때마다 스크롤을 가장 아래로 이동
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <ChatContainer visible={visible} ref={chatRef}>
       <RoomList>
@@ -52,21 +111,43 @@ const ChatList = ({ visible, onClose }) => {
         </ChatHeader>
         {rooms.map((room, index) => (
           <RoomItem key={index} onClick={() => handleRoomClick(room)}>
-            {room}
+            <img src={room.photo} alt={room.name} />
+            {room.name}
           </RoomItem>
         ))}
       </RoomList>
       <ChatBox>
-        <ChatHeader>{selectedRoom || "Select a Room"}</ChatHeader>
-        <ChatMessages>
-          {selectedRoom && messages[selectedRoom] ? (
-            messages[selectedRoom].map((message, index) => (
-              <div key={index}>{message}</div>
-            ))
+        <ChatHeader>
+          {selectedRoom ? selectedRoom.name : "Select a Room"}
+        </ChatHeader>
+        <ChatMessages ref={chatMessagesRef}>
+          {selectedRoom ? (
+            messages.length > 0 ? (
+              messages.map((message, index) => (
+                <Message isMe={message.sender === "me"}>
+                  {message.sender === "me" && (
+                    <MessageTimeStyle>
+                      <MessageTime time={new Date(message.time)} />
+                    </MessageTimeStyle>
+                  )}
+                  <MessageText isMe={message.sender === "me"}>
+                    {message.text}
+                  </MessageText>
+                  {message.sender !== "me" && (
+                    <MessageTimeStyle>
+                      <MessageTime time={new Date(message.time)} />
+                    </MessageTimeStyle>
+                  )}
+                </Message>
+              ))
+            ) : (
+              <div>No messages</div>
+            )
           ) : (
             <div>No messages</div>
           )}
         </ChatMessages>
+
         {selectedRoom && (
           <ChatInputContainer>
             <ChatInput
@@ -85,6 +166,7 @@ const ChatList = ({ visible, onClose }) => {
 export default ChatList;
 
 const ChatContainer = styled.div`
+  z-index: 9000;
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -105,12 +187,19 @@ const RoomList = styled.div`
 `;
 
 const RoomItem = styled.div`
+  display: flex;
+  align-items: center;
   padding: 10px;
   cursor: pointer;
   border-bottom: 1px solid #ddd;
 
   &:hover {
     background-color: #f1f1f1;
+  }
+
+  img {
+    border-radius: 50%;
+    margin-right: 10px;
   }
 `;
 
@@ -147,6 +236,29 @@ const ChatMessages = styled.div`
   padding: 10px;
   height: calc(100% - 60px);
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: ${(props) => (props.isMe ? "flex-end" : "flex-start")};
+`;
+
+const Message = styled.div`
+  display: flex;
+  align-self: ${(props) => (props.isMe ? "flex-end" : "flex-start")};
+  margin-bottom: 15px;
+`;
+
+const MessageText = styled.span`
+  padding: 7px;
+  background-color: ${(props) => (props.isMe ? "#DCF8C6" : "#FFF")};
+  border-radius: 10px;
+  max-width: 60%;
+`;
+
+const MessageTimeStyle = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
 `;
 
 const ChatInputContainer = styled.div`
