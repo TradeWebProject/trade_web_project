@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import data from "./dummyData";
 
-const SearchContent = () => {
+const SearchContent = ({ selectedFilters }) => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -71,6 +71,15 @@ const SearchContent = () => {
     <>
       <Container>
         <SearchKeyword>'신발' 에 대한 검색 결과</SearchKeyword>
+        <SelectedFilters>
+          {Object.entries(selectedFilters).map(([filterTitle, options]) =>
+            options.map((option) => (
+              <FilterTag key={option}>
+                {filterTitle}: {option}
+              </FilterTag>
+            ))
+          )}
+        </SelectedFilters>
         <SearchResultList>
           {listData.map((product, index) => (
             <SearchItem key={index}>
@@ -134,3 +143,17 @@ const ItemInfo = styled.div`
 `;
 
 const ItemPrice = styled.strong``;
+
+const SelectedFilters = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+`;
+
+const FilterTag = styled.div`
+  background-color: #eee;
+  border-radius: 12px;
+  padding: 5px 10px;
+  margin: 5px;
+  font-size: 14px;
+`;
