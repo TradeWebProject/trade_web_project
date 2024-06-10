@@ -33,7 +33,7 @@ const Detail = () => {
         nickName: "nickname2",
         starRate: 5,
         reviewContent: "대박",
-        date: "2024.06.08",
+        date: "2024.06.07",
         productId: 2,
     },
     {
@@ -41,7 +41,7 @@ const Detail = () => {
         nickName: "nickname3",
         starRate: 4,
         reviewContent: "색이 예쁘고 발이 편해요",
-        date: "2024.06.08",
+        date: "2024.06.06",
         productId: 2,
     },
     {
@@ -49,15 +49,15 @@ const Detail = () => {
         nickName: "nickname4",
         starRate: 4,
         reviewContent: "추천",
-        date: "2024.06.08",
+        date: "2024.06.05",
         productId: 2,
     },
     {
         files: profile,
         nickName: "nickname5",
         starRate: 4,
-        reviewContent: "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
-        date: "2024.06.08",
+        reviewContent: "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
+        date: "2024.06.05",
         productId: 2,
     },
     {
@@ -65,7 +65,7 @@ const Detail = () => {
         nickName: "nickname6",
         starRate: 4,
         reviewContent: "좋아요 또 살래요",
-        date: "2024.06.08",
+        date: "2024.06.04",
         productId: 2,
     },
     {
@@ -73,7 +73,7 @@ const Detail = () => {
         nickName: "nickname7",
         starRate: 4,
         reviewContent: "좋아요",
-        date: "2024.06.08",
+        date: "2024.06.03",
         productId: 2,
     },
 ];
@@ -150,10 +150,19 @@ const Detail = () => {
             </ProfileContainer>
             ))}
         </ReviewContainer>
-        {/* <ReviewContainer>
-          dfdfdfdf
-        </ReviewContainer> */}
-     
+        <ReviewContainer>
+            <Pagination class="pagination">
+                <PageButton>&laquo;</PageButton>
+                <PageButton>1</PageButton>
+                <PageButton>2</PageButton>
+                <PageButton>3</PageButton>
+                <PageButton>4</PageButton>
+                <PageButton>5</PageButton>
+                <PageButton>6</PageButton>
+                <PageButton>&raquo;</PageButton>
+            </Pagination>
+        </ReviewContainer>
+        
     </Wrapper>
   );
 };
@@ -359,4 +368,21 @@ const ChangeImgButton = styled.button`
     color: white;
     border: 1px solid black;
     cursor: pointer;
+`;
+
+
+const Pagination = styled.div`
+   margin-top: 1800px;
+   margin-left: 560px;
+
+
+`;
+
+const PageButton = styled.button`
+    width: 35px;
+    height: 35px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+
 `;

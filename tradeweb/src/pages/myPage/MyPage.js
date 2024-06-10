@@ -241,16 +241,16 @@ const MyPage = () => {
                                     </SearchItem>
                                 ))}
                             </SearchResultList>
-                            <div class="pagination">
-                                <button>&laquo;</button>
-                                <button>1</button>
-                                <button>2</button>
-                                <button>3</button>
-                                <button>4</button>
-                                <button>5</button>
-                                <button>6</button>
-                                <button>&raquo;</button>
-                            </div>
+                            <Pagination class="pagination">
+                                <PageButton>&laquo;</PageButton>
+                                <PageButton>1</PageButton>
+                                <PageButton>2</PageButton>
+                                <PageButton>3</PageButton>
+                                <PageButton>4</PageButton>
+                                <PageButton>5</PageButton>
+                                <PageButton>6</PageButton>
+                                <PageButton>&raquo;</PageButton>
+                            </Pagination>
                         </Container>  
                     </Box>
                 )}
@@ -316,16 +316,16 @@ const MyPage = () => {
                                     <TableTd>결제완료</TableTd>
                                 </tr>
                              </Table>
-                             <div class="pagination">
-                                <button>&laquo;</button>
-                                <button>1</button>
-                                <button>2</button>
-                                <button>3</button>
-                                <button>4</button>
-                                <button>5</button>
-                                <button>6</button>
-                                <button>&raquo;</button>
-                            </div>
+                             <Pagination class="pagination">
+                                <PageButton>&laquo;</PageButton>
+                                <PageButton>1</PageButton>
+                                <PageButton>2</PageButton>
+                                <PageButton>3</PageButton>
+                                <PageButton>4</PageButton>
+                                <PageButton>5</PageButton>
+                                <PageButton>6</PageButton>
+                                <PageButton>&raquo;</PageButton>
+                            </Pagination>
 
                         </Container>
                         <Container>
@@ -409,16 +409,16 @@ const MyPage = () => {
                                     <TableTd>2024.05.06</TableTd>
                                 </tr>
                              </Table>
-                             <div class="pagination">
-                                <button>&laquo;</button>
-                                <button>1</button>
-                                <button>2</button>
-                                <button>3</button>
-                                <button>4</button>
-                                <button>5</button>
-                                <button>6</button>
-                                <button>&raquo;</button>
-                            </div>
+                             <Pagination class="pagination">
+                                <PageButton>&laquo;</PageButton>
+                                <PageButton>1</PageButton>
+                                <PageButton>2</PageButton>
+                                <PageButton>3</PageButton>
+                                <PageButton>4</PageButton>
+                                <PageButton>5</PageButton>
+                                <PageButton>6</PageButton>
+                                <PageButton>&raquo;</PageButton>
+                            </Pagination>
 
                         </Container>
                         {/* <Container>
@@ -544,14 +544,14 @@ const MyPage = () => {
                                        
                                          
                                         <Pagination class="pagination">
-                                            <button>&laquo;</button>
-                                            <button>1</button>
-                                            <button>2</button>
-                                            <button>3</button>
-                                            <button>4</button>
-                                            <button>5</button>
-                                            <button>6</button>
-                                            <button>&raquo;</button>
+                                            <PageButton>&laquo;</PageButton>
+                                            <PageButton>1</PageButton>
+                                            <PageButton>2</PageButton>
+                                            <PageButton>3</PageButton>
+                                            <PageButton>4</PageButton>
+                                            <PageButton>5</PageButton>
+                                            <PageButton>6</PageButton>
+                                            <PageButton>&raquo;</PageButton>
                                         </Pagination>
                                     </Container>
                                     <Title>상품판매 현황</Title>
@@ -626,6 +626,15 @@ const Title  = styled.div`
 const Pagination = styled.div`
    
 
+
+`;
+
+const PageButton = styled.button`
+    width: 35px;
+    height: 35px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
 
 `;
 
