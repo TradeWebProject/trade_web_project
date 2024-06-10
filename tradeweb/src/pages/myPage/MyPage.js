@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from '@emotion/styled';
 import {Box, Tab, Tabs, Button  } from "@mui/material";
-
-
+import { BarChart } from '@mui/x-charts/BarChart';
+import { axisClasses } from '@mui/x-charts/ChartsAxis';
 
 import profile from "../../assets/profile.svg";
 import plus from "../../assets/plus.svg";
@@ -556,7 +556,22 @@ const MyPage = () => {
                                     </Container>
                                     <Title>상품판매 현황</Title>
                                     <div>
-                                        차트api
+                                    <BarChart
+                                        xAxis={[
+                                            {
+                                            id: 'barCategories',
+                                            data: ['bar A', 'bar B', 'bar C'],
+                                            scaleType: 'band',
+                                            },
+                                        ]}
+                                        series={[
+                                            {
+                                            data: [2, 5, 3],
+                                            },
+                                        ]}
+                                        width={500}
+                                        height={300}
+                                    />
 
 
 
