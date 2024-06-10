@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import DropdownOptions from "../common/DropdownOptions";
 import heartIcon from "../../assets/heart.svg";
+import profile from "../../assets/profile.svg";
 
 const Detail = () => {
   // 임의의 데이터 정의
@@ -17,6 +18,65 @@ const Detail = () => {
     productStarsCount: 12,
     productOptions: ["S", "M", "L", "XL"],
   };
+
+  const reviewData = [
+    {
+        files: profile,
+        nickName: "nickname",
+        starRate: 4,
+        reviewContent: "색이 예쁘고 발이 편해요",
+        date: "2024.06.08",
+        productId: 2,
+    },
+    {
+        files: profile,
+        nickName: "nickname2",
+        starRate: 5,
+        reviewContent: "대박",
+        date: "2024.06.07",
+        productId: 2,
+    },
+    {
+        files: profile,
+        nickName: "nickname3",
+        starRate: 4,
+        reviewContent: "색이 예쁘고 발이 편해요",
+        date: "2024.06.06",
+        productId: 2,
+    },
+    {
+        files: profile,
+        nickName: "nickname4",
+        starRate: 4,
+        reviewContent: "추천",
+        date: "2024.06.05",
+        productId: 2,
+    },
+    {
+        files: profile,
+        nickName: "nickname5",
+        starRate: 4,
+        reviewContent: "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
+        date: "2024.06.05",
+        productId: 2,
+    },
+    {
+        files: profile,
+        nickName: "nickname6",
+        starRate: 4,
+        reviewContent: "좋아요 또 살래요",
+        date: "2024.06.04",
+        productId: 2,
+    },
+    {
+        files: profile,
+        nickName: "nickname7",
+        starRate: 4,
+        reviewContent: "좋아요",
+        date: "2024.06.03",
+        productId: 2,
+    },
+];
 
   // 데이터 추출
   const {
@@ -67,6 +127,42 @@ const Detail = () => {
           />
         </ProductInfo>
       </Section>
+     
+        <ReviewContainer>
+            
+            {reviewData.map((data) => (
+            <ProfileContainer>
+              <ReviewHeader>
+                <img src={data.files} alt="profile"/>
+                <div>{data.nickName}</div>
+                <div>
+                    {data.date}
+                </div>
+              </ReviewHeader>
+             <StarContainer>
+                <Icon>
+                  ⭐ {productStars}({productStarsCount})
+                </Icon>
+             </StarContainer>
+                
+                <div>{data.reviewContent}</div>
+               
+            </ProfileContainer>
+            ))}
+        </ReviewContainer>
+        <ReviewContainer>
+            <Pagination class="pagination">
+                <PageButton>&laquo;</PageButton>
+                <PageButton>1</PageButton>
+                <PageButton>2</PageButton>
+                <PageButton>3</PageButton>
+                <PageButton>4</PageButton>
+                <PageButton>5</PageButton>
+                <PageButton>6</PageButton>
+                <PageButton>&raquo;</PageButton>
+            </Pagination>
+        </ReviewContainer>
+        
     </Wrapper>
   );
 };
@@ -165,4 +261,75 @@ const Button = styled.button`
   &:hover {
     background-color: #f5f5f5;
   }
+`;
+
+const ReviewContainer = styled.div`
+  position: absolute;
+  width: 1000px;
+  margin-top: 500px;
+  margin-left: -440px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+`;
+
+const ProfileContainer = styled.div`
+    width: 600px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-top: 40px;
+    margin-left: 560px;
+    margin-bottom: 30px;
+    padding: 0 20px;
+    gap: 10px;
+    background-color: #F4F4F4;
+`;
+
+const ReviewHeader = styled.div`
+  display: flex;
+  align-items: center;
+  width: 200px;
+  height: 50px;
+  margin-top: 20px;
+  gap: 10px;
+
+
+`;
+
+const StarContainer = styled.div`
+display: flex;
+width: 200px;
+height: 50px;
+
+`;
+
+const ChangeImgButton = styled.button`
+    width: 100px;
+    height: 37px;
+    margin-left: 360px;
+    background-color: black;
+    color: white;
+    border: 1px solid black;
+    cursor: pointer;
+`;
+
+
+const Pagination = styled.div`
+   margin-top: 1800px;
+   margin-left: 560px;
+
+
+`;
+
+const PageButton = styled.button`
+    width: 35px;
+    height: 35px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+
 `;
