@@ -20,7 +20,7 @@ const filters = [
   },
 ];
 
-const SearchFilter = () => {
+const SearchFilter = ({ selectedFilters, onFilterChange }) => {
   const [openFilters, setOpenFilters] = useState({});
 
   const toggleFilter = (filterTitle) => {
@@ -46,7 +46,15 @@ const SearchFilter = () => {
               <FilterMenu>
                 {filter.options.map((option) => (
                   <CheckBox key={option}>
-                    <input type="checkbox" /> {option}
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedFilters[filter.title] &&
+                        selectedFilters[filter.title].includes(option)
+                      }
+                      onChange={() => onFilterChange(filter.title, option)}
+                    />{" "}
+                    {option}
                   </CheckBox>
                 ))}
               </FilterMenu>
