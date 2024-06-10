@@ -101,33 +101,7 @@ const Detail = () => {
       <Section>
         <MainImage src={image} alt="Main Image" />
         <Description>{description}</Description>
-        <Buttons>
-          <HeartIcon src={heartIcon} alt="Heart Icon" />
-          <Button>문의하기</Button>
-        </Buttons>
-      </Section>
-      <Section>
-        <UserSection>
-          <UserImage src={userImage} alt="User Image" />
-          <UserName>{userName}</UserName>
-        </UserSection>
-        <ProductInfo>
-          <ProductTitle>{productTitle}</ProductTitle>
-
-          <IconsWrapper>
-            <Icon>❤️ {productLikes}</Icon>
-            <Icon>
-              ⭐ {productStars}({productStarsCount})
-            </Icon>
-          </IconsWrapper>
-          <DropdownOptions
-            options={productOptions}
-            title="옵션 선택"
-            onSelect={handleOptionSelect}
-          />
-        </ProductInfo>
-      </Section>
-     
+        
         <ReviewContainer>
             
             {reviewData.map((data) => (
@@ -150,7 +124,7 @@ const Detail = () => {
             </ProfileContainer>
             ))}
         </ReviewContainer>
-        <ReviewContainer>
+        {/* <ReviewContainer>
             <Pagination class="pagination">
                 <PageButton>&laquo;</PageButton>
                 <PageButton>1</PageButton>
@@ -161,7 +135,35 @@ const Detail = () => {
                 <PageButton>6</PageButton>
                 <PageButton>&raquo;</PageButton>
             </Pagination>
-        </ReviewContainer>
+        </ReviewContainer> */}
+      </Section>
+      <Section>
+        <UserSection>
+          <UserImage src={userImage} alt="User Image" />
+          <UserName>{userName}</UserName>
+        </UserSection>
+        <ProductInfo>
+          <ProductTitle>{productTitle}</ProductTitle>
+
+          <IconsWrapper>
+            <Icon>❤️ {productLikes}</Icon>
+            <Icon>
+              ⭐ {productStars}({productStarsCount})
+            </Icon>
+          </IconsWrapper>
+          <DropdownOptions
+            options={productOptions}
+            title="옵션 선택"
+            onSelect={handleOptionSelect}
+          />
+          <Buttons>
+            <HeartIcon src={heartIcon} alt="Heart Icon" />
+            <Button>문의하기</Button>
+        </Buttons>
+        </ProductInfo>
+      </Section>
+     
+       
         
     </Wrapper>
   );
@@ -236,9 +238,7 @@ const HeartIcon = styled.img`
 
 const Buttons = styled.div`
   /* 버튼 스타일링 */
-  position: absolute;
-  bottom: 0px;
-  right: -521px;
+  /*position: absolute;*/
   display: flex;
   align-items: center;
   z-index: 2;
@@ -264,13 +264,12 @@ const Button = styled.button`
 `;
 
 const ReviewContainer = styled.div`
-  position: absolute;
+ 
   width: 1000px;
-  margin-top: 500px;
-  margin-left: -440px;
   display: flex;
+  border: 1px solid red;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-content: flex-start;
 `;
 
@@ -282,7 +281,6 @@ const ProfileContainer = styled.div`
     align-items: flex-start;
     justify-content: flex-start;
     margin-top: 40px;
-    margin-left: 560px;
     margin-bottom: 30px;
     padding: 0 20px;
     gap: 10px;
