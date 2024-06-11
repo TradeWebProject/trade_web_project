@@ -261,6 +261,7 @@ const MyPage = () => {
                              <Table>
                                 <tr>
                                     <TableTh>결제일</TableTh>
+                                    <TableTh>상품 이미지</TableTh>
                                     <TableTh>상품명</TableTh>
                                     <TableTh>결제금액</TableTh>
                                     <TableTh>결제번호</TableTh>
@@ -268,6 +269,7 @@ const MyPage = () => {
                                 </tr>
                                 <tr>
                                     <TableTd>2024.06.08</TableTd>
+                                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
                                     <TableTd>아디다스 슬리퍼</TableTd>
                                     <TableTd>43,000원</TableTd>
                                     <TableTd>0000003</TableTd>
@@ -275,6 +277,7 @@ const MyPage = () => {
                                 </tr>
                                 <tr>
                                     <TableTd>2024.06.06</TableTd>
+                                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
                                     <TableTd>나이키 신발</TableTd>
                                     <TableTd>89,000원</TableTd>
                                     <TableTd>0000002</TableTd>
@@ -282,6 +285,7 @@ const MyPage = () => {
                                 </tr>
                                 <tr>
                                     <TableTd>2024.06.05</TableTd>
+                                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
                                     <TableTd>나이키 티셔츠</TableTd>
                                     <TableTd>56,000원</TableTd>
                                     <TableTd>0000001</TableTd>
@@ -289,6 +293,7 @@ const MyPage = () => {
                                 </tr>
                                 <tr>
                                     <TableTd>2024.06.04</TableTd>
+                                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
                                     <TableTd>아디다스 슬리퍼2</TableTd>
                                     <TableTd>43,000원</TableTd>
                                     <TableTd>0000003</TableTd>
@@ -296,6 +301,7 @@ const MyPage = () => {
                                 </tr>
                                 <tr>
                                     <TableTd>2024.06.03</TableTd>
+                                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
                                     <TableTd>나이키 신발2</TableTd>
                                     <TableTd>89,000원</TableTd>
                                     <TableTd>0000002</TableTd>
@@ -303,6 +309,7 @@ const MyPage = () => {
                                 </tr>
                                 <tr>
                                     <TableTd>2024.06.02</TableTd>
+                                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
                                     <TableTd>나이키 티셔츠2</TableTd>
                                     <TableTd>56,000원</TableTd>
                                     <TableTd>0000001</TableTd>
@@ -310,6 +317,7 @@ const MyPage = () => {
                                 </tr>
                                 <tr>
                                     <TableTd>2024.06.01</TableTd>
+                                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
                                     <TableTd>나이키 티셔츠3</TableTd>
                                     <TableTd>56,000원</TableTd>
                                     <TableTd>0000001</TableTd>
@@ -421,35 +429,6 @@ const MyPage = () => {
                             </Pagination>
 
                         </Container>
-                        {/* <Container>
-                            <Title>찜목록</Title>
-                            <SearchResultList>
-                                {data.map((product) => (
-                                    <SearchItem key={product.productId}>
-                                        <ItemImageBox>
-                                            <ItemImage src={product.files} alt={product.title} />
-                                        </ItemImageBox>
-                                        <ItemTitle>{product.title}</ItemTitle>
-                                        <ItemInfo>{product.description}</ItemInfo>
-                                        <ItemPrice>
-                                            {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                        </ItemPrice>
-                                        <Icon>❤️</Icon>
-                                    </SearchItem>
-                                ))}
-                            </SearchResultList>
-                            <div class="pagination">
-                                <button>&laquo;</button>
-                                <button>1</button>
-                                <button>2</button>
-                                <button>3</button>
-                                <button>4</button>
-                                <button>5</button>
-                                <button>6</button>
-                                <button>&raquo;</button>
-                            </div>
-                        </Container> */}
-                        
                     </Box>
                 )}
                 {currentTabIndex === 2 && (
