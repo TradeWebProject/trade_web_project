@@ -63,43 +63,88 @@ const ProductWritePage = () => {
                         <ProductNameElement>재고:</ProductNameElement>
                         <ProductNameInput type="text" defaultValue="10"/>
                     </ProductNameWrapper>
-                    <ProductSellDateWrapper>
+                    <OptionInputWrapper>
+                        <OptionTitleTextElement>옵션명:</OptionTitleTextElement>
+                        <OptionTextInput type="text" placeholder="옵션명을 입력하세요"/>
+                        <button>옵션 내용 추가</button>
+                    </OptionInputWrapper>
+                    <OptionInputWrapper>
+                        <OptionContentTitleElement>옵션 내용:</OptionContentTitleElement>
+                        <OptionContentInput type="text" placeholder="옵션 내용을 입력하세요"/>
+                    </OptionInputWrapper>
+                    <InnerWrapper>
+                        <ProductSellDateWrapper>
+                            <SellStartDateWrapper>
+                                    <DateStartText>판매 시작일:</DateStartText>
+                                    <StartDateInput type="date" defaultValue="2024-06-07"/>
+                            </SellStartDateWrapper>
+                            <SellEndDateWrapper>
+                                    <DateStartText>판매 종료일:</DateStartText>
+                                    <EndDateInput type="date" defaultValue="2024-06-30"/>
+                            </SellEndDateWrapper>
+                        </ProductSellDateWrapper>
+                        <ProductSellDateWrapper>
+                            <SellStartDateWrapper>
+                                <OptionTitleText>카테고리</OptionTitleText>
+                                <DropwDownElementWrapper>
+                                    <DropdownOptions
+                                        options={productOptions}
+                                        title="카테고리 선택"
+                                        onSelect={handleOptionSelect}
+                                    />
+                                </DropwDownElementWrapper>
+                                
+                            </SellStartDateWrapper>
+                            <SellStartDateWrapper>
+                                <OptionTitleText>제품 상태</OptionTitleText>
+                                <DropwDownElementWrapper>
+                                    <DropdownOptions
+                                        options={productSellStatusOptions}
+                                        title="제품 상태 선택"
+                                        onSelect={handleOptionSelect}
+                                    />
+                                </DropwDownElementWrapper>
+                                
+                            </SellStartDateWrapper>
+                        </ProductSellDateWrapper>
+
+
+                    </InnerWrapper>
+                    {/* <ProductSellDateWrapper>
                         <SellStartDateWrapper>
-                                <DateStartText>판매 시작 날짜</DateStartText>
+                                <DateStartText>판매 시작일:</DateStartText>
                                 <StartDateInput type="date" defaultValue="2024-06-07"/>
                         </SellStartDateWrapper>
                         <SellEndDateWrapper>
-                                <DateStartText>판매 종료 날짜</DateStartText>
+                                <DateStartText>판매 종료일:</DateStartText>
                                 <EndDateInput type="date" defaultValue="2024-06-30"/>
                         </SellEndDateWrapper>
                     </ProductSellDateWrapper>
                     <ProductSellDateWrapper>
                         <SellStartDateWrapper>
                             <OptionTitleText>카테고리</OptionTitleText>
-                            <DropdownOptions
-                                options={productOptions}
-                                title="카테고리 선택"
-                                onSelect={handleOptionSelect}
-                            />
+                            <DropwDownElementWrapper>
+                                <DropdownOptions
+                                    options={productOptions}
+                                    title="카테고리 선택"
+                                    onSelect={handleOptionSelect}
+                                />
+                            </DropwDownElementWrapper>
+                            
                         </SellStartDateWrapper>
                         <SellStartDateWrapper>
                             <OptionTitleText>제품 상태</OptionTitleText>
-                            <DropdownOptions
-                                options={productSellStatusOptions}
-                                title="제품 상태 선택"
-                                onSelect={handleOptionSelect}
-                            />
+                            <DropwDownElementWrapper>
+                                <DropdownOptions
+                                    options={productSellStatusOptions}
+                                    title="제품 상태 선택"
+                                    onSelect={handleOptionSelect}
+                                />
+                            </DropwDownElementWrapper>
+                            
                         </SellStartDateWrapper>
-                    </ProductSellDateWrapper>
-                    <div>
-                        <OptionTitleText>옵션명:</OptionTitleText>
-                        <OptionTextInput type="text" placeholder="옵션명을 입력하세요"/>
-                        <button>옵션 추가</button>
-                    </div>
-                    <div>
-                        <OptionTitleText>옵션 내용:</OptionTitleText>
-                        <OptionContentInput type="text" placeholder="옵션 내용을 입력하세요"/>
-                    </div>
+                    </ProductSellDateWrapper> */}
+                    
                 </SubContentWrapper>
                 
                 <link
@@ -174,8 +219,6 @@ const SaveButtonTopWrapper = styled.div`
     background-color: #f7f2d2;
 `;
 
-
-
 const SubContentWrapper  = styled.div`
     width: 1280px;
     display: flex;
@@ -197,7 +240,6 @@ const ProductNameWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-   
 `;
 
 const ProductNameElement = styled.div`
@@ -221,7 +263,6 @@ const ProductSellDateWrapper = styled.div`
 const SellStartDateWrapper = styled.div`
     width: 1140px;
     display: flex;
-    // margin-bottom: 10px;
 `;
 
 const SellEndDateWrapper = styled.div`
@@ -245,7 +286,6 @@ const StartDateInput = styled.input`
     position: relative;
     appearance: none; /* 기본 스타일 제거 */
     background-color: white;
-    // border: 1px solid #ccc;
     border: none;
     padding: 12px 20px;
     margin-bottom: 20px;
@@ -258,34 +298,75 @@ const EndDateInput = styled.input`
     position: relative;
     appearance: none; /* 기본 스타일 제거 */
     background-color: white;
-    // border: 1px solid #ccc;
     border: none;
     padding: 12px 20px;
     margin-bottom: 20px;
     cursor: pointer;
 `;
 
-const OptionTitleText = styled.div`
-    // width: 100px;
-    width: 110px;
-    height: 24px;
-    margin-right: 24px;
+const OptionInputWrapper = styled.div`
+    width: 1280px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    // border: 1px solid red;
+`;
+
+const OptionContentTitleElement = styled.div`
+    width:  160px;
+    height: 30px;
     margin-top: 30px;
     margin-bottom: 10px;
     background-size: cover;
-    // border: 1px solid red;
+    // border: 1px solid green;
+    cursor: pointer;
+`;
+
+const OptionTitleTextElement = styled.div`
+    width:  52px;
+    height: 30px;
+    margin-right: 26px;
+    margin-bottom: 10px;
+    background-size: cover;
+    // border: 1px solid blue;
+    cursor: pointer;
+`;
+
+const OptionTitleText = styled.div`
+    width:  90px;
+    height: 30px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    background-size: cover;
+    // border: 1px solid black;
     cursor: pointer;
 `;
 
 
 const OptionTextInput = styled.input`
+    width: 1060px;
+    height: 44px;
+    margin-right: 34px;
     border: none;   
     margin-bottom: 10px;
 `;
 
 const OptionContentInput = styled.input`
+    width:  2600px;
+    height: 44px;
     border: none; 
+`;
 
+const InnerWrapper = styled.div`
+    width: 1277px;
+    height: 150px;
+    background-color:#f0c556;
+`;
+
+const DropwDownElementWrapper = styled.div`
+    width: 524px;
+    height: 24px;
+    margin-left: 20px;
 `;
 
 const FileUploadButtonWrapper = styled.div`
@@ -301,8 +382,6 @@ const FileUploadButton = styled.button`
     color: white;
 `;
 
-
-
 const ImageWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -311,7 +390,6 @@ const ImageWrapper = styled.div`
 
 const MainImage = styled.div`
   position: relative;
-
   width: 400px;
   height: 400px;
   border: 1px solid #ccc;
