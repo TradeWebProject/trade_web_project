@@ -154,6 +154,7 @@ const ContentLayout = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background-color: #f7f2d2;
 `;
 
 const Wrapper = styled.div`
