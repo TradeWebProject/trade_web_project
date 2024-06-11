@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,  useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import DropdownOptions from "../common/DropdownOptions";
 import heartIcon from "../../assets/heart.svg";
@@ -6,6 +6,12 @@ import profile from "../../assets/profile.svg";
 import rightarrow from "../../assets/rightarrow.svg";
 
 const Detail = () => {
+  const [listData, setListData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const loader = useRef(null);
+
+
   // 임의의 데이터 정의
   const data = {
     image: "https://via.placeholder.com/700x448",
@@ -77,6 +83,46 @@ const Detail = () => {
         date: "2024.06.03",
         productId: 2,
     },
+    {
+      files: profile,
+      nickName: "nickname8",
+      starRate: 4,
+      reviewContent: "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
+      date: "2024.06.05",
+      productId: 2,
+  },
+  {
+      files: profile,
+      nickName: "nickname9",
+      starRate: 4,
+      reviewContent: "좋아요 또 살래요",
+      date: "2024.06.04",
+      productId: 2,
+  },
+  {
+      files: profile,
+      nickName: "nickname10",
+      starRate: 4,
+      reviewContent: "좋아요",
+      date: "2024.06.03",
+      productId: 2,
+  },
+  {
+      files: profile,
+      nickName: "nickname11",
+      starRate: 4,
+      reviewContent: "좋아요 또 살래요",
+      date: "2024.06.04",
+      productId: 2,
+  },
+  {
+      files: profile,
+      nickName: "nickname12",
+      starRate: 4,
+      reviewContent: "좋아요",
+      date: "2024.06.03",
+      productId: 2,
+  },
 ];
 
   // 데이터 추출
@@ -97,6 +143,50 @@ const Detail = () => {
     console.log(option);
   };
 
+  const loadMore = useCallback(() => {
+    const startIndex = (page - 1) * 5;
+    const endIndex = startIndex + 5;
+    const newReviews = reviewData.slice(startIndex, endIndex);
+
+    if (newReviews.length === 0) {
+        setHasMore(false);
+    } else {
+      setListData((prev) => [...prev, ...newReviews]);
+      setPage((prev) => prev + 1);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    loadMore();
+  }, []);
+
+  useEffect(() => {
+    if (!hasMore) return;
+    
+    console.log("useEffect");
+
+    let currentLoader = loader.current;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+           loadMore(); 
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (currentLoader) {
+      observer.observe(currentLoader);
+    }
+
+    return () => {
+      if (currentLoader) {
+        observer.unobserve(currentLoader);
+      }
+    };
+  }, [loadMore, hasMore]);
+
   return (
     <Wrapper>
       <Section>
@@ -105,8 +195,8 @@ const Detail = () => {
         
         <ReviewContainer>
             
-            {reviewData.map((data) => (
-            <ProfileContainer>
+            {listData.map((data, index) => (
+            <ProfileContainer key={index}>
               <ReviewHeader>
                 <img src={data.files} alt="profile"/>
                 <div>{data.nickName}</div>
@@ -125,6 +215,7 @@ const Detail = () => {
             </ProfileContainer>
             ))}
         </ReviewContainer>
+        <div ref={loader}></div>
       </Section>
       <Section>
         <UserSection>
