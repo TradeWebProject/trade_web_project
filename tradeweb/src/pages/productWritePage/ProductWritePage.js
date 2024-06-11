@@ -433,11 +433,13 @@ const PlusIcon = styled.div`
 const SaveButtonWrapper = styled.div`
     width: 1280px;
     margin-top: 80px;
+    display: flex;
+    justify-content: end;
     background-color: #f7f2d2;
 `;
 
 const SaveButton = styled.button`
-    width: 30%;
+    width: 10%;
     height: 45px;
     margin-left: 32%;
     background-color: black;
