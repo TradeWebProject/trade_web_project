@@ -446,6 +446,7 @@ const MyPage = () => {
                                                 <TableTh>상품번호</TableTh>
                                                 <TableTh>상품명</TableTh>
                                                 <TableTh>카테고리</TableTh>
+                                                <TableTh>재고수량</TableTh>
                                                 <TableTh>상품상태</TableTh>
                                                 <TableTh>댓글 조회</TableTh>
                                             </tr>
@@ -453,6 +454,7 @@ const MyPage = () => {
                                                 <TableTd>1</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>아디다스 슬리퍼</a></TableTd>
                                                 <TableTd>의류</TableTd>
+                                                <TableTd>5</TableTd>
                                                 <TableTd>새 생품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
@@ -460,6 +462,7 @@ const MyPage = () => {
                                                 <TableTd>2</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>나이키 신발</a></TableTd>
                                                 <TableTd>의류</TableTd>
+                                                <TableTd>1</TableTd>
                                                 <TableTd>중고 상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
@@ -467,6 +470,7 @@ const MyPage = () => {
                                                 <TableTd>3</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>아디다스 반팔티</a></TableTd>
                                                 <TableTd>의류</TableTd>
+                                                <TableTd>5</TableTd>
                                                 <TableTd>새상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
@@ -474,6 +478,7 @@ const MyPage = () => {
                                                 <TableTd>4</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>갤럭시 탭s7</a></TableTd>
                                                 <TableTd>가전</TableTd>
+                                                <TableTd>1</TableTd>
                                                 <TableTd>중고 상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
@@ -481,6 +486,7 @@ const MyPage = () => {
                                                 <TableTd>5</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>애플워치</a></TableTd>
                                                 <TableTd>가전</TableTd>
+                                                <TableTd>1</TableTd>
                                                 <TableTd>중고상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
@@ -488,13 +494,15 @@ const MyPage = () => {
                                                 <TableTd>6</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>청바지</a></TableTd>
                                                 <TableTd>의류</TableTd>
-                                                <TableTd>새 상품</TableTd>
+                                                <TableTd>2</TableTd>
+                                                <TableTd>새상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
                                             <tr>
                                                 <TableTd>7</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>긴팔 티셔츠</a></TableTd>
                                                 <TableTd>의류</TableTd>
+                                                <TableTd>2</TableTd>
                                                 <TableTd>새상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
@@ -502,6 +510,7 @@ const MyPage = () => {
                                                 <TableTd>8</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>아이패드</a></TableTd>
                                                 <TableTd>가전 제품</TableTd>
+                                                <TableTd>1</TableTd>
                                                 <TableTd>중고 상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
@@ -509,13 +518,15 @@ const MyPage = () => {
                                                 <TableTd>9</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>모니터</a></TableTd>
                                                 <TableTd>가전 제품</TableTd>
-                                                <TableTd>새 상품</TableTd>
+                                                <TableTd>1</TableTd>
+                                                <TableTd>새상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
                                             <tr>
                                                 <TableTd>10</TableTd>
                                                 <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>반바지</a></TableTd>
                                                 <TableTd>의류</TableTd>
+                                                <TableTd>1</TableTd>
                                                 <TableTd>중고상품</TableTd>
                                                 <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
                                             </tr>
