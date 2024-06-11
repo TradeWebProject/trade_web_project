@@ -44,6 +44,9 @@ const ProductWritePage = () => {
         <ContentLayout>
             <Wrapper>
                 <h2>상품 등록</h2>
+                <SaveButtonTopWrapper>
+                    <SaveButton>저장</SaveButton>
+                </SaveButtonTopWrapper>  
                 <SubTitle>
                     <h3>상품 정보</h3>
                 </SubTitle>
@@ -88,15 +91,15 @@ const ProductWritePage = () => {
                             />
                         </SellStartDateWrapper>
                     </ProductSellDateWrapper>
-                    <ProductSellDateWrapper>
+                    <div>
                         <OptionTitleText>옵션명:</OptionTitleText>
-                        <input type="text" placeholder="옵션명을 입력하세요"/>
+                        <OptionTextInput type="text" placeholder="옵션명을 입력하세요"/>
                         <button>옵션 추가</button>
-                    </ProductSellDateWrapper>
-                    <ProductSellDateWrapper>
+                    </div>
+                    <div>
                         <OptionTitleText>옵션 내용:</OptionTitleText>
-                        <input type="text" placeholder="옵션 내용을 입력하세요"/>
-                    </ProductSellDateWrapper>
+                        <OptionContentInput type="text" placeholder="옵션 내용을 입력하세요"/>
+                    </div>
                 </SubContentWrapper>
                 
                 <link
@@ -107,15 +110,12 @@ const ProductWritePage = () => {
                 <SubTitle>
                     <h3>상품 상세 설명</h3>
                 </SubTitle>
-                <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px" }}
+                <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px", backgroundColor: "white", }}
                               modules={modules}  
                               placeholder="상품에 대한 상세설명을 작성해주세요!"  />
                 <ImageWrapper>
                     <SubTitle><h3>이미지</h3></SubTitle>
                     <MainImage>
-                    {/* {files.length > 0 && (
-                        <img src={files[0]} alt="Main product" />
-                    )} */}
                         <img src="https://placehold.jp/200x200.png"/>
                     </MainImage>
                         <ImageInputWrapper>
@@ -138,7 +138,7 @@ const ProductWritePage = () => {
                     </ImageInputWrapper>
                 </ImageWrapper>
                 <SaveButtonWrapper>
-                    <SaveButton>작성 완료</SaveButton>
+                    <SaveButton>저장</SaveButton>
                 </SaveButtonWrapper>  
             </Wrapper>
         </ContentLayout>
@@ -166,6 +166,16 @@ const Wrapper = styled.div`
     margin-top: 120px;
 `;
 
+const SaveButtonTopWrapper = styled.div`
+    width: 1280px;
+    margin-top: 80px;
+    display: flex;
+    justify-content: end;
+    background-color: #f7f2d2;
+`;
+
+
+
 const SubContentWrapper  = styled.div`
     width: 1280px;
     display: flex;
@@ -186,6 +196,8 @@ const ProductNameWrapper = styled.div`
     width: 1280px;
     display: flex;
     align-items: center;
+    margin-bottom: 10px;
+   
 `;
 
 const ProductNameElement = styled.div`
@@ -197,7 +209,7 @@ const ProductNameElement = styled.div`
 const ProductNameInput = styled.input`
     width: 1200px;
     height: 24px;
-    border: 1px solid #ccc;
+    border: none;
     padding: 12px 20px;
 `;
 
@@ -209,6 +221,7 @@ const ProductSellDateWrapper = styled.div`
 const SellStartDateWrapper = styled.div`
     width: 1140px;
     display: flex;
+    // margin-bottom: 10px;
 `;
 
 const SellEndDateWrapper = styled.div`
@@ -232,7 +245,8 @@ const StartDateInput = styled.input`
     position: relative;
     appearance: none; /* 기본 스타일 제거 */
     background-color: white;
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
+    border: none;
     padding: 12px 20px;
     margin-bottom: 20px;
     cursor: pointer;
@@ -244,7 +258,8 @@ const EndDateInput = styled.input`
     position: relative;
     appearance: none; /* 기본 스타일 제거 */
     background-color: white;
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
+    border: none;
     padding: 12px 20px;
     margin-bottom: 20px;
     cursor: pointer;
@@ -256,9 +271,21 @@ const OptionTitleText = styled.div`
     height: 24px;
     margin-right: 24px;
     margin-top: 30px;
+    margin-bottom: 10px;
     background-size: cover;
     // border: 1px solid red;
     cursor: pointer;
+`;
+
+
+const OptionTextInput = styled.input`
+    border: none;   
+    margin-bottom: 10px;
+`;
+
+const OptionContentInput = styled.input`
+    border: none; 
+
 `;
 
 const FileUploadButtonWrapper = styled.div`
@@ -328,6 +355,7 @@ const PlusIcon = styled.div`
 const SaveButtonWrapper = styled.div`
     width: 1280px;
     margin-top: 80px;
+    background-color: #f7f2d2;
 `;
 
 const SaveButton = styled.button`
