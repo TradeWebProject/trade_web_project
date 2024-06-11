@@ -1,35 +1,76 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { theme } from "../../styles/theme";
 
-const Login = () => {
-  const moveToHome = () => {};
-  const moveToSignup = () => {};
+const LoginSignup = () => {
+  const [isLogin, setIsLogin] = useState(true);
+
+  const toggleToLogin = () => setIsLogin(true);
+  const toggleToSignup = () => setIsLogin(false);
 
   return (
     <Wrapper>
-      <Title onClick={moveToHome}>super24</Title>
-      <Form>
-        <InputWrapper>
-          <StyledInput type="text" placeholder="아이디(이메일)" name="email" />
-          <StyledInput type="password" placeholder="비밀번호" name="password" />
-        </InputWrapper>
-        <SubmitButton type="submit">Login</SubmitButton>
-        <SignupButton onClick={moveToSignup}>Sign up</SignupButton>
-      </Form>
+      <Title>super24</Title>
+      <Box>
+        <TabWrapper>
+          <TabButton onClick={toggleToLogin} active={isLogin}>
+            로그인
+          </TabButton>
+          <TabButton onClick={toggleToSignup} active={!isLogin}>
+            회원가입
+          </TabButton>
+        </TabWrapper>
+        <Form>
+          {isLogin ? (
+            <InputWrapper>
+              <StyledInput
+                type="text"
+                placeholder="아이디(이메일)"
+                name="email"
+              />
+              <StyledInput
+                type="password"
+                placeholder="비밀번호"
+                name="password"
+              />
+              <SubmitButton type="submit">로그인</SubmitButton>
+            </InputWrapper>
+          ) : (
+            <SignupWrapper>
+              <InputWrapper>
+                <StyledInput type="text" placeholder="아이디(이메일)" />
+                <StyledInput
+                  type="password"
+                  placeholder="비밀번호 (8자 이상 20자 이하 영문자 숫자 조합)"
+                />
+                <StyledInput type="password" placeholder="비밀번호 확인" />
+                <StyledInput type="text" placeholder="휴대폰 번호 ( - 포함)" />
+                <StyledInput type="text" placeholder="주소" />
+                <FileInfo>
+                  나를 나타내는 프로필 사진과 닉네임으로 등록하세요.
+                </FileInfo>
+                <FileInputWrapper>
+                  <ImageButton alt="파일 선택 버튼" />
+                </FileInputWrapper>
+                <InputNickname type="text" placeholder="닉네임" />
+              </InputWrapper>
+              <SubmitButton>가입하기</SubmitButton>
+            </SignupWrapper>
+          )}
+        </Form>
+      </Box>
     </Wrapper>
   );
 };
 
-export default Login;
+export default LoginSignup;
 
-// 스타일드 컴포넌트 정의
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  margin-top: 58px;
+  margin-top: 100px;
 `;
 
 const Title = styled.h2`
@@ -38,6 +79,44 @@ const Title = styled.h2`
   height: 44px;
   cursor: pointer;
   color: ${theme.mainColor};
+  margin-bottom: 20px;
+`;
+
+const Box = styled.div`
+  width: 100%;
+  max-width: 500px;
+  border: 1px solid ${theme.mainColor};
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const TabWrapper = styled.div`
+  display: flex;
+  width: 100%;
+`;
+
+const TabButton = styled.button`
+  padding: 20px;
+  flex: 1;
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  background-color: ${({ active }) => (active ? theme.mainColor : "white")};
+  color: ${({ active }) => (active ? "white" : theme.mainColor)};
+  border-bottom: ${({ active }) =>
+    active ? `3px solid ${theme.mainColor}` : "none"};
+  margin-bottom: -1px;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-bottom 0.3s ease;
+  opacity: ${({ active }) => (active ? 1 : 0.7)};
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const Form = styled.form`
@@ -53,10 +132,11 @@ const InputWrapper = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
+  margin: 0 15px;
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
+  width: 450px;
   max-width: 465px;
   height: 50px;
   font-size: 18px;
@@ -68,9 +148,11 @@ const StyledInput = styled.input`
 `;
 
 const SubmitButton = styled.button`
-  width: 100%;
+  width: 450px;
   max-width: 465px;
-  height: 45px;
+  height: 50px;
+  margin-bottom: 15px;
+  padding: 0 15px;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
@@ -81,15 +163,42 @@ const SubmitButton = styled.button`
   color: white;
 `;
 
-const SignupButton = styled.button`
+const SignupWrapper = styled.div`
+  display: ${({ isLogin }) => (isLogin ? "none" : "flex")};
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  opacity: ${({ isLogin }) => (isLogin ? 0 : 1)};
+`;
+
+const InputNickname = styled.input`
+  width: 92%;
+  max-width: 465px;
+  height: 40px;
+  font-size: 18px;
+  text-indent: 12px;
+  border: 1px solid ${theme.mainColor};
+  border-radius: 10px;
+  margin-bottom: 10px;
+`;
+
+const FileInputWrapper = styled.div`
   width: 100%;
   max-width: 465px;
-  height: 45px;
-  font-weight: 700;
-  font-size: 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const FileInfo = styled.div`
+  font-size: 13px;
+  color: ${theme.mainColor};
+  margin: 11px 0 36px 0;
+`;
+
+const ImageButton = styled.img`
+  width: 150px;
+  height: 150px;
   cursor: pointer;
-  background-color: ${theme.subColor};
-  border: 1px solid ${theme.subColor};
-  color: white;
-  border-radius: 10px;
 `;
