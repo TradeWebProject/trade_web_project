@@ -3,6 +3,7 @@ import styled from "styled-components";
 import DropdownOptions from "../common/DropdownOptions";
 import heartIcon from "../../assets/heart.svg";
 import profile from "../../assets/profile.svg";
+import rightarrow from "../../assets/rightarrow.svg";
 
 const Detail = () => {
   // 임의의 데이터 정의
@@ -10,7 +11,7 @@ const Detail = () => {
     image: "https://via.placeholder.com/700x448",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nonne merninisti licere mihi ista probare, quae sunt a te dicta? Refert tamen, quo modo.",
-    userImage: "https://via.placeholder.com/30",
+    userImage: profile,
     userName: "아이머그컵",
     productTitle: "🔥커스텀 일러스트 자수 커플 반팔티 티셔츠",
     productLikes: 271,
@@ -101,33 +102,7 @@ const Detail = () => {
       <Section>
         <MainImage src={image} alt="Main Image" />
         <Description>{description}</Description>
-        <Buttons>
-          <HeartIcon src={heartIcon} alt="Heart Icon" />
-          <Button>문의하기</Button>
-        </Buttons>
-      </Section>
-      <Section>
-        <UserSection>
-          <UserImage src={userImage} alt="User Image" />
-          <UserName>{userName}</UserName>
-        </UserSection>
-        <ProductInfo>
-          <ProductTitle>{productTitle}</ProductTitle>
-
-          <IconsWrapper>
-            <Icon>❤️ {productLikes}</Icon>
-            <Icon>
-              ⭐ {productStars}({productStarsCount})
-            </Icon>
-          </IconsWrapper>
-          <DropdownOptions
-            options={productOptions}
-            title="옵션 선택"
-            onSelect={handleOptionSelect}
-          />
-        </ProductInfo>
-      </Section>
-     
+        
         <ReviewContainer>
             
             {reviewData.map((data) => (
@@ -150,18 +125,34 @@ const Detail = () => {
             </ProfileContainer>
             ))}
         </ReviewContainer>
-        <ReviewContainer>
-            <Pagination class="pagination">
-                <PageButton>&laquo;</PageButton>
-                <PageButton>1</PageButton>
-                <PageButton>2</PageButton>
-                <PageButton>3</PageButton>
-                <PageButton>4</PageButton>
-                <PageButton>5</PageButton>
-                <PageButton>6</PageButton>
-                <PageButton>&raquo;</PageButton>
-            </Pagination>
-        </ReviewContainer>
+      </Section>
+      <Section>
+        <UserSection>
+          <UserImage src={userImage} alt="User Image" />
+          <UserName>{userName}</UserName>
+          <img src={rightarrow}/>
+        </UserSection>
+        <ProductInfo>
+          <ProductTitle>{productTitle}</ProductTitle>
+          <IconsWrapper>
+            <Icon>❤️ {productLikes}</Icon>
+            <Icon>
+              ⭐ {productStars}({productStarsCount})
+            </Icon>
+          </IconsWrapper>
+          <DropdownOptions
+            options={productOptions}
+            title="옵션 선택"
+            onSelect={handleOptionSelect}
+          />
+          <Buttons>
+            <HeartIcon src={heartIcon} alt="Heart Icon" />
+            <Button>문의하기</Button>
+        </Buttons>
+        </ProductInfo>
+      </Section>
+     
+       
         
     </Wrapper>
   );
@@ -184,6 +175,8 @@ const Section = styled.div`
   align-items: flex-start;
   margin: 0 30px;
   position: relative;
+  border: 1px solid blue;
+  width: 700px;
 `;
 
 const MainImage = styled.img`
@@ -198,6 +191,10 @@ const Description = styled.p`
 
 const UserSection = styled.div`
   /* 사용자 정보 섹션 스타일링 */
+  border: 1px solid green;
+  display: flex;
+  align-items:center;
+  
 `;
 
 const UserImage = styled.img`
@@ -205,10 +202,12 @@ const UserImage = styled.img`
   width: 100%;
   max-width: 30px;
   height: auto;
+  margin-right: 5px;
 `;
 
 const UserName = styled.span`
   /* 사용자 이름 스타일링 */
+  margin-right: 5px;
 `;
 
 const ProductInfo = styled.div`
@@ -236,9 +235,7 @@ const HeartIcon = styled.img`
 
 const Buttons = styled.div`
   /* 버튼 스타일링 */
-  position: absolute;
-  bottom: 0px;
-  right: -521px;
+  /*position: absolute;*/
   display: flex;
   align-items: center;
   z-index: 2;
@@ -264,13 +261,11 @@ const Button = styled.button`
 `;
 
 const ReviewContainer = styled.div`
-  position: absolute;
-  width: 1000px;
-  margin-top: 500px;
-  margin-left: -440px;
+  width: 700px;
   display: flex;
+  border: 1px solid red;
   flex-direction: column;
-  align-items: center;
+  align-items: start;
   justify-content: flex-start;
 `;
 
@@ -282,7 +277,6 @@ const ProfileContainer = styled.div`
     align-items: flex-start;
     justify-content: flex-start;
     margin-top: 40px;
-    margin-left: 560px;
     margin-bottom: 30px;
     padding: 0 20px;
     gap: 10px;
