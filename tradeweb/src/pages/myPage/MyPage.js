@@ -725,10 +725,11 @@ const TableTh = styled.th`
     padding: 6px 15px;
     background: #42444e;
     color: #fff;
-    text-align: left;
+    text-align: center;
 
 `;
 
 const TableTd = styled.td`
     padding: 6px 15px;
+    text-align: center;
 `;
