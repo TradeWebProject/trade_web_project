@@ -273,7 +273,6 @@ const OptionInputWrapper = styled.div`
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-    // border: 1px solid red;
 `;
 
 const OptionContentTitleElement = styled.div`
