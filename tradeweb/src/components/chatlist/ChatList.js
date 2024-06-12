@@ -177,6 +177,7 @@ const ChatContainer = styled.div`
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   display: ${(props) => (props.visible ? "flex" : "none")};
+  overflow: hidden;
 `;
 
 const RoomList = styled.div`
@@ -207,6 +208,7 @@ const ChatBox = styled.div`
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 70%;
 `;
 
 const ChatHeader = styled.div`
@@ -239,6 +241,7 @@ const ChatMessages = styled.div`
   display: flex;
   flex-direction: column;
   align-items: ${(props) => (props.isMe ? "flex-end" : "flex-start")};
+  width: 95%;
 `;
 
 const Message = styled.div`
@@ -251,14 +254,16 @@ const MessageText = styled.span`
   padding: 7px;
   background-color: ${(props) => (props.isMe ? "#DCF8C6" : "#FFF")};
   border-radius: 10px;
-  max-width: 60%;
+  overflow-wrap: break-word;
+  word-break: break-all;
+  width: 100%;
 `;
 
 const MessageTimeStyle = styled.span`
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 0 5px;
+  align-items: end;
+  margin-bottom: 10px;
 `;
 
 const ChatInputContainer = styled.div`
