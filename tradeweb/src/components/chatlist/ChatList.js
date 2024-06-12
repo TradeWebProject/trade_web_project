@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import MessageTime from "./MessageTime";
 import { theme } from "../../styles/theme";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 
 const dummyData = [
   {
@@ -49,11 +50,21 @@ const sortMessagesByTime = (messages) => {
   });
 };
 
+const truncateText = (text, maxLength) => {
+  return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
+};
+
+const getLastMessageText = (messages) => {
+  if (messages.length === 0) return "";
+  return truncateText(messages[messages.length - 1].text, 15);
+};
+
 const ChatList = ({ visible, onClose }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [rooms] = useState(dummyData);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
+  const [isRoomListMinimized, setIsRoomListMinimized] = useState(false);
   const chatRef = useRef(null);
 
   const handleRoomClick = (room) => {
@@ -104,27 +115,48 @@ const ChatList = ({ visible, onClose }) => {
 
   return (
     <ChatContainer visible={visible} ref={chatRef}>
-      <RoomList>
-        <ChatHeader>
-          Rooms
-          <CloseButton onClick={onClose}>X</CloseButton>
-        </ChatHeader>
+      <RoomList isMinimized={isRoomListMinimized}>
+        <ChatHeader />
+
         {rooms.map((room, index) => (
-          <RoomItem key={index} onClick={() => handleRoomClick(room)}>
+          <RoomItem
+            key={index}
+            onClick={() => handleRoomClick(room)}
+            isSelected={selectedRoom === room}
+            isMinimized={isRoomListMinimized}
+          >
             <img src={room.photo} alt={room.name} />
-            {room.name}
+            {!isRoomListMinimized && (
+              <div>
+                <RoomName>{room.name}</RoomName>
+                <LastMessage>{getLastMessageText(room.messages)}</LastMessage>
+              </div>
+            )}
           </RoomItem>
         ))}
+        <ToggleButton
+          onClick={() => setIsRoomListMinimized(!isRoomListMinimized)}
+          isMinimized={isRoomListMinimized}
+        >
+          {isRoomListMinimized ? <FaAngleRight /> : <FaAngleLeft />}
+        </ToggleButton>
       </RoomList>
+
       <ChatBox>
         <ChatHeader>
-          {selectedRoom ? selectedRoom.name : "Select a Room"}
+          <CloseButton onClick={onClose}>X</CloseButton>
         </ChatHeader>
         <ChatMessages ref={chatMessagesRef}>
           {selectedRoom ? (
             messages.length > 0 ? (
               messages.map((message, index) => (
-                <Message isMe={message.sender === "me"}>
+                <Message key={index} isMe={message.sender === "me"}>
+                  {message.sender !== "me" && (
+                    <SenderImage
+                      src={selectedRoom.photo}
+                      alt={selectedRoom.name}
+                    />
+                  )}
                   {message.sender === "me" && (
                     <MessageTimeStyle>
                       <MessageTime time={new Date(message.time)} />
@@ -170,18 +202,17 @@ const ChatContainer = styled.div`
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 800px;
-  height: 600px;
+  width: 900px;
+  height: 700px;
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   display: ${(props) => (props.visible ? "flex" : "none")};
-  overflow: hidden;
 `;
 
 const RoomList = styled.div`
-  width: 30%;
+  width: ${(props) => (props.isMinimized ? "7%" : "50%")};
   display: flex;
   flex-direction: column;
   border-right: 1px solid #ddd;
@@ -193,6 +224,7 @@ const RoomItem = styled.div`
   padding: 10px;
   cursor: pointer;
   border-bottom: 1px solid #ddd;
+  background-color: ${(props) => (props.isSelected ? "#ddd" : "white")};
 
   &:hover {
     background-color: #f1f1f1;
@@ -200,32 +232,54 @@ const RoomItem = styled.div`
 
   img {
     border-radius: 50%;
-    margin-right: 10px;
+    margin-right: ${(props) => (props.isMinimized ? "0" : "10px")};
+  }
+
+  div {
+    display: ${(props) => (props.isMinimized ? "none" : "block")};
   }
 `;
 
+const RoomName = styled.div``;
+
+const LastMessage = styled.div`
+  font-size: 0.8em;
+  color: gray;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const SenderImage = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 4px;
+`;
+
 const ChatBox = styled.div`
-  flex: 1;
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 100%;
 `;
 
 const ChatHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   padding: 10px;
   background-color: ${theme.mainColor};
   color: white;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
+  height: 25px;
 `;
 
 const CloseButton = styled.button`
   background: transparent;
   border: none;
   color: white;
+  height: 100%;
   font-size: 0.8rem;
   cursor: pointer;
 
@@ -236,7 +290,7 @@ const CloseButton = styled.button`
 
 const ChatMessages = styled.div`
   padding: 10px;
-  height: calc(100% - 60px);
+  height: 84%;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -246,6 +300,7 @@ const ChatMessages = styled.div`
 
 const Message = styled.div`
   display: flex;
+  align-items: center;
   align-self: ${(props) => (props.isMe ? "flex-end" : "flex-start")};
   margin-bottom: 15px;
 `;
@@ -263,7 +318,8 @@ const MessageTimeStyle = styled.span`
   display: flex;
   justify-content: center;
   align-items: end;
-  margin-bottom: 10px;
+  margin: 6px;
+  margin-top: 15px;
 `;
 
 const ChatInputContainer = styled.div`
@@ -276,4 +332,20 @@ const ChatInput = styled.input`
   padding: 10px 0;
   border: 1px solid #ddd;
   border-radius: 5px;
+`;
+
+const ToggleButton = styled.button`
+  position: absolute;
+  left: ${(props) => (props.isMinimized ? "6%" : "30%")};
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #ddd;
+  font-size: 1.5rem; // Increase font-size for the arrow icons
+  cursor: pointer;
+
+  &:hover {
+    color: #ccc;
+  }
 `;

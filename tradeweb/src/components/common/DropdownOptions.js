@@ -26,12 +26,7 @@ const DropdownOptions = ({ options, title, onSelect }) => {
             value={selectedOption}
             onChange={handleOptionSelect}
             displayEmpty
-            input={
-              <OutlinedInput
-                notched={false}
-                label={selectedOption === "" ? title : ""}
-              />
-            }
+            input={<OutlinedInput label={selectedOption === "" ? title : ""} />}
             MenuProps={{
               disableScrollLock: true,
               anchorOrigin: {
@@ -45,13 +40,13 @@ const DropdownOptions = ({ options, title, onSelect }) => {
             }}
             sx={{
               borderRadius: "10px",
+              ".MuiOutlinedInput-root": {
+                borderRadius: "10px",
+              },
               ".MuiOutlinedInput-notchedOutline": {
                 borderColor: "transparent",
               },
               "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "transparent",
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                 borderColor: "transparent",
               },
             }}
@@ -65,6 +60,9 @@ const DropdownOptions = ({ options, title, onSelect }) => {
                   "&:last-child": {
                     borderBottom: "none",
                   },
+                  fontFamily: "Arial, sans-serif",
+                  fontSize: "16px",
+                  color: "black",
                 }}
               >
                 {option}
@@ -83,6 +81,7 @@ const CustomOptions = styled("div")`
   position: relative;
   width: 100%;
   margin: 20px 4px 20px 0;
+  border-radius: 10px;
   background-color: white;
 `;
 
