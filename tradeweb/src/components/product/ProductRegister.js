@@ -260,7 +260,7 @@ const EndDateInput = styled.input`
     width: 483px;
     height: 24px;
     position: relative;
-    appearance: none; /* 기본 스타일 제거 */
+    appearance: none;
     background-color: white;
     border: none;
     padding: 12px 20px;
