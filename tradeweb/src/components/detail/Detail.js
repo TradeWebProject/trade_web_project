@@ -339,15 +339,6 @@ const Detail = () => {
             </Icon>
             <Icon>  <span>판매자에 대한 만족도</span>👍 {productManagersThumbCount}({productManagerThumbCount})</Icon>
           </IconsWrapper>
-          {/* <IconsWrapper>
-           
-            <Icon>👍 {productManagersThumbCount}({productManagerThumbCount})</Icon>
-          </IconsWrapper> */}
-          {/* <DropdownOptions
-            options={productOptions}
-            title="옵션 선택"
-            onSelect={handleOptionSelect}
-          /> */}
           <Buttons>
             {isLiked ? 
               <Icon>❤️</Icon>
