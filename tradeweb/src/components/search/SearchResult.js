@@ -23,6 +23,20 @@ const SearchResult = () => {
       return newFilters;
     });
   };
+
+  const handleFilterRemove = (filterTitle, option) => {
+    setSelectedFilters((prev) => {
+      const newFilters = { ...prev };
+      newFilters[filterTitle] = newFilters[filterTitle].filter(
+        (item) => item !== option
+      );
+      if (newFilters[filterTitle].length === 0) {
+        delete newFilters[filterTitle];
+      }
+      return newFilters;
+    });
+  };
+
   return (
     <Container>
       <FilterContainer>
@@ -31,7 +45,10 @@ const SearchResult = () => {
           onFilterChange={handleFilterChange}
         />
       </FilterContainer>
-      <SearchContent selectedFilters={selectedFilters} />
+      <SearchContent
+        selectedFilters={selectedFilters}
+        filterRemove={handleFilterRemove}
+      />
     </Container>
   );
 };

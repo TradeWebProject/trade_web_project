@@ -16,7 +16,7 @@ const filters = [
   },
   {
     title: "상품 상태",
-    options: ["새 상품", "중고 상품"],
+    options: ["미개봉", "중고 상품"],
   },
 ];
 
