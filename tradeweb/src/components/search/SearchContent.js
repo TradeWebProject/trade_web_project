@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import data from "./dummyData";
+import close from "../../assets/close.svg";
 
-const SearchContent = ({ selectedFilters }) => {
+const SearchContent = ({ selectedFilters, filterRemove }) => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -75,7 +76,12 @@ const SearchContent = ({ selectedFilters }) => {
           {Object.entries(selectedFilters).map(([filterTitle, options]) =>
             options.map((option) => (
               <FilterTag key={option}>
-                {filterTitle}: {option}
+                {option}
+                &nbsp;
+                <CloseButton
+                  src={close}
+                  onClick={() => filterRemove(filterTitle, option)}
+                />
               </FilterTag>
             ))
           )}
@@ -156,4 +162,11 @@ const FilterTag = styled.div`
   padding: 5px 10px;
   margin: 5px;
   font-size: 14px;
+  display: flex;
+`;
+
+const CloseButton = styled.img`
+  width: 15px;
+  padding-top: 2px;
+  cursor: pointer;
 `;
