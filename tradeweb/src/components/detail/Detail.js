@@ -4,6 +4,8 @@ import DropdownOptions from "../common/DropdownOptions";
 import heartIcon from "../../assets/heart.svg";
 import profile from "../../assets/profile.svg";
 import rightarrow from "../../assets/rightarrow.svg";
+import { IoIosStarOutline } from "react-icons/io";
+import { LuThumbsUp } from "react-icons/lu";
 
 const Detail = () => {
   const [listData, setListData] = useState([]);
@@ -23,6 +25,8 @@ const Detail = () => {
     productLikes: 271,
     productStars: 4.5,
     productStarsCount: 12,
+    productManagersThumbCount: 4.5,
+    productManagerThumbCount: 15,
     productOptions: ["S", "M", "L", "XL"],
   };
 
@@ -31,7 +35,9 @@ const Detail = () => {
         files: profile,
         nickName: "nickname",
         starRate: 4,
+        thumbRate: 5,
         reviewContent: "색이 예쁘고 발이 편해요",
+        productManagerReviewContent: "판매자분이 상담을 친절하게 잘 해주셨어요",
         date: "2024.06.08",
         productId: 2,
     },
@@ -39,7 +45,9 @@ const Detail = () => {
         files: profile,
         nickName: "nickname2",
         starRate: 5,
+        thumbRate: 5,
         reviewContent: "대박",
+        productManagerReviewContent: "판매자와의 채팅이 만족스러웠어요",
         date: "2024.06.07",
         productId: 2,
     },
@@ -47,7 +55,9 @@ const Detail = () => {
         files: profile,
         nickName: "nickname3",
         starRate: 4,
+        thumbRate: 5,
         reviewContent: "색이 예쁘고 발이 편해요",
+        productManagerReviewContent: "바로 구매 했습니다",
         date: "2024.06.06",
         productId: 2,
     },
@@ -55,7 +65,9 @@ const Detail = () => {
         files: profile,
         nickName: "nickname4",
         starRate: 4,
+        thumbRate: 4,
         reviewContent: "추천",
+        productManagerReviewContent: "바로 구매 했습니다",
         date: "2024.06.05",
         productId: 2,
     },
@@ -63,7 +75,9 @@ const Detail = () => {
         files: profile,
         nickName: "nickname5",
         starRate: 4,
+        thumbRate: 5,
         reviewContent: "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
+        productManagerReviewContent: "바로 구매 했습니다",
         date: "2024.06.05",
         productId: 2,
     },
@@ -71,7 +85,9 @@ const Detail = () => {
         files: profile,
         nickName: "nickname6",
         starRate: 4,
+        thumbRate: 5,
         reviewContent: "좋아요 또 살래요",
+        productManagerReviewContent: "바로 구매 했습니다",
         date: "2024.06.04",
         productId: 2,
     },
@@ -79,7 +95,9 @@ const Detail = () => {
         files: profile,
         nickName: "nickname7",
         starRate: 4,
+        thumbRate: 5,
         reviewContent: "좋아요",
+        productManagerReviewContent: "바로 구매 했습니다",
         date: "2024.06.03",
         productId: 2,
     },
@@ -87,7 +105,9 @@ const Detail = () => {
       files: profile,
       nickName: "nickname8",
       starRate: 4,
+      thumbRate: 5,
       reviewContent: "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
+      productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.05",
       productId: 2,
   },
@@ -95,7 +115,9 @@ const Detail = () => {
       files: profile,
       nickName: "nickname9",
       starRate: 4,
+      thumbRate: 5,
       reviewContent: "좋아요 또 살래요",
+      productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.04",
       productId: 2,
   },
@@ -103,7 +125,9 @@ const Detail = () => {
       files: profile,
       nickName: "nickname10",
       starRate: 4,
+      thumbRate: 5,
       reviewContent: "좋아요",
+      productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.03",
       productId: 2,
   },
@@ -111,7 +135,9 @@ const Detail = () => {
       files: profile,
       nickName: "nickname11",
       starRate: 4,
+      thumbRate: 5,
       reviewContent: "좋아요 또 살래요",
+      productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.04",
       productId: 2,
   },
@@ -119,7 +145,9 @@ const Detail = () => {
       files: profile,
       nickName: "nickname12",
       starRate: 4,
+      thumbRate: 5,
       reviewContent: "좋아요",
+      productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.03",
       productId: 2,
   },
@@ -136,6 +164,9 @@ const Detail = () => {
     productStars,
     productStarsCount,
     productOptions,
+    productManagersThumbCount,
+    productManagerThumbCount,
+
   } = data;
 
   // 옵션 선택 시
@@ -194,7 +225,18 @@ const Detail = () => {
         <Description>{description}</Description>
         
         <ReviewContainer>
-            
+            <ReviewWriteContainer>
+              <div>상품을 잘 받으셨나요?</div>
+              <Icon>
+                <LuThumbsUp /> <LuThumbsUp /> <LuThumbsUp /> <LuThumbsUp /> <LuThumbsUp />  
+              </Icon> 
+              <InputElement type="text" placeholder="판매자에 대한 후기를 작성해주세요"/>
+              <Icon>
+                <IoIosStarOutline /> <IoIosStarOutline /> <IoIosStarOutline /> <IoIosStarOutline /> <IoIosStarOutline />  
+              </Icon> 
+              <InputElement type="text" placeholder="상품에 대한 후기를 작성해주세요"/>
+              <Button>후기 등록</Button>
+            </ReviewWriteContainer>
             {listData.map((data, index) => (
             <ProfileContainer key={index}>
               <ReviewHeader>
@@ -208,9 +250,13 @@ const Detail = () => {
                 <Icon>
                   ⭐ {productStars}({productStarsCount})
                 </Icon>
+                <Icon>
+                👍 {productManagersThumbCount}({productManagerThumbCount})
+                </Icon>
              </StarContainer>
                 
                 <div>{data.reviewContent}</div>
+            <div>{data.productManagerReviewContent}</div>
                
             </ProfileContainer>
             ))}
@@ -231,13 +277,18 @@ const Detail = () => {
               ⭐ {productStars}({productStarsCount})
             </Icon>
           </IconsWrapper>
-          <DropdownOptions
+          <IconsWrapper>
+            <span>판매자에 대한 만족도</span>
+            <Icon>👍 {productManagersThumbCount}({productManagerThumbCount})</Icon>
+          </IconsWrapper>
+          {/* <DropdownOptions
             options={productOptions}
             title="옵션 선택"
             onSelect={handleOptionSelect}
-          />
+          /> */}
           <Buttons>
             <HeartIcon src={heartIcon} alt="Heart Icon" />
+            <Button>구매하기</Button>
             <Button>문의하기</Button>
         </Buttons>
         </ProductInfo>
@@ -334,7 +385,7 @@ const Buttons = styled.div`
 
 const Button = styled.button`
   /* 버튼 스타일링 */
-  width: 430px;
+  width: 200px;
   height: 54px;
   background-color: white;
   border-radius: 10px;
@@ -360,9 +411,23 @@ const ReviewContainer = styled.div`
   justify-content: flex-start;
 `;
 
+const ReviewWriteContainer = styled.div`
+  width: 600px;
+  height: 580px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  padding: 0 20px;
+  gap: 10px;
+`;
+
+
 const ProfileContainer = styled.div`
     width: 600px;
-    height: 180px;
+    height: 280px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -389,6 +454,14 @@ const StarContainer = styled.div`
 display: flex;
 width: 200px;
 height: 50px;
+
+`;
+
+const InputElement = styled.input`
+  width: 400px;
+  height: 200px;
+
+
 
 `;
 
