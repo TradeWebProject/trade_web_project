@@ -44,12 +44,9 @@ const ProductRegister = () => {
     return (
         <ContentLayout>
             <Wrapper>
-                <h2>상품 등록</h2>
-                <SaveButtonTopWrapper>
-                    <SaveButton>저장</SaveButton>
-                </SaveButtonTopWrapper>  
+                <h1>상품 등록</h1>
                 <SubTitle>
-                    <h3>상품 정보</h3>
+                    <h2>상품 정보</h2>
                 </SubTitle>
                 <SubContentWrapper>
                     <ProductNameWrapper>
@@ -60,19 +57,6 @@ const ProductRegister = () => {
                         <ProductNameElement>가격:</ProductNameElement>
                         <ProductNameInput type="text" defaultValue="56000"/>
                     </ProductNameWrapper>
-                    <ProductNameWrapper>
-                        <ProductNameElement>재고:</ProductNameElement>
-                        <ProductNameInput type="text" defaultValue="10"/>
-                    </ProductNameWrapper>
-                    <OptionInputWrapper>
-                        <OptionTitleTextElement>옵션명:</OptionTitleTextElement>
-                        <OptionTextInput type="text" placeholder="옵션명을 입력하세요"/>
-                        <button>옵션 내용 추가</button>
-                    </OptionInputWrapper>
-                    <OptionInputWrapper>
-                        <OptionContentTitleElement>옵션 내용:</OptionContentTitleElement>
-                        <OptionContentInput type="text" placeholder="옵션 내용을 입력하세요"/>
-                    </OptionInputWrapper>
                     <InnerWrapper>
                         <ProductSellDateWrapper>
                             <SellStartDateWrapper>
@@ -117,7 +101,7 @@ const ProductRegister = () => {
                 />
 
                 <SubTitle>
-                    <h3>상품 상세 설명</h3>
+                    <h2>상품 상세 설명</h2>
                 </SubTitle>
                 <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px", backgroundColor: "white", }}
                               modules={modules}  
@@ -163,7 +147,7 @@ const ContentLayout = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #f7f2d2;
+    // background-color: #f7f2d2;
 `;
 
 const Wrapper = styled.div`
@@ -173,14 +157,6 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 120px;
-`;
-
-const SaveButtonTopWrapper = styled.div`
-    width: 1280px;
-    margin-top: 80px;
-    display: flex;
-    justify-content: end;
-    background-color: #f7f2d2;
 `;
 
 const SubContentWrapper  = styled.div`
@@ -194,7 +170,7 @@ const SubContentWrapper  = styled.div`
 const SubTitle = styled.div`
     width: 1280px;
     hieght: 45px;
-    margin-top: 40px;
+    margin-top: 10px;
     display: flex;
     justify-content: flex-start;
 `;
@@ -210,6 +186,7 @@ const ProductNameElement = styled.div`
     width: 70px;
     height: 30px;
     margin-right: 10px;
+   
 `;
 
 const ProductNameInput = styled.input`
@@ -217,6 +194,8 @@ const ProductNameInput = styled.input`
     height: 24px;
     border: none;
     padding: 12px 20px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
 `;
 
 const ProductSellDateWrapper = styled.div`
@@ -248,8 +227,9 @@ const StartDateInput = styled.input`
     height: 24px;
     margin-right: 4px;
     position: relative;
-    appearance: none; /* 기본 스타일 제거 */
-    background-color: white;
+    appearance: none;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
     border: none;
     padding: 12px 20px;
     margin-bottom: 20px;
@@ -261,7 +241,8 @@ const EndDateInput = styled.input`
     height: 24px;
     position: relative;
     appearance: none;
-    background-color: white;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
     border: none;
     padding: 12px 20px;
     margin-bottom: 20px;
@@ -323,13 +304,14 @@ const OptionContentInput = styled.input`
 const InnerWrapper = styled.div`
     width: 1277px;
     height: 150px;
-    background-color:#f0c556;
+    // background-color:#f0c556;
 `;
 
 const DropwDownElementWrapper = styled.div`
     width: 524px;
     height: 24px;
     margin-left: 20px;
+    
 `;
 
 const FileUploadButtonWrapper = styled.div`
@@ -397,8 +379,7 @@ const SaveButtonWrapper = styled.div`
     width: 1280px;
     margin-top: 80px;
     display: flex;
-    justify-content: end;
-    background-color: #f7f2d2;
+    justify-content: center;
 `;
 
 const SaveButton = styled.button`

@@ -83,7 +83,8 @@ const CustomOptions = styled("div")`
   position: relative;
   width: 100%;
   margin: 20px 4px 20px 0;
-  background-color: white;
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
 `;
 
 const SelectWrapper = styled("div")`
