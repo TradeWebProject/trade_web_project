@@ -311,13 +311,8 @@ const Detail = () => {
                     starRateRendering(data.clickedStarNum)
                   }
                 </Icon>
-                {/* <Icon>
-                👍 {productManagersThumbCount}({productManagerThumbCount})
-                </Icon> */}
              </StarContainer>
-                
                 <div>{data.reviewContent}</div>
-            {/* <div>{data.productManagerReviewContent}</div> */}
                
             </ProfileContainer>
             ))}
@@ -345,7 +340,6 @@ const Detail = () => {
               :
               <HeartIcon src={heartIcon} alt="Heart Icon" onClick={() => handleProductLike(data.productId)} />
             } 
-            
             <Button onClick={ChatbuttonOnClick}>구매문의</Button>
         </Buttons>
         </ProductInfo>
