@@ -10,6 +10,7 @@ import { Route, Routes } from "react-router-dom";
 import AppLayout from "./components/common/AppLayout";
 import ProductWritePage from "./pages/productWritePage/ProductWritePage";
 import SearchResultPage from "./pages/search/SearchResultPage";
+import Mainpage from "./pages/main/MainPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/write" element={<ProductWritePage />} />
         <Route path="/search" element={<SearchResultPage />} />
+        <Route path="/" element={<Mainpage />} />
       </Routes>
     </AppLayout>
   );
