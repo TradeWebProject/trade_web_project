@@ -1,11 +1,18 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from "styled-components";
 import ReactQuill from "react-quill";
 import "quill/dist/quill.core.css";
 import DropdownOptions from "../../components/common/DropdownOptions";
 import plusIcon from "../../assets/plus.svg";
+import deleteIcon from "../../assets/delete.svg";
 
 const ProductRegister = () => {
+    const [files, setFiles] = useState([]);
+    const [rawFiles, setRawFiles] = useState([]);
+    const fileInputRef = useRef(null);
+    const maxfiles = 10;
+    const remainingfiles = maxfiles - files.length;
+
     const data = {
         productOptions: ["의류", "전자제품"],
         productSellStatusOptions: ["미개봉 상품", "중고 상품"],
@@ -40,16 +47,83 @@ const ProductRegister = () => {
     };
 
 
+    const handleImageChange = (e) => {
+        const files = e.target.files;
+
+        const maxSize = 10 * 1024 * 1024; // 10MB
+
+        const formData = new FormData();
+        const newRawFiles = []; // 새로운 인코딩되지 않은 원본 파일을 저장하는 배열
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (file.size > maxSize) {
+            alert("파일 크기는 10MB를 초과할 수 없습니다.");
+            return;
+            }
+            formData.append("files", file); // FormData에는 인코딩된 파일을 추가
+            newRawFiles.push(file); // newRawFiles 배열에는 인코딩되지 않은 원본 파일을 추가
+        }
+
+        setRawFiles((prevRawFiles) => [...prevRawFiles, ...newRawFiles]);
+
+        const promises = Array.from(files).map((file) => {
+            const reader = new FileReader();
+
+            return new Promise((resolve, reject) => {
+            reader.onload = (e) => {
+                resolve(e.target.result);
+            };
+
+            reader.onerror = (error) => {
+                reject(error);
+            };
+
+            reader.readAsDataURL(file);
+            });
+        });
+
+        Promise.all(promises)
+            .then((results) => {
+            setFiles((prevfiles) => {
+                const newfiles = [...prevfiles, ...results];
+                if (newfiles.length > 10) {
+                return newfiles.slice(newfiles.length - 10);
+                }
+
+                return newfiles;
+            });
+            fileInputRef.current.value = null;
+            })
+            .catch((error) => {
+            console.error("이미지를 읽는 동안 오류가 발생했습니다.", error);
+            });
+       };
+
+       const handleDeleteImage = (index) => {
+        const newFiles = [...files];
+        const newRawFiles = [...rawFiles]; // rawFiles 복사
+        newFiles.splice(index, 1); // 파일 삭제
+        newRawFiles.splice(index, 1); // rawFiles에서도 삭제
+        setFiles(newFiles); // 파일 상태 업데이트
+        setRawFiles(newRawFiles); // rawFiles 상태 업데이트
+      };
+
+       const renderfiles = () => {
+        return files.map((image, index) => (
+          <ImagePreview key={index}>
+            <img src={image} alt={`Uploaded file ${index + 1}`} />
+            <DeleteButton onClick={() => handleDeleteImage(index)} />
+          </ImagePreview>
+        ));
+      };
 
     return (
         <ContentLayout>
             <Wrapper>
-                <h2>상품 등록</h2>
-                <SaveButtonTopWrapper>
-                    <SaveButton>저장</SaveButton>
-                </SaveButtonTopWrapper>  
+                <h1>상품 등록</h1>
                 <SubTitle>
-                    <h3>상품 정보</h3>
+                    <h2>상품 정보</h2>
                 </SubTitle>
                 <SubContentWrapper>
                     <ProductNameWrapper>
@@ -60,19 +134,6 @@ const ProductRegister = () => {
                         <ProductNameElement>가격:</ProductNameElement>
                         <ProductNameInput type="text" defaultValue="56000"/>
                     </ProductNameWrapper>
-                    <ProductNameWrapper>
-                        <ProductNameElement>재고:</ProductNameElement>
-                        <ProductNameInput type="text" defaultValue="10"/>
-                    </ProductNameWrapper>
-                    <OptionInputWrapper>
-                        <OptionTitleTextElement>옵션명:</OptionTitleTextElement>
-                        <OptionTextInput type="text" placeholder="옵션명을 입력하세요"/>
-                        <button>옵션 내용 추가</button>
-                    </OptionInputWrapper>
-                    <OptionInputWrapper>
-                        <OptionContentTitleElement>옵션 내용:</OptionContentTitleElement>
-                        <OptionContentInput type="text" placeholder="옵션 내용을 입력하세요"/>
-                    </OptionInputWrapper>
                     <InnerWrapper>
                         <ProductSellDateWrapper>
                             <SellStartDateWrapper>
@@ -117,7 +178,7 @@ const ProductRegister = () => {
                 />
 
                 <SubTitle>
-                    <h3>상품 상세 설명</h3>
+                    <h2>상품 상세 설명</h2>
                 </SubTitle>
                 <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px", backgroundColor: "white", }}
                               modules={modules}  
@@ -125,7 +186,10 @@ const ProductRegister = () => {
                 <ImageWrapper>
                     <SubTitle><h3>이미지</h3></SubTitle>
                     <MainImage>
-                        <img src="https://placehold.jp/200x200.png"/>
+                        {/* <img src="https://placehold.jp/200x200.png"/> */}
+                        {files.length > 0 && (
+                            <img src={files[0]} alt="Main product" />
+                        )}
                     </MainImage>
                         <ImageInputWrapper>
                             <ImageButton>
@@ -133,17 +197,17 @@ const ProductRegister = () => {
                                 type="file"
                                 accept="image/*"
                                 multiple
-                                // onChange={handleImageChange}
-                                // style={{ display: "none" }}
-                                // ref={fileInputRef}
-                                // disabled={remainingfiles <= 0}
+                                onChange={handleImageChange}
+                                style={{ display: "none" }}
+                                ref={fileInputRef}
+                                disabled={remainingfiles <= 0}
                                 />
                                 <PlusIcon />
                                 <div>
-                                {/* {files.length}/{maxfiles} */}
+                                    {files.length}/{maxfiles}
                                 </div>
                             </ImageButton>
-                            {/* <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper> */}
+                            <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper>
                     </ImageInputWrapper>
                 </ImageWrapper>
                 <SaveButtonWrapper>
@@ -163,7 +227,7 @@ const ContentLayout = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #f7f2d2;
+    // background-color: #f7f2d2;
 `;
 
 const Wrapper = styled.div`
@@ -173,14 +237,6 @@ const Wrapper = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 120px;
-`;
-
-const SaveButtonTopWrapper = styled.div`
-    width: 1280px;
-    margin-top: 80px;
-    display: flex;
-    justify-content: end;
-    background-color: #f7f2d2;
 `;
 
 const SubContentWrapper  = styled.div`
@@ -194,7 +250,7 @@ const SubContentWrapper  = styled.div`
 const SubTitle = styled.div`
     width: 1280px;
     hieght: 45px;
-    margin-top: 40px;
+    margin-top: 10px;
     display: flex;
     justify-content: flex-start;
 `;
@@ -210,6 +266,7 @@ const ProductNameElement = styled.div`
     width: 70px;
     height: 30px;
     margin-right: 10px;
+   
 `;
 
 const ProductNameInput = styled.input`
@@ -217,6 +274,8 @@ const ProductNameInput = styled.input`
     height: 24px;
     border: none;
     padding: 12px 20px;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
 `;
 
 const ProductSellDateWrapper = styled.div`
@@ -248,8 +307,9 @@ const StartDateInput = styled.input`
     height: 24px;
     margin-right: 4px;
     position: relative;
-    appearance: none; /* 기본 스타일 제거 */
-    background-color: white;
+    appearance: none;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
     border: none;
     padding: 12px 20px;
     margin-bottom: 20px;
@@ -260,8 +320,9 @@ const EndDateInput = styled.input`
     width: 483px;
     height: 24px;
     position: relative;
-    appearance: none; /* 기본 스타일 제거 */
-    background-color: white;
+    appearance: none;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
     border: none;
     padding: 12px 20px;
     margin-bottom: 20px;
@@ -323,13 +384,14 @@ const OptionContentInput = styled.input`
 const InnerWrapper = styled.div`
     width: 1277px;
     height: 150px;
-    background-color:#f0c556;
+    // background-color:#f0c556;
 `;
 
 const DropwDownElementWrapper = styled.div`
     width: 524px;
     height: 24px;
     margin-left: 20px;
+    
 `;
 
 const FileUploadButtonWrapper = styled.div`
@@ -361,6 +423,26 @@ const MainImage = styled.div`
   img {
     width: 400px;
     height: 400px;
+  }
+`;
+
+const ImagePreviewWrapper = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+`;
+
+const ImagePreview = styled.div`
+  display: flex;
+  position: relative;
+  width: 55px;
+  height: 55px;
+  border: 1px solid #ccc;
+  margin-left: 7px;
+  background-color: #f4f4f4;
+  img {
+    width: 100%;
+    height: 100%;
   }
 `;
 
@@ -397,8 +479,7 @@ const SaveButtonWrapper = styled.div`
     width: 1280px;
     margin-top: 80px;
     display: flex;
-    justify-content: end;
-    background-color: #f7f2d2;
+    justify-content: center;
 `;
 
 const SaveButton = styled.button`
@@ -408,4 +489,17 @@ const SaveButton = styled.button`
     background-color: black;
     color: white;
     border-radius: 5px;
+`;
+
+const DeleteButton = styled.button`
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  background-color: transparent;
+  background-image: url(${deleteIcon});
+  background-size: cover;
+  cursor: pointer;
+  border: none;
 `;
