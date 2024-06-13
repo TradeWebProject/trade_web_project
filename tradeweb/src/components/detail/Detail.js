@@ -19,6 +19,7 @@ const Detail = () => {
   const [isChatVisible, setChatVisible] = useState(false);
   const [isPurchased, setIsPurchased] = useState(true);
   const [isClicked, setClicked] = useState([false, false, false, false, false]);
+  const [isLiked, setLiked] = useState(false);
 
   // 별을 5개로 표현하기 위한 더미 배열
   const array = [0, 1, 2, 3, 4];
@@ -176,6 +177,7 @@ const Detail = () => {
     productOptions,
     productManagersThumbCount,
     productManagerThumbCount,
+    productId,
 
   } = data;
 
@@ -246,6 +248,7 @@ const Detail = () => {
   }
 
   const starScore = index => {
+    console.log(index + "clicked");
     let star = [...isClicked];
     for (let i = 0; i < 5; i++) {
         star[i] = i <= index ? true : false;
@@ -255,6 +258,13 @@ const Detail = () => {
 
   // 현재 선택한 별점 개수
   let clickedStarNum = isClicked.filter(element => true === element.lenght);
+
+  // 상품 찜하기 버튼 클릭시 실행되는 함수
+  const handleProductLike = productId => {
+      setLiked(true);
+  }
+
+
 
   return (
     <Wrapper>
@@ -270,11 +280,11 @@ const Detail = () => {
                       <div>별점을 선택해주세요.</div>
                       <div>
                         {
-                          array.map((index) => (
+                          array.map((el, index) => (
                             <FaRegStar key={index}
                                               onClick={() => starScore(index)}
                                               // src={isClicked[index] ? <MdOutlineStar /> :  <FaRegStar/>}
-                                              className={isClicked[index] ?  <MdOutlineStar /> :  <FaRegStar/>}
+                                              className={isClicked[el] ?  <MdOutlineStar /> :  <FaRegStar/>}
                                               alt="starIcon"  />
                           ))
                         }
@@ -301,13 +311,8 @@ const Detail = () => {
                     starRateRendering(data.clickedStarNum)
                   }
                 </Icon>
-                {/* <Icon>
-                👍 {productManagersThumbCount}({productManagerThumbCount})
-                </Icon> */}
              </StarContainer>
-                
                 <div>{data.reviewContent}</div>
-            {/* <div>{data.productManagerReviewContent}</div> */}
                
             </ProfileContainer>
             ))}
@@ -329,17 +334,12 @@ const Detail = () => {
             </Icon>
             <Icon>  <span>판매자에 대한 만족도</span>👍 {productManagersThumbCount}({productManagerThumbCount})</Icon>
           </IconsWrapper>
-          {/* <IconsWrapper>
-           
-            <Icon>👍 {productManagersThumbCount}({productManagerThumbCount})</Icon>
-          </IconsWrapper> */}
-          {/* <DropdownOptions
-            options={productOptions}
-            title="옵션 선택"
-            onSelect={handleOptionSelect}
-          /> */}
           <Buttons>
-            <HeartIcon src={heartIcon} alt="Heart Icon" />
+            {isLiked ? 
+              <Icon>❤️</Icon>
+              :
+              <HeartIcon src={heartIcon} alt="Heart Icon" onClick={() => handleProductLike(data.productId)} />
+            } 
             <Button onClick={ChatbuttonOnClick}>구매문의</Button>
         </Buttons>
         </ProductInfo>
