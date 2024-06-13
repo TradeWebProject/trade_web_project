@@ -12,6 +12,8 @@ const ProductModify = () => {
     const [rawFiles, setRawFiles] = useState([]);
     const [isTextChanged, setText] = useState("");
     const [isInputChanged, setIsInputChanged] = useState(false);
+    const [isCategoryChanged, setIsCategoryChanged] = useState("");
+    const [isProductQuantityChanged, setIsProductQuantityChanged] = useState("");
     const [buttonName, setButtonName] = useState("저장");
     const [value, setValue] = useState('');
     const [inputs, setInputs] = useState({
@@ -63,9 +65,19 @@ const ProductModify = () => {
     } = data;
 
      // 옵션 선택 시
-    const handleOptionSelect = (option) => {
+    const onSelect = (option) => {
         console.log(option);
+        setIsCategoryChanged(option);
+        setIsInputChanged(true);
+        setButtonName("수정");
     };
+
+    const onSelect2 = (option) => {
+        console.log(option);
+        setIsProductQuantityChanged(option)
+        setIsInputChanged(true);
+        setButtonName("수정");
+    }
 
     const modules = {
         toolbar: {
@@ -191,8 +203,8 @@ const ProductModify = () => {
                                     name="category"
                                     options={productOptions}
                                     title="카테고리 선택"
-                                    onSelect={handleOptionSelect}
-                                    onChange={onChange}
+                                    onSelect={onSelect}
+                                    defaultValue={isCategoryChanged}
                                 />
                             </DropwDownElementWrapper>
                             
@@ -204,8 +216,8 @@ const ProductModify = () => {
                                     name="productQuality"
                                     options={productSellStatusOptions}
                                     title="제품 상태 선택"
-                                    onSelect={handleOptionSelect}
-                                    onChange={onChange}
+                                    onSelect={onSelect2}
+                                    defaultValue={isProductQuantityChanged}
                                 />
                             </DropwDownElementWrapper>
                             
