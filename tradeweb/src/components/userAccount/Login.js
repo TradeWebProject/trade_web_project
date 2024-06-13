@@ -1,12 +1,106 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 import { theme } from "../../styles/theme";
 
-const LoginSignup = () => {
+const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    userPassword: "",
+    phone: "",
+    nickname: "",
+    userImg: null,
+    interests: "",
+  });
 
   const toggleToLogin = () => setIsLogin(true);
   const toggleToSignup = () => setIsLogin(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      let response;
+      if (isLogin) {
+        response = await axios.post(
+          `${process.env.REACT_APP_API_URL}users/login`,
+          { email: formData.email, userPassword: formData.userPassword }
+        );
+        localStorage.setItem("accessToken", response.data.accessToken);
+        localStorage.setItem("email", formData.email);
+      } else {
+        const form = new FormData();
+        form.append("email", formData.email);
+        form.append("password", formData.password);
+        form.append("phone", formData.phone);
+        form.append("nickname", formData.nickname);
+        form.append("userImg", formData.userImg);
+        form.append("interests", formData.interests);
+        console.log(form);
+        response = await axios.post(
+          `${process.env.REACT_APP_API_URL}users/signup`,
+          form,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+      }
+      console.log("응답 데이터:", response.data);
+    } catch (error) {
+      if (error.response) {
+        // 서버가 응답한 경우
+        console.error("요청 실패:", error.response.data);
+      } else {
+        // 요청을 보내는 동안 오류가 발생한 경우
+        console.error("요청 실패:", error.message);
+      }
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      userImg: e.target.files[0],
+    }));
+  };
+
+  const handleLogout = async () => {
+    const email = localStorage.getItem("email");
+    if (email) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}users/logout`,
+          {
+            email,
+          }
+        );
+        localStorage.removeItem("email");
+        localStorage.removeItem("accessToken");
+      } catch (error) {
+        if (error.response) {
+          // 서버가 응답한 경우
+          console.error("로그아웃 실패:", error.response.data);
+        } else if (error.request) {
+          // 요청이 만들어졌으나 응답을 받지 못한 경우
+          console.error("요청이 만들어졌으나 응답을 받지 못함:", error.request);
+        } else {
+          // 요청을 보내는 동안 다른 오류가 발생한 경우
+          console.error("로그아웃 요청 설정 오류:", error.message);
+        }
+      }
+    }
+  };
 
   return (
     <Wrapper>
@@ -19,42 +113,79 @@ const LoginSignup = () => {
           <TabButton onClick={toggleToSignup} active={!isLogin}>
             회원가입
           </TabButton>
+          <TabButton onClick={handleLogout}>임시로그아웃</TabButton>
         </TabWrapper>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           {isLogin ? (
             <InputWrapper>
               <StyledInput
                 type="text"
                 placeholder="아이디(이메일)"
                 name="email"
+                value={formData.email}
+                onChange={handleChange}
               />
               <StyledInput
                 type="password"
                 placeholder="비밀번호"
-                name="password"
+                name="userPassword"
+                value={formData.userPassword}
+                onChange={handleChange}
               />
               <SubmitButton type="submit">로그인</SubmitButton>
             </InputWrapper>
           ) : (
-            <SignupWrapper>
+            <SignupWrapper isLogin={isLogin}>
               <InputWrapper>
-                <StyledInput type="text" placeholder="아이디(이메일)" />
+                <StyledInput
+                  type="text"
+                  placeholder="아이디(이메일)"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
                 <StyledInput
                   type="password"
                   placeholder="비밀번호 (8자 이상 20자 이하 영문자 숫자 조합)"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                 />
                 <StyledInput type="password" placeholder="비밀번호 확인" />
-                <StyledInput type="text" placeholder="휴대폰 번호 ( - 포함)" />
-                <StyledInput type="text" placeholder="주소" />
+                <StyledInput
+                  type="text"
+                  placeholder="휴대폰 번호"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  maxLength="11"
+                />
                 <FileInfo>
                   나를 나타내는 프로필 사진과 닉네임으로 등록하세요.
                 </FileInfo>
                 <FileInputWrapper>
-                  <ImageButton alt="파일 선택 버튼" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
                 </FileInputWrapper>
-                <InputNickname type="text" placeholder="닉네임" />
+                <InputNickname
+                  type="text"
+                  placeholder="닉네임"
+                  name="nickname"
+                  value={formData.nickname}
+                  onChange={handleChange}
+                />
+                <StyledInput
+                  type="text"
+                  placeholder="관심사"
+                  name="interests"
+                  value={formData.interests}
+                  onChange={handleChange}
+                />
               </InputWrapper>
-              <SubmitButton>가입하기</SubmitButton>
+              <SubmitButton type="submit">가입하기</SubmitButton>
             </SignupWrapper>
           )}
         </Form>
@@ -63,7 +194,7 @@ const LoginSignup = () => {
   );
 };
 
-export default LoginSignup;
+export default Login;
 
 const Wrapper = styled.div`
   display: flex;
@@ -195,10 +326,4 @@ const FileInfo = styled.div`
   font-size: 13px;
   color: ${theme.mainColor};
   margin: 11px 0 36px 0;
-`;
-
-const ImageButton = styled.img`
-  width: 150px;
-  height: 150px;
-  cursor: pointer;
 `;
