@@ -1,209 +1,19 @@
 import React, { useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from '@emotion/styled';
 import {Box, Tab, Tabs, Button  } from "@mui/material";
+import { BarChart } from '@mui/x-charts/BarChart';
+import { axisClasses } from '@mui/x-charts/ChartsAxis';
+
 import profile from "../../assets/profile.svg";
+import plus from "../../assets/plus.svg";
+import Modal from '../../components/common/Modal/Modal';
+import MyPageManagement from '../../components/myProductManagement/MyPageManagement';
 
 const MyPage = () => {
-    const [currentTabIndex, setCurrentTabIndex] = useState(0);
-
-    const handleTabChange = (e, tabIndex) => {
-        console.log(tabIndex);
-        setCurrentTabIndex(tabIndex);
-    };
 
     return (
-        <ContentLayout>
-            <Wrapper>
-                <Box sx={{display: 'flex', alignItems: 'flex-start', width: 1230}}>
-                    <Tabs value={currentTabIndex} onChange={handleTabChange} variant="fullWidth">
-                        <Tab style={{width: '140px'}} label='마이 프로필' />
-                        <Tab label='구매 내역' />
-                        <Tab label='판매 내역' />
-                    </Tabs>
-                </Box>
-                {currentTabIndex === 0 && (
-                    <Box sx={{ p: 3 }}>
-                        <Container>
-                            <Title>프로필</Title>
-                            <ProfileContainer>
-                                <img src={profile} alt="profile"/>
-                                <div>Nickname</div>
-                                <div>
-                                    <ChangeImgButton>사진 변경</ChangeImgButton>
-                                </div>
-                            </ProfileContainer>
-                            <InfoWrapper>
-                                <div>이메일</div>
-                                <InfoText>tkgksw@naver.com</InfoText>
-                            </InfoWrapper>
-                            <InfoWrapper>
-                                <div>주소</div>
-                                <InfoText>경기도 의왕시 내손로</InfoText>
-                            </InfoWrapper>
-                            <InfoWrapper>
-                                <div>전화번호</div>
-                                <InfoText>010-5518-4698</InfoText>
-                            </InfoWrapper>
-                            {/* <InfoWrapper>
-                                <div>프로필 이미지</div>
-                                <img src="https://placehold.jp/50x50.png"/>
-                            </InfoWrapper> */}
-                        </Container>   
-                    </Box>
-                )}
-                {currentTabIndex === 1 && (
-                    <Box sx={{ p: 3 }}>
-                        <Container>
-                             <Title>결제내역</Title>
-                              <Header>
-                                    <div>결제일</div>
-                                    <div>상품명</div>
-                                    <div>결제금액</div>
-                                    <div>결제번호</div>
-                                    <div>결제상태</div>
-                              </Header>  
-                              <TableContent>
-                                  <TableContentWrapper>
-                                      <div>2024.06.05</div>
-                                      <div>
-                                          나이키 티셔츠
-                                      </div>
-                                      <div>
-                                          56,000원
-                                      </div>
-                                      <div>
-                                          0000001
-                                      </div>
-                                      <div>
-                                          결제완료
-                                      </div>
-                                  </TableContentWrapper>
-                                  {/* <TableContentWrapper>
-                                      <div>2024.06.07</div>
-                                      <div>
-                                          아디다스 티셔츠
-                                      </div>
-                                      <div>
-                                          0000002
-                                      </div>
-                                      <div>
-                                          결제예정
-                                      </div>
-                                  </TableContentWrapper> */}
-
-                              </TableContent>
-
-                              <Title>내가 작성한 리뷰</Title>
-                              <Header>
-                                    <div>결제일</div>
-                                    <div>상품명</div>
-                                    <div>결제금액</div>
-                                    <div>결제번호</div>
-                                    <div>결제상태</div>
-                              </Header>  
-                              <TableContent>
-                                  <TableContentWrapper>
-                                      <div>2024.06.05</div>
-                                      <div>
-                                          나이키 티셔츠
-                                      </div>
-                                      <div>
-                                          56,000원
-                                      </div>
-                                      <div>
-                                          0000001
-                                      </div>
-                                      <div>
-                                          결제완료
-                                      </div>
-                                  </TableContentWrapper>
-                                  {/* <TableContentWrapper>
-                                      <div>2024.06.07</div>
-                                      <div>
-                                          아디다스 티셔츠
-                                      </div>
-                                      <div>
-                                          0000002
-                                      </div>
-                                      <div>
-                                          결제예정
-                                      </div>
-                                  </TableContentWrapper> */}
-
-                              </TableContent>
-                              <Title>찜목록</Title>
-                              <Header>
-                                    <div>결제일</div>
-                                    <div>상품명</div>
-                                    <div>결제금액</div>
-                                    <div>결제번호</div>
-                                    <div>결제상태</div>
-                              </Header>  
-                              <TableContent>
-                                  <TableContentWrapper>
-                                      <div>2024.06.05</div>
-                                      <div>
-                                          나이키 티셔츠
-                                      </div>
-                                      <div>
-                                          56,000원
-                                      </div>
-                                      <div>
-                                          0000001
-                                      </div>
-                                      <div>
-                                          결제완료
-                                      </div>
-                                  </TableContentWrapper>
-                                  {/* <TableContentWrapper>
-                                      <div>2024.06.07</div>
-                                      <div>
-                                          아디다스 티셔츠
-                                      </div>
-                                      <div>
-                                          0000002
-                                      </div>
-                                      <div>
-                                          결제예정
-                                      </div>
-                                  </TableContentWrapper> */}
-
-                              </TableContent>
-
-                        </Container>
-                        
-                    </Box>
-                )}
-                {currentTabIndex === 2 && (
-                    <Box sx={{ p: 3 }}>
-                        <BoxWrapper>
-                          
-                                <Button  sx={{ mr: 2 }} variant="contained" size="small">
-                                    상품 등록
-                                </Button>
-                            
-                            <ContentWrapper>
-                                <div>
-                                    <Tab style={{width: '160px'}} label='상품 관리'/>
-                                    <div>
-                                        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                                    </div>
-                                    <Tab style={{width: '160px'}} label='상품판매 현황'/>
-                                    <div>
-                                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                                    </div>
-                                    <Tab style={{width: '160px'}} label='리뷰 관리'/>
-                                    <div>
-                                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-                                </div>
-                                </div>
-                               
-                            </ContentWrapper>
-                        </BoxWrapper>
-                    </Box>
-                )}
-            </Wrapper>
-        </ContentLayout>
+       <MyPageManagement/>
     );
 };
 
@@ -232,7 +42,7 @@ const BoxWrapper = styled.div`
     width: 1230px;
     display: flex;
     flex-direction: column;
-    align-item: center;
+    align-items: center;
 `;
 
 const ContentWrapper = styled.div`
@@ -242,6 +52,7 @@ const ContentWrapper = styled.div`
 `;
 
 const Container = styled.div`
+    width: 1230px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -249,9 +60,25 @@ const Container = styled.div`
 `;
 
 const Title  = styled.div`
-    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
     font-size: 24px;
     font-weight: bold;
+`;
+
+const Pagination = styled.div`
+   
+
+
+`;
+
+const PageButton = styled.button`
+    width: 35px;
+    height: 35px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+
 `;
 
 const ProfileContainer = styled.div`
@@ -264,9 +91,7 @@ const ProfileContainer = styled.div`
     margin-bottom: 30px;
     padding: 0 20px;
     gap: 10px;
-    // border: 1px solid red;
     background-color: #F4F4F4;
-
 `;
 
 const ChangeImgButton = styled.button`
@@ -277,8 +102,6 @@ const ChangeImgButton = styled.button`
     color: white;
     border: 1px solid black;
     cursor: pointer;
-
-
 `;
 
 const InfoWrapper = styled.div`
@@ -301,34 +124,61 @@ const InfoText  = styled.div`
 
 `;
 
+const SearchResultList = styled.div`
+    display: grid;
+    row-gap: 40px;
+    column-gap: 20px;
+    grid-template-columns: 150px 150px 150px 150px;
+`;
 
-const Header = styled.div`
-    width: 1000px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid red; 
+const SearchItem = styled.div`
+    width: 120px;
+`;
+
+const ItemImageBox = styled.div`
+    border-radius: 10px;
+    background-color: rgb(244, 244, 244);
+`;
+const ItemImage = styled.img`
+    width: 120px;
+`;
+
+const ItemTitle = styled.div`
+    width: 120px;
+    font-weight: bold;
+`;
+
+const ItemInfo = styled.div`
+    width: 120px;
+    height: 24px;
+    font-size: 14px;
+    margin-bottom: 20px;
+`;
+
+const ItemPrice = styled.div`
+    font-weight: bold;
+`;
+const Icon = styled.div`
+    /* 아이콘 스타일 */
+    margin-right: 5px;
+`;
+
+const Table = styled.table`
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    margin-bottom: 40px;
+`;
+
+const TableTh = styled.th`
+    padding: 6px 15px;
+    background: #42444e;
+    color: #fff;
+    text-align: center;
 
 `;
 
-
-const TableContent = styled.div`
-    width: 1000px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid green; 
-
-`;
-
-
-const TableContentWrapper = styled.div`
-    width: 1000px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border: 1px solid green; 
-
+const TableTd = styled.td`
+    padding: 6px 15px;
+    text-align: center;
 `;

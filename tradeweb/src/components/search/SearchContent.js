@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import data from "./dummyData";
+import close from "../../assets/close.svg";
 
-const SearchContent = () => {
+const SearchContent = ({ selectedFilters, filterRemove }) => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -71,6 +72,20 @@ const SearchContent = () => {
     <>
       <Container>
         <SearchKeyword>'신발' 에 대한 검색 결과</SearchKeyword>
+        <SelectedFilters>
+          {Object.entries(selectedFilters).map(([filterTitle, options]) =>
+            options.map((option) => (
+              <FilterTag key={option}>
+                {option}
+                &nbsp;
+                <CloseButton
+                  src={close}
+                  onClick={() => filterRemove(filterTitle, option)}
+                />
+              </FilterTag>
+            ))
+          )}
+        </SelectedFilters>
         <SearchResultList>
           {listData.map((product, index) => (
             <SearchItem key={index}>
@@ -134,3 +149,24 @@ const ItemInfo = styled.div`
 `;
 
 const ItemPrice = styled.strong``;
+
+const SelectedFilters = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+`;
+
+const FilterTag = styled.div`
+  background-color: #eee;
+  border-radius: 12px;
+  padding: 5px 10px;
+  margin: 5px;
+  font-size: 14px;
+  display: flex;
+`;
+
+const CloseButton = styled.img`
+  width: 15px;
+  padding-top: 2px;
+  cursor: pointer;
+`;
