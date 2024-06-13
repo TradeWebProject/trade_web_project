@@ -21,7 +21,7 @@ function App() {
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/write" element={<ProductWritePage />} />
         <Route
-          path="/product/management/detail"
+          path="/product/management/detail/:id"
           element={<ProductDetailManagementPage />}
         />
         <Route path="/search" element={<SearchResultPage />} />

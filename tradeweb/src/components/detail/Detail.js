@@ -18,6 +18,7 @@ const Detail = () => {
   const [isChatVisible, setChatVisible] = useState(false);
   const [isPurchased, setIsPurchased] = useState(true);
   const [isClicked, setClicked] = useState([false, false, false, false, false]);
+  const [isLiked, setLiked] = useState(false);
 
   // 별을 5개로 표현하기 위한 더미 배열
   const array = [0, 1, 2, 3, 4];
@@ -175,6 +176,8 @@ const Detail = () => {
     productOptions,
     productManagersThumbCount,
     productManagerThumbCount,
+    productId,
+
   } = data;
 
   // 옵션 선택 시
@@ -242,7 +245,9 @@ const Detail = () => {
     return result;
   };
 
-  const starScore = (index) => {
+
+  const starScore = index => {
+    console.log(index + "clicked");
     let star = [...isClicked];
     for (let i = 0; i < 5; i++) {
       star[i] = i <= index ? true : false;
@@ -253,6 +258,13 @@ const Detail = () => {
   // 현재 선택한 별점 개수
   let clickedStarNum = isClicked.filter((element) => true === element.lenght);
 
+  // 상품 찜하기 버튼 클릭시 실행되는 함수
+  const handleProductLike = productId => {
+      setLiked(true);
+  }
+
+
+
   return (
     <Wrapper>
       <Section>
@@ -260,49 +272,43 @@ const Detail = () => {
         <Description>{description}</Description>
 
         <ReviewContainer>
-          {isPurchased ? (
-            <ReviewWriteContainer>
-              <ReviewIconWrapper>
-                <div>별점을 선택해주세요.</div>
-                <div>
-                  {array.map((index) => (
-                    <FaRegStar
-                      key={index}
-                      onClick={() => starScore(index)}
-                      // src={isClicked[index] ? <MdOutlineStar /> :  <FaRegStar/>}
-                      className={
-                        isClicked[index] ? <MdOutlineStar /> : <FaRegStar />
-                      }
-                      alt="starIcon"
-                    />
-                  ))}
-                </div>
-              </ReviewIconWrapper>
-              <InputElement type="text" placeholder="구매후기를 작성해주세요" />
-              <RegisterButton>후기 등록</RegisterButton>
-            </ReviewWriteContainer>
-          ) : (
-            <ReviewWriteContainer>
-              상품 구매후에 후기를 작성할 수 있습니다
-            </ReviewWriteContainer>
-          )}
+               {isPurchased ? 
+                <ReviewWriteContainer>
+                  <ReviewIconWrapper>
+                      <div>별점을 선택해주세요.</div>
+                      <div>
+                        {
+                          array.map((el, index) => (
+                            <FaRegStar key={index}
+                                              onClick={() => starScore(index)}
+                                              // src={isClicked[index] ? <MdOutlineStar /> :  <FaRegStar/>}
+                                              className={isClicked[el] ?  <MdOutlineStar /> :  <FaRegStar/>}
+                                              alt="starIcon"  />
+                          ))
+                        }
+                      </div>
+                  </ReviewIconWrapper>
+                  <InputElement type="text" placeholder="구매후기를 작성해주세요"/>
+                  <RegisterButton>후기 등록</RegisterButton>
+                  </ReviewWriteContainer>
+                  : <ReviewWriteContainer>상품 구매후에 후기를 작성할 수 있습니다</ReviewWriteContainer>}
 
-          {listData.map((data, index) => (
+            {listData.map((data, index) => (
             <ProfileContainer key={index}>
               <ReviewHeader>
                 <img src={data.files} alt="profile" />
                 <div>{data.nickName}</div>
                 <div>{data.date}</div>
               </ReviewHeader>
-              <StarContainer>
-                <Icon>{starRateRendering(data.clickedStarNum)}</Icon>
-                {/* <Icon>
-                👍 {productManagersThumbCount}({productManagerThumbCount})
-                </Icon> */}
-              </StarContainer>
+             <StarContainer>
+                <Icon>
+                  {
+                    starRateRendering(data.clickedStarNum)
+                  }
+                </Icon>
+             </StarContainer>
+                <div>{data.reviewContent}</div>
 
-              <div>{data.reviewContent}</div>
-              {/* <div>{data.productManagerReviewContent}</div> */}
             </ProfileContainer>
           ))}
         </ReviewContainer>
@@ -322,17 +328,12 @@ const Detail = () => {
               ⭐ {productStars}({productStarsCount})
             </Icon>
           </IconsWrapper>
-          {/* <IconsWrapper>
-           
-            <Icon>👍 {productManagersThumbCount}({productManagerThumbCount})</Icon>
-          </IconsWrapper> */}
-          {/* <DropdownOptions
-            options={productOptions}
-            title="옵션 선택"
-            onSelect={handleOptionSelect}
-          /> */}
           <Buttons>
-            <HeartIcon src={heartIcon} alt="Heart Icon" />
+            {isLiked ? 
+              <Icon>❤️</Icon>
+              :
+              <HeartIcon src={heartIcon} alt="Heart Icon" onClick={() => handleProductLike(data.productId)} />
+            } 
             <Button onClick={ChatbuttonOnClick}>구매문의</Button>
           </Buttons>
         </ProductInfo>
