@@ -1,17 +1,17 @@
-import React from "react";
-import ImageSliderData from "./ImageSliderData";
+// import React from "react";
+// import ImageSliderData from "./ImageSliderData";
 import styled from "styled-components";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// import "slick-carousel/slick/slick.css";
+// import "slick-carousel/slick/slick-theme.css";
 
-import ImageSlider from "./ImageSlider";
+// import ImageSlider from "./ImageSlider";
 
 const Main = () => {
   return (
     <>
-      <ImageSliderWrapper>
+      {/* <ImageSliderWrapper>
         <ImageSlider images={ImageSliderData} width="960px" height="330px" />
-      </ImageSliderWrapper>
+      </ImageSliderWrapper> */}
     </>
   );
 };
