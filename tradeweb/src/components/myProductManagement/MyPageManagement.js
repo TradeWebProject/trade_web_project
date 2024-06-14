@@ -3,13 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import styled from '@emotion/styled';
 import {Box, Tab, Tabs, Button  } from "@mui/material";
 import { BarChart } from '@mui/x-charts/BarChart';
-import { axisClasses } from '@mui/x-charts/ChartsAxis';
 
 import profile from "../../assets/profile.svg";
 import plus from "../../assets/plus.svg";
 import MyProfile from '../userAccount/MyProfile';
 import UserPayment from '../payment/UserPayment';
-
 
 const MyPageManagement = () => {
     const navigate = useNavigate();
