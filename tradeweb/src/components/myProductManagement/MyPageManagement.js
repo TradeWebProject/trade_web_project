@@ -17,148 +17,91 @@ const MyPageManagement = () => {
     const [navigateUrl, setNavigateUrl] = useState("");
     const [reviewList, setReviewList] = useState([]);
 
-    const data = [
+
+
+
+    const reviewData = [
         {
-          files: plus,
-          title: "나이키 신발",
-          price: 240000,
-          description: "나이키 운동화 사이즈 300",
-          productId: 1,
-        },
-        {
-          files: plus,
-          title: "아디다스 신발",
-          price: 340000,
-          description: "아디다스 삼선 슬리퍼 사이즈260",
-          productId: 2,
-        },
-        {
-          files: plus,
-          title: "닥터마틴 로퍼",
-          price: 270000,
-          description: "닥터마틴 로퍼 사이즈 270",
-          productId: 3,
-        },
-        {
-          files: plus,
-          title: "흰색 셔츠",
-          price: 20000,
-          description: "미개봉 흰색 셔츠",
-          productId: 4,
-        },
-        {
-            files: plus,
-            title: "나이키 신발",
-            price: 240000,
-            description: "나이키 운동화 사이즈 300",
-            productId: 1,
-          },
-          {
-            files: plus,
-            title: "아디다스 신발",
-            price: 340000,
-            description: "아디다스 삼선 슬리퍼 사이즈260",
+            files: profile,
+            nickName: "nickname",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요",
+            date: "2024.06.08",
             productId: 2,
-          },
-          {
-            files: plus,
-            title: "닥터마틴 로퍼",
-            price: 270000,
-            description: "닥터마틴 로퍼 사이즈 270",
-            productId: 3,
-          },
-          {
-            files: plus,
-            title: "흰색 셔츠",
-            price: 20000,
-            description: "미개봉 흰색 셔츠",
-            productId: 4,
-          },
-      ];
-
-
-      const reviewData = [
-            {
-                files: profile,
-                nickName: "nickname",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname2",
-                starRate: 5,
-                reviewContent: "색이 예쁘고 발이 편해요",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname3",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요...",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname4",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요...",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname5",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요...",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname6",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요...",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname7",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요...",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname8",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요...",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname9",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요...",
-                date: "2024.06.08",
-                productId: 2,
-            },
-            {
-                files: profile,
-                nickName: "nickname10",
-                starRate: 4,
-                reviewContent: "색이 예쁘고 발이 편해요...",
-                date: "2024.06.08",
-                productId: 2,
-            },
-      ];
+        },
+        {
+            files: profile,
+            nickName: "nickname2",
+            starRate: 5,
+            reviewContent: "색이 예쁘고 발이 편해요",
+            date: "2024.06.08",
+            productId: 2,
+        },
+        {
+            files: profile,
+            nickName: "nickname3",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요...",
+            date: "2024.06.08",
+            productId: 2,
+        },
+        {
+            files: profile,
+            nickName: "nickname4",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요...",
+            date: "2024.06.08",
+            productId: 2,
+        },
+        {
+            files: profile,
+            nickName: "nickname5",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요...",
+            date: "2024.06.08",
+            productId: 2,
+        },
+        {
+            files: profile,
+            nickName: "nickname6",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요...",
+            date: "2024.06.08",
+            productId: 2,
+        },
+        {
+            files: profile,
+            nickName: "nickname7",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요...",
+            date: "2024.06.08",
+            productId: 2,
+        },
+        {
+            files: profile,
+            nickName: "nickname8",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요...",
+            date: "2024.06.08",
+            productId: 2,
+        },
+        {
+            files: profile,
+            nickName: "nickname9",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요...",
+            date: "2024.06.08",
+            productId: 2,
+        },
+        {
+            files: profile,
+            nickName: "nickname10",
+            starRate: 4,
+            reviewContent: "색이 예쁘고 발이 편해요...",
+            date: "2024.06.08",
+            productId: 2,
+        },
+    ];
 
     const handleTabChange = (e, tabIndex) => {
         console.log(tabIndex);
@@ -177,7 +120,7 @@ const MyPageManagement = () => {
     }
 
     const reviewButtonOnClick = () => {
-        setReviewList(reviewData);
+        // setReviewList(reviewData);
         navigate("/detail");
     }
 
@@ -207,7 +150,7 @@ const MyPageManagement = () => {
                     <Box sx={{ p: 3 }}>
                         {
                         <UserPayment/>
-                       }
+                        }
                     </Box>
                 )}
                 {currentTabIndex === 2 && (

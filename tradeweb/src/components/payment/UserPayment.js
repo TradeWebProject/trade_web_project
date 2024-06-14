@@ -82,7 +82,6 @@ const UserPayment = () => {
                     <PageButton>6</PageButton>
                     <PageButton>&raquo;</PageButton>
                 </Pagination>
-
             </Container>
             <Container>
                 <Title>내가 작성한 리뷰</Title>
