@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from "styled-components";
 import ReactQuill from "react-quill";
 import axios from "axios";
@@ -6,7 +6,6 @@ import "quill/dist/quill.core.css";
 import DropdownOptions from "../../components/common/DropdownOptions";
 import plusIcon from "../../assets/plus.svg";
 import deleteIcon from "../../assets/delete.svg";
-import { ChartsAxisTooltipContent } from '@mui/x-charts/ChartsTooltip';
 
 const ProductRegister = () => {
     const [files, setFiles] = useState([]);
@@ -18,7 +17,6 @@ const ProductRegister = () => {
     const [description, setDescription] = useState("");
     const [productQuality, setProductQuality] = useState("");
     const [category, setCategory] = useState("");
-
 
     const fileInputRef = useRef(null);
     const maxfiles = 10;
@@ -49,8 +47,7 @@ const ProductRegister = () => {
     const RequillDescriptionChanged = (e) => {
         setDescription(e);
         console.log(description);
-    }
-
+    };
 
     const modules = {
         toolbar: {
@@ -73,7 +70,6 @@ const ProductRegister = () => {
 
     const handleImageChange = (e) => {
         const files = e.target.files;
-
         const maxSize = 10 * 1024 * 1024; // 10MB
 
         const formData = new FormData();
@@ -145,7 +141,7 @@ const ProductRegister = () => {
      
       const registerProduct = async () => {
         try {
-          const token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MTg2Mjk5MjMsImVtYWlsIjoidGtna3N3QG5hdmVyLmNvbSJ9.tNPiF_l9N1-t9ysY4fDYc_34Ji-PMWAHv8HvPK6EPYg";
+          const token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MTg2NTQ3NjMsImVtYWlsIjoidGtna3N3QG5hdmVyLmNvbSJ9.I5JpEu0erEc3F8-WFwUXDlBpHJmey1VsWJwzP41Mh4Q";
           const formData = new FormData();
           
           // FormData에 항목 추가
@@ -398,32 +394,32 @@ const EndDateInput = styled.input`
     cursor: pointer;
 `;
 
-const OptionInputWrapper = styled.div`
-    width: 1280px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-`;
+// const OptionInputWrapper = styled.div`
+//     width: 1280px;
+//     display: flex;
+//     align-items: center;
+//     margin-bottom: 10px;
+// `;
 
-const OptionContentTitleElement = styled.div`
-    width:  160px;
-    height: 30px;
-    margin-top: 30px;
-    margin-bottom: 10px;
-    background-size: cover;
-    // border: 1px solid green;
-    cursor: pointer;
-`;
+// const OptionContentTitleElement = styled.div`
+//     width:  160px;
+//     height: 30px;
+//     margin-top: 30px;
+//     margin-bottom: 10px;
+//     background-size: cover;
+//     // border: 1px solid green;
+//     cursor: pointer;
+// `;
 
-const OptionTitleTextElement = styled.div`
-    width:  52px;
-    height: 30px;
-    margin-right: 26px;
-    margin-bottom: 10px;
-    background-size: cover;
-    // border: 1px solid blue;
-    cursor: pointer;
-`;
+// const OptionTitleTextElement = styled.div`
+//     width:  52px;
+//     height: 30px;
+//     margin-right: 26px;
+//     margin-bottom: 10px;
+//     background-size: cover;
+//     // border: 1px solid blue;
+//     cursor: pointer;
+// `;
 
 const OptionTitleText = styled.div`
     width:  90px;
@@ -436,19 +432,19 @@ const OptionTitleText = styled.div`
 `;
 
 
-const OptionTextInput = styled.input`
-    width: 1060px;
-    height: 44px;
-    margin-right: 34px;
-    border: none;   
-    margin-bottom: 10px;
-`;
+// const OptionTextInput = styled.input`
+//     width: 1060px;
+//     height: 44px;
+//     margin-right: 34px;
+//     border: none;   
+//     margin-bottom: 10px;
+// `;
 
-const OptionContentInput = styled.input`
-    width:  2600px;
-    height: 44px;
-    border: none; 
-`;
+// const OptionContentInput = styled.input`
+//     width:  2600px;
+//     height: 44px;
+//     border: none; 
+// `;
 
 const InnerWrapper = styled.div`
     width: 1277px;
@@ -463,18 +459,18 @@ const DropwDownElementWrapper = styled.div`
     
 `;
 
-const FileUploadButtonWrapper = styled.div`
-    width: 200px;
-    cursor: pointer;
-`;
+// const FileUploadButtonWrapper = styled.div`
+//     width: 200px;
+//     cursor: pointer;
+// `;
 
-const FileUploadButton = styled.button`
-    width: 200px;
-    hieght: 45px;
-    margin-top: 10px;
-    background-color: black;
-    color: white;
-`;
+// const FileUploadButton = styled.button`
+//     width: 200px;
+//     hieght: 45px;
+//     margin-top: 10px;
+//     background-color: black;
+//     color: white;
+// `;
 
 const ImageWrapper = styled.div`
   display: flex;
