@@ -2,8 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import data from "./dummyData";
 import close from "../../assets/close.svg";
+import ProductList from "./ProductList";
 
-const SearchContent = ({ selectedFilters, filterRemove }) => {
+const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -80,27 +81,13 @@ const SearchContent = ({ selectedFilters, filterRemove }) => {
                 &nbsp;
                 <CloseButton
                   src={close}
-                  onClick={() => filterRemove(filterTitle, option)}
+                  onClick={() => onFilterRemove(filterTitle, option)}
                 />
               </FilterTag>
             ))
           )}
         </SelectedFilters>
-        <SearchResultList>
-          {listData.map((product, index) => (
-            <SearchItem key={index}>
-              <ItemImageBox>
-                <ItemImage src={product.files} alt={product.title} />
-              </ItemImageBox>
-
-              <ItemTitle>{product.title}</ItemTitle>
-              <ItemInfo>{product.description}</ItemInfo>
-              <ItemPrice>
-                {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-              </ItemPrice>
-            </SearchItem>
-          ))}
-        </SearchResultList>
+        <ProductList products={listData} />
         <div ref={loader}></div>
       </Container>
     </>

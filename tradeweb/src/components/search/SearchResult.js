@@ -47,7 +47,7 @@ const SearchResult = () => {
       </FilterContainer>
       <SearchContent
         selectedFilters={selectedFilters}
-        filterRemove={handleFilterRemove}
+        onfilterRemove={handleFilterRemove}
       />
     </Container>
   );
