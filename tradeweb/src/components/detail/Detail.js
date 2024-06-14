@@ -1,4 +1,4 @@
-import React, { useState,  useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import DropdownOptions from "../common/DropdownOptions";
 import heartIcon from "../../assets/heart.svg";
@@ -9,7 +9,6 @@ import { LuThumbsUp } from "react-icons/lu";
 import ChatList from "../chatlist/ChatList";
 import { FaRegStar } from "react-icons/fa";
 import { MdOutlineStar } from "react-icons/md";
-
 
 const Detail = () => {
   const [listData, setListData] = useState([]);
@@ -23,9 +22,6 @@ const Detail = () => {
 
   // 별을 5개로 표현하기 위한 더미 배열
   const array = [0, 1, 2, 3, 4];
-
- 
-
 
   // 임의의 데이터 정의
   const data = {
@@ -45,84 +41,87 @@ const Detail = () => {
 
   const reviewData = [
     {
-        files: profile,
-        nickName: "nickname",
-        clickedStarNum: 4,
-        thumbRate: 5,
-        reviewContent: "색이 예쁘고 발이 편해요 ",
-        date: "2024.06.08",
-        productId: 2,
+      files: profile,
+      nickName: "nickname",
+      clickedStarNum: 4,
+      thumbRate: 5,
+      reviewContent: "색이 예쁘고 발이 편해요 ",
+      date: "2024.06.08",
+      productId: 2,
     },
     {
-        files: profile,
-        nickName: "nickname2",
-        clickedStarNum: 5,
-        thumbRate: 5,
-        reviewContent: "바로 구매했는데 ",
-        date: "2024.06.07",
-        productId: 2,
+      files: profile,
+      nickName: "nickname2",
+      clickedStarNum: 5,
+      thumbRate: 5,
+      reviewContent: "바로 구매했는데 ",
+      date: "2024.06.07",
+      productId: 2,
     },
     {
-        files: profile,
-        nickName: "nickname3",
-        clickedStarNum: 4,
-        thumbRate: 5,
-        reviewContent: "색이 예쁘고 발이 편해요",
-        productManagerReviewContent: "채팅을 통해 상품에 대한 많은 정보를 얻을 수 있었어요.",
-        date: "2024.06.06",
-        productId: 2,
+      files: profile,
+      nickName: "nickname3",
+      clickedStarNum: 4,
+      thumbRate: 5,
+      reviewContent: "색이 예쁘고 발이 편해요",
+      productManagerReviewContent:
+        "채팅을 통해 상품에 대한 많은 정보를 얻을 수 있었어요.",
+      date: "2024.06.06",
+      productId: 2,
     },
     {
-        files: profile,
-        nickName: "nickname4",
-        clickedStarNum: 4,
-        thumbRate: 4,
-        reviewContent: "추천",
-        productManagerReviewContent: "바로 구매 했습니다",
-        date: "2024.06.05",
-        productId: 2,
+      files: profile,
+      nickName: "nickname4",
+      clickedStarNum: 4,
+      thumbRate: 4,
+      reviewContent: "추천",
+      productManagerReviewContent: "바로 구매 했습니다",
+      date: "2024.06.05",
+      productId: 2,
     },
     {
-        files: profile,
-        nickName: "nickname5",
-        clickedStarNum: 4,
-        thumbRate: 5,
-        reviewContent: "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
-        productManagerReviewContent: "바로 구매 했습니다",
-        date: "2024.06.05",
-        productId: 2,
+      files: profile,
+      nickName: "nickname5",
+      clickedStarNum: 4,
+      thumbRate: 5,
+      reviewContent:
+        "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
+      productManagerReviewContent: "바로 구매 했습니다",
+      date: "2024.06.05",
+      productId: 2,
     },
     {
-        files: profile,
-        nickName: "nickname6",
-        clickedStarNum: 4,
-        thumbRate: 5,
-        reviewContent: "좋아요 또 살래요",
-        productManagerReviewContent: "바로 구매 했습니다",
-        date: "2024.06.04",
-        productId: 2,
+      files: profile,
+      nickName: "nickname6",
+      clickedStarNum: 4,
+      thumbRate: 5,
+      reviewContent: "좋아요 또 살래요",
+      productManagerReviewContent: "바로 구매 했습니다",
+      date: "2024.06.04",
+      productId: 2,
     },
     {
-        files: profile,
-        nickName: "nickname7",
-        clickedStarNum: 4,
-        thumbRate: 5,
-        reviewContent: "좋아요",
-        productManagerReviewContent: "바로 구매 했습니다",
-        date: "2024.06.03",
-        productId: 2,
+      files: profile,
+      nickName: "nickname7",
+      clickedStarNum: 4,
+      thumbRate: 5,
+      reviewContent: "좋아요",
+      productManagerReviewContent: "바로 구매 했습니다",
+      date: "2024.06.03",
+      productId: 2,
     },
     {
       files: profile,
       nickName: "nickname8",
       clickedStarNum: 4,
       thumbRate: 5,
-      reviewContent: "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
+      reviewContent:
+        "색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...색이 예쁘고 발이 편해요...",
       productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.05",
       productId: 2,
-  },
-  {
+    },
+    {
       files: profile,
       nickName: "nickname9",
       clickedStarNum: 4,
@@ -131,8 +130,8 @@ const Detail = () => {
       productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.04",
       productId: 2,
-  },
-  {
+    },
+    {
       files: profile,
       nickName: "nickname10",
       clickedStarNum: 4,
@@ -141,8 +140,8 @@ const Detail = () => {
       productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.03",
       productId: 2,
-  },
-  {
+    },
+    {
       files: profile,
       nickName: "nickname11",
       clickedStarNum: 4,
@@ -151,8 +150,8 @@ const Detail = () => {
       productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.04",
       productId: 2,
-  },
-  {
+    },
+    {
       files: profile,
       nickName: "nickname12",
       clickedStarNum: 4,
@@ -161,8 +160,8 @@ const Detail = () => {
       productManagerReviewContent: "바로 구매 했습니다",
       date: "2024.06.03",
       productId: 2,
-  },
-];
+    },
+  ];
 
   // 데이터 추출
   const {
@@ -192,7 +191,7 @@ const Detail = () => {
     const newReviews = reviewData.slice(startIndex, endIndex);
 
     if (newReviews.length === 0) {
-        setHasMore(false);
+      setHasMore(false);
     } else {
       setListData((prev) => [...prev, ...newReviews]);
       setPage((prev) => prev + 1);
@@ -205,7 +204,7 @@ const Detail = () => {
 
   useEffect(() => {
     if (!hasMore) return;
-    
+
     console.log("useEffect");
 
     let currentLoader = loader.current;
@@ -213,7 +212,7 @@ const Detail = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-           loadMore(); 
+          loadMore();
         }
       },
       { threshold: 1 }
@@ -232,32 +231,32 @@ const Detail = () => {
 
   const ChatbuttonOnClick = () => {
     setChatVisible(!isChatVisible);
-  }
+  };
 
   const closeChat = () => {
     setChatVisible(false);
   };
 
-
   const starRateRendering = (data) => {
     const result = [];
     for (let i = 0; i < data; i++) {
-        result.push("⭐");
+      result.push("⭐");
     }
     return result;
-  }
+  };
+
 
   const starScore = index => {
     console.log(index + "clicked");
     let star = [...isClicked];
     for (let i = 0; i < 5; i++) {
-        star[i] = i <= index ? true : false;
+      star[i] = i <= index ? true : false;
     }
     setClicked(star);
   };
 
   // 현재 선택한 별점 개수
-  let clickedStarNum = isClicked.filter(element => true === element.lenght);
+  let clickedStarNum = isClicked.filter((element) => true === element.lenght);
 
   // 상품 찜하기 버튼 클릭시 실행되는 함수
   const handleProductLike = productId => {
@@ -271,7 +270,6 @@ const Detail = () => {
       <Section>
         <MainImage src={image} alt="Main Image" />
         <Description>{description}</Description>
-        
 
         <ReviewContainer>
                {isPurchased ? 
@@ -294,16 +292,13 @@ const Detail = () => {
                   <RegisterButton>후기 등록</RegisterButton>
                   </ReviewWriteContainer>
                   : <ReviewWriteContainer>상품 구매후에 후기를 작성할 수 있습니다</ReviewWriteContainer>}
-          
-             
+
             {listData.map((data, index) => (
             <ProfileContainer key={index}>
               <ReviewHeader>
-                <img src={data.files} alt="profile"/>
+                <img src={data.files} alt="profile" />
                 <div>{data.nickName}</div>
-                <div>
-                    {data.date}
-                </div>
+                <div>{data.date}</div>
               </ReviewHeader>
              <StarContainer>
                 <Icon>
@@ -313,9 +308,9 @@ const Detail = () => {
                 </Icon>
              </StarContainer>
                 <div>{data.reviewContent}</div>
-               
+
             </ProfileContainer>
-            ))}
+          ))}
         </ReviewContainer>
         <div ref={loader}></div>
       </Section>
@@ -323,7 +318,7 @@ const Detail = () => {
         <UserSection>
           <UserImage src={userImage} alt="User Image" />
           <UserName>{userName}</UserName>
-          <img src={rightarrow}/>
+          <img src={rightarrow} />
         </UserSection>
         <ProductInfo>
           <ProductTitle>{productTitle}</ProductTitle>
@@ -332,7 +327,6 @@ const Detail = () => {
             <Icon>
               ⭐ {productStars}({productStarsCount})
             </Icon>
-            <Icon>  <span>판매자에 대한 만족도</span>👍 {productManagersThumbCount}({productManagerThumbCount})</Icon>
           </IconsWrapper>
           <Buttons>
             {isLiked ? 
@@ -341,7 +335,7 @@ const Detail = () => {
               <HeartIcon src={heartIcon} alt="Heart Icon" onClick={() => handleProductLike(data.productId)} />
             } 
             <Button onClick={ChatbuttonOnClick}>구매문의</Button>
-        </Buttons>
+          </Buttons>
         </ProductInfo>
       </Section>
       <ChatList visible={isChatVisible} onClose={closeChat} />
@@ -384,8 +378,7 @@ const UserSection = styled.div`
   /* 사용자 정보 섹션 스타일링 */
   // border: 1px solid green;
   display: flex;
-  align-items:center;
-  
+  align-items: center;
 `;
 
 const UserImage = styled.img`
@@ -450,7 +443,6 @@ const RegisterButton = styled.button`
   &:hover {
     background-color: #f5f5f5;
   }
-
 `;
 
 const Button = styled.button`
@@ -495,23 +487,20 @@ const ReviewWriteContainer = styled.div`
 
 const ReviewIconWrapper = styled.div`
   display: flex;
-  gap:10px;
-
-
+  gap: 10px;
 `;
 
-
 const ProfileContainer = styled.div`
-    width: 700px;
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-top: 10px;
-    padding: 0 20px;
-    gap: 10px;
-    background-color: #F4F4F4;
+  width: 700px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 10px;
+  padding: 0 20px;
+  gap: 10px;
+  background-color: #f4f4f4;
 `;
 
 const ReviewHeader = styled.div`
@@ -521,48 +510,16 @@ const ReviewHeader = styled.div`
   height: 50px;
   margin-top: 20px;
   gap: 10px;
-
-
 `;
 
 const StarContainer = styled.div`
-display: flex;
-width: 200px;
-height: 50px;
-
+  display: flex;
+  width: 200px;
+  height: 50px;
 `;
 
 const InputElement = styled.input`
   width: 700px;
   height: 200px;
   border-radius: 10px;
-
-
-`;
-
-const ChangeImgButton = styled.button`
-    width: 100px;
-    height: 37px;
-    margin-left: 360px;
-    background-color: black;
-    color: white;
-    border: 1px solid black;
-    cursor: pointer;
-`;
-
-
-const Pagination = styled.div`
-   margin-top: 1800px;
-   margin-left: 560px;
-
-
-`;
-
-const PageButton = styled.button`
-    width: 35px;
-    height: 35px;
-    background-color: black;
-    color: white;
-    cursor: pointer;
-
 `;
