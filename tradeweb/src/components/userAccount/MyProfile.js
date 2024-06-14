@@ -228,11 +228,7 @@ const Icon = styled.div`
     margin-right: 5px;
 `;
 
-const Pagination = styled.div`
-   
-
-
-`;
+const Pagination = styled.div``;
 
 const PageButton = styled.button`
     width: 35px;
