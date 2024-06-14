@@ -9,6 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import AppLayout from "./components/common/AppLayout";
 import ProductWritePage from "./pages/productWritePage/ProductWritePage";
 import SearchResultPage from "./pages/search/SearchResultPage";
+import Mainpage from "./pages/main/MainPage";
 import ReviewPage from "./pages/reviewPage/reviewPage";
 import ProductDetailManagementPage from "./pages/productDetailManagementPage/ProductDetailManagementPage";
 
@@ -25,6 +26,7 @@ function App() {
           element={<ProductDetailManagementPage />}
         />
         <Route path="/search" element={<SearchResultPage />} />
+        <Route path="/" element={<Mainpage />} />
         <Route path="/review" element={<ReviewPage />} />
       </Routes>
     </AppLayout>
