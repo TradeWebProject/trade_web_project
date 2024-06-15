@@ -10,6 +10,8 @@ import search from "../../assets/search.svg";
 const Nav = () => {
   const [isSearchClicked, setIsSearchClicked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [keyword, setKeyword] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,11 +20,26 @@ const Nav = () => {
       setIsLoggedIn(true);
     }
   }, []);
-
+  //검색창 열기
   const handleSearchButton = () => {
     setIsSearchClicked(!isSearchClicked);
   };
 
+  const getValue = (event) => {
+    setKeyword(event.target.value);
+  };
+
+  const handleSearch = () => {
+    navigate(`/search?keyword=${keyword}`);
+  };
+
+  const onSubmitSearch = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  //로그아웃
   const handleLogout = async () => {
     const email = localStorage.getItem("email");
     if (email) {
@@ -59,14 +76,13 @@ const Nav = () => {
   return (
     <Container>
       <Wrapper>
-        <Title>Super24</Title>
+        <Title onClick={() => navigate("/")}>Super24</Title>
         <ButtonWrapper>
           {isLoggedIn ? (
             <LogoutButton onClick={handleLogout}>LOGOUT</LogoutButton>
           ) : (
             <AuthButton onClick={handleLogin}>LOGIN</AuthButton>
           )}
-          <HomeButton onClick={() => navigate("/")}>HOME</HomeButton>
           <SearchButton>
             <SearchImg src={search} onClick={handleSearchButton} />
             <CSSTransition
@@ -76,7 +92,12 @@ const Nav = () => {
               unmountOnExit
             >
               <SearchInputAnimation>
-                <SearchInput />
+                <SearchInput
+                  type="search"
+                  value={keyword}
+                  onChange={getValue}
+                  onKeyPress={onSubmitSearch}
+                />
               </SearchInputAnimation>
             </CSSTransition>
           </SearchButton>
@@ -109,24 +130,29 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-const Title = styled.h2``;
+const Title = styled.h2`
+  cursor: pointer;
+`;
 
 const ButtonWrapper = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const HomeButton = styled.div`
-  font-size: 25px;
-  margin-left: 15px;
-  margin-right: 15px;
-  cursor: pointer;
-`;
-
 const SearchButton = styled.div`
+  padding-top: 4px;
   display: flex;
   align-items: center;
 `;
+
+const AuthButton = styled.div`
+  margin-left: 15px;
+  margin-right: 15px;
+  font-size: 25px;
+  cursor: pointer;
+`;
+
+const LogoutButton = styled(AuthButton)``;
 
 const SearchImg = styled.img`
   width: 25px;
@@ -162,10 +188,3 @@ const SearchInputAnimation = styled.div`
     transition: width 500ms;
   }
 `;
-
-const AuthButton = styled.div`
-  font-size: 25px;
-  cursor: pointer;
-`;
-
-const LogoutButton = styled(AuthButton)``;

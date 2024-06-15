@@ -5,8 +5,8 @@ import ProductItem from "./ProductItem";
 const ProductList = ({ products }) => {
   return (
     <SearchResultList>
-      {products.map((product, index) => (
-        <ProductItem key={index} product={product} />
+      {products.map((product, productsId) => (
+        <ProductItem key={productsId} product={product} />
       ))}
     </SearchResultList>
   );
@@ -19,5 +19,4 @@ const SearchResultList = styled.div`
   row-gap: 40px;
   column-gap: 80px;
   grid-template-columns: 200px 200px 200px 200px;
-
 `;
