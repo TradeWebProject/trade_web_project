@@ -1,10 +1,10 @@
+
 import React, { useState } from 'react';
+import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
-import styled from '@emotion/styled';
 import {Box, Tab, Tabs, Button  } from "@mui/material";
 import profile from "../../assets/profile.svg";
 import plus from "../../assets/plus.svg";
-
 
 const MyProfile = () => {
     const navigate = useNavigate();
@@ -71,8 +71,9 @@ const MyProfile = () => {
             description: "미개봉 흰색 셔츠",
             productId: 4,
           },
-      ];
 
+    ];
+  
     return (
         <Box sx={{ p: 3 }}>
                         <Container>
@@ -126,6 +127,7 @@ const MyProfile = () => {
                             </Pagination>
                         </Container>  
                     </Box>
+
     );
 };
 
