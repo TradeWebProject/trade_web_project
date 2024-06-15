@@ -62,7 +62,7 @@ const UserProductSellHistory = () => {
     };
 
     const reviewButtonOnClick = () => {
-        navigate("/detail");
+        navigate("/my-page");
     };
 
     return (

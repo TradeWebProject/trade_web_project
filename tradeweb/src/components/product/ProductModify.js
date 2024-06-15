@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import DropdownOptions from "../../components/common/DropdownOptions";
 import plusIcon from "../../assets/plus.svg";
 import styled from "styled-components";
@@ -9,6 +9,7 @@ import "quill/dist/quill.core.css";
 import deleteIcon from "../../assets/delete.svg";
 
 const ProductModify = () => {
+    const navigate = useNavigate();
     const quillRef = useRef();
     const {productId} = useParams();
     const [produtData, setProductData] = useState("");
@@ -199,6 +200,10 @@ const ProductModify = () => {
         ));
       };
 
+      const onClickCancelButton = () => {
+        navigate("/my-page");
+      }
+
     return (
     <ContentLayout>
         <Wrapper>
@@ -297,7 +302,7 @@ const ProductModify = () => {
                 </ImageInputWrapper>
             </ImageWrapper>
             <SaveButtonWrapper>
-                <SaveButton>취소</SaveButton>
+                <SaveButton onClick={onClickCancelButton}>취소</SaveButton>
                 {isInputChanged &&
                      <SaveButton>수정</SaveButton>
                      
