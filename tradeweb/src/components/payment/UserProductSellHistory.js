@@ -11,7 +11,7 @@ const UserProductSellHistory = () => {
     const [responseData, setResponseData] = useState([]);
     const [responseImageUrl, setResponseImageUrl] = useState("");
     const [selledStatus, setSelledStatus] = useState("");
-    const token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MTg2NTQ3NjMsImVtYWlsIjoidGtna3N3QG5hdmVyLmNvbSJ9.I5JpEu0erEc3F8-WFwUXDlBpHJmey1VsWJwzP41Mh4Q";
+    const token = localStorage.getItem("accessToken");
     const userId = 9;
     const selledProductStatus = 0;
 
@@ -28,6 +28,7 @@ const UserProductSellHistory = () => {
                             }
                 ).then(function (response) {
                     console.log("응답 데이터:", response.data.products);
+                    
                     // convertToBase66(response.data.products.imageUrl);
                     const productsArray = response.data.products;
                     setResponseData(productsArray);
@@ -84,7 +85,7 @@ const UserProductSellHistory = () => {
                                 return  <tr>
                                             <TableTd>{data.productId}</TableTd>
                                             {/* <TableTd><img src={plus}/></TableTd> */}
-                                            <TableTd><img src={`${process.env.REACT_APP_API_URL}{data.imageUrl}`}/></TableTd>
+                                            <TableTd><img src={`${process.env.REACT_APP_IMAGE_URL}${data.imageUrl}`}/></TableTd>
                                             <TableTd><a href="/product/management/detail/${data.productId}" onClick={productNameOnClick}>{data.productName}</a></TableTd>
                                             <TableTd>{data.category}</TableTd>
                                             <TableTd>{data.productQuality}</TableTd>
@@ -118,7 +119,7 @@ const UserProductSellHistory = () => {
                                          .map((data, index) => (
                                             <tr>
                                                 <TableTd>{data.productId}</TableTd>
-                                                <TableTd><a href="/product/management/detail/" onClick={productNameOnClick}>{data.productName}</a></TableTd>
+                                                <TableTd><a href="/detail" onClick={productNameOnClick}>{data.productName}</a></TableTd>
                                                 <TableTd>{data.category}</TableTd>
                                                 <TableTd>중고 상품</TableTd>
                                                 <TableTd>판매완료</TableTd>
