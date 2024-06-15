@@ -82,7 +82,6 @@ const UserPayment = () => {
                     <PageButton>6</PageButton>
                     <PageButton>&raquo;</PageButton>
                 </Pagination>
-
             </Container>
             <Container>
                 <Title>내가 작성한 리뷰</Title>
@@ -187,7 +186,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    // border: 1px solid red;
 `;
 
 const Title  = styled.div`
@@ -209,7 +207,6 @@ const TableTh = styled.th`
     background: #42444e;
     color: #fff;
     text-align: center;
-
 `;
 
 const TableTd = styled.td`
@@ -225,5 +222,4 @@ const PageButton = styled.button`
     background-color: black;
     color: white;
     cursor: pointer;
-
 `;
