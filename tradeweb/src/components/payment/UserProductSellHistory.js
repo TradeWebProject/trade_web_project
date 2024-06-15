@@ -81,12 +81,8 @@ const UserProductSellHistory = () => {
                                 <TableTh>판매상태</TableTh>
                             </tr>
                             {responseData.map(function (data, index) {
-                                // const blob = new Blob(data.imageUrl, {type: "image/png"});
-                                // const url = window.URL.createObjectURL(blob);
-                            
                                 return  <tr>
                                             <TableTd>{data.productId}</TableTd>
-                                            {/* <TableTd><img src={plus}/></TableTd> */}
                                             <TableTd><TableRowImage src={`${process.env.REACT_APP_IMAGE_URL}${data.imageUrl}`}/></TableTd>
                                             <TableTd><a href={`/product/management/detail/${data.productId}`} onClick={() => productNameOnClick(data.productId)}>{data.productName}</a></TableTd>
                                             <TableTd>{data.category}</TableTd>
@@ -195,7 +191,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    // border: 1px solid red;
 `;
 
 const Title  = styled.div`
@@ -227,8 +222,6 @@ const TableTd = styled.td`
 const TableRowImage = styled.img`
     width: 200px;
     height: 200px;
-
-
 `;
 
 const Pagination = styled.div``;
