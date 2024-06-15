@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from "styled-components";
 import ReactQuill from "react-quill";
+import axios from "axios";
 import "quill/dist/quill.core.css";
 import DropdownOptions from "../../components/common/DropdownOptions";
 import plusIcon from "../../assets/plus.svg";
@@ -9,6 +10,14 @@ import deleteIcon from "../../assets/delete.svg";
 const ProductRegister = () => {
     const [files, setFiles] = useState([]);
     const [rawFiles, setRawFiles] = useState([]);
+    const [productName, setProductName] = useState("");
+    const [price, setPrice] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [description, setDescription] = useState("");
+    const [productQuality, setProductQuality] = useState("");
+    const [category, setCategory] = useState("");
+
     const fileInputRef = useRef(null);
     const maxfiles = 10;
     const remainingfiles = maxfiles - files.length;
@@ -26,6 +35,18 @@ const ProductRegister = () => {
      // 옵션 선택 시
     const handleOptionSelect = (option) => {
         console.log(option);
+        setCategory(option);
+    };
+
+    // 옵션 선택 시
+    const handleOptionSelect2 = (option) => {
+        console.log(option);
+        setProductQuality(option);
+    };
+
+    const RequillDescriptionChanged = (e) => {
+        setDescription(e);
+        console.log(description);
     };
 
     const modules = {
@@ -49,7 +70,6 @@ const ProductRegister = () => {
 
     const handleImageChange = (e) => {
         const files = e.target.files;
-
         const maxSize = 10 * 1024 * 1024; // 10MB
 
         const formData = new FormData();
@@ -118,6 +138,48 @@ const ProductRegister = () => {
         ));
       };
 
+     
+      const registerProduct = async () => {
+        try {
+          const token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MTg2NTQ3NjMsImVtYWlsIjoidGtna3N3QG5hdmVyLmNvbSJ9.I5JpEu0erEc3F8-WFwUXDlBpHJmey1VsWJwzP41Mh4Q";
+          const formData = new FormData();
+          
+          // FormData에 항목 추가
+          formData.append("productName", productName);
+          formData.append("price", price);
+          formData.append("startDate", startDate);
+          formData.append("endDate", endDate);
+          formData.append("description", description);
+          formData.append("productQuality", productQuality);
+          formData.append("category", category);
+          
+          // 파일 크기 확인 및 추가
+          const maxSize = 10 * 1024 * 1024; // 10MB
+          rawFiles.forEach((file) => {
+            if (file.size > maxSize) {
+              alert("파일 크기는 10MB를 초과할 수 없습니다.");
+              throw new Error("파일 크기 초과");
+            }
+            formData.append("files", file);
+          });
+      
+          // API 요청
+          const response = await axios.post(
+            `${process.env.REACT_APP_API_URL}products/register`, 
+            formData, 
+            {
+              headers: {
+                'Content-Type': "multipart/form-data",
+                'Authorization': `Bearer ${token}`,
+              }
+            }
+          );
+          console.log("응답 데이터:", response.data);
+        } catch (error) {
+          console.error("요청 실패:", error);
+        }
+      };
+
     return (
         <ContentLayout>
             <Wrapper>
@@ -128,21 +190,21 @@ const ProductRegister = () => {
                 <SubContentWrapper>
                     <ProductNameWrapper>
                         <ProductNameElement>상품명:</ProductNameElement>
-                        <ProductNameInput type="text"  defaultValue="아디다스 반팔티"/>
+                        <ProductNameInput type="text"  defaultValue="아디다스 반팔티" onChange={(e) => setProductName(e.target.value)}/>
                     </ProductNameWrapper>
                     <ProductNameWrapper>
                         <ProductNameElement>가격:</ProductNameElement>
-                        <ProductNameInput type="text" defaultValue="56000"/>
+                        <ProductNameInput type="text" defaultValue="56000" onChange={(e) => setPrice(e.target.value)}/>
                     </ProductNameWrapper>
                     <InnerWrapper>
                         <ProductSellDateWrapper>
                             <SellStartDateWrapper>
                                     <DateStartText>판매 시작일:</DateStartText>
-                                    <StartDateInput type="date" defaultValue="2024-06-07"/>
+                                    <StartDateInput type="date" defaultValue="2024-06-07" onChange={(e) => setStartDate(e.target.value)}/>
                             </SellStartDateWrapper>
                             <SellEndDateWrapper>
                                     <DateStartText>판매 종료일:</DateStartText>
-                                    <EndDateInput type="date" defaultValue="2024-06-30"/>
+                                    <EndDateInput type="date" defaultValue="2024-06-30" onChange={(e) => setEndDate(e.target.value)}/>
                             </SellEndDateWrapper>
                         </ProductSellDateWrapper>
                         <ProductSellDateWrapper>
@@ -153,6 +215,7 @@ const ProductRegister = () => {
                                         options={productOptions}
                                         title="카테고리 선택"
                                         onSelect={handleOptionSelect}
+                                        onChange={(e) => setCategory(e.target.value)}
                                     />
                                 </DropwDownElementWrapper>
                                 
@@ -163,7 +226,8 @@ const ProductRegister = () => {
                                     <DropdownOptions
                                         options={productSellStatusOptions}
                                         title="제품 상태 선택"
-                                        onSelect={handleOptionSelect}
+                                        onSelect={handleOptionSelect2}
+                                        onChange={(e) => setProductQuality(e.target.value)}
                                     />
                                 </DropwDownElementWrapper>
                                 
@@ -182,7 +246,8 @@ const ProductRegister = () => {
                 </SubTitle>
                 <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px", backgroundColor: "white", }}
                               modules={modules}  
-                              placeholder="상품에 대한 상세설명을 작성해주세요!"  />
+                              placeholder="상품에 대한 상세설명을 작성해주세요!" 
+                              onChange={RequillDescriptionChanged} />
                 <ImageWrapper>
                     <SubTitle><h3>이미지</h3></SubTitle>
                     <MainImage>
@@ -211,7 +276,7 @@ const ProductRegister = () => {
                     </ImageInputWrapper>
                 </ImageWrapper>
                 <SaveButtonWrapper>
-                    <SaveButton>저장</SaveButton>
+                    <SaveButton onClick={registerProduct}>저장</SaveButton>
                 </SaveButtonWrapper>  
             </Wrapper>
         </ContentLayout>
@@ -329,32 +394,32 @@ const EndDateInput = styled.input`
     cursor: pointer;
 `;
 
-const OptionInputWrapper = styled.div`
-    width: 1280px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-`;
+// const OptionInputWrapper = styled.div`
+//     width: 1280px;
+//     display: flex;
+//     align-items: center;
+//     margin-bottom: 10px;
+// `;
 
-const OptionContentTitleElement = styled.div`
-    width:  160px;
-    height: 30px;
-    margin-top: 30px;
-    margin-bottom: 10px;
-    background-size: cover;
-    // border: 1px solid green;
-    cursor: pointer;
-`;
+// const OptionContentTitleElement = styled.div`
+//     width:  160px;
+//     height: 30px;
+//     margin-top: 30px;
+//     margin-bottom: 10px;
+//     background-size: cover;
+//     // border: 1px solid green;
+//     cursor: pointer;
+// `;
 
-const OptionTitleTextElement = styled.div`
-    width:  52px;
-    height: 30px;
-    margin-right: 26px;
-    margin-bottom: 10px;
-    background-size: cover;
-    // border: 1px solid blue;
-    cursor: pointer;
-`;
+// const OptionTitleTextElement = styled.div`
+//     width:  52px;
+//     height: 30px;
+//     margin-right: 26px;
+//     margin-bottom: 10px;
+//     background-size: cover;
+//     // border: 1px solid blue;
+//     cursor: pointer;
+// `;
 
 const OptionTitleText = styled.div`
     width:  90px;
@@ -367,19 +432,19 @@ const OptionTitleText = styled.div`
 `;
 
 
-const OptionTextInput = styled.input`
-    width: 1060px;
-    height: 44px;
-    margin-right: 34px;
-    border: none;   
-    margin-bottom: 10px;
-`;
+// const OptionTextInput = styled.input`
+//     width: 1060px;
+//     height: 44px;
+//     margin-right: 34px;
+//     border: none;   
+//     margin-bottom: 10px;
+// `;
 
-const OptionContentInput = styled.input`
-    width:  2600px;
-    height: 44px;
-    border: none; 
-`;
+// const OptionContentInput = styled.input`
+//     width:  2600px;
+//     height: 44px;
+//     border: none; 
+// `;
 
 const InnerWrapper = styled.div`
     width: 1277px;
@@ -394,18 +459,18 @@ const DropwDownElementWrapper = styled.div`
     
 `;
 
-const FileUploadButtonWrapper = styled.div`
-    width: 200px;
-    cursor: pointer;
-`;
+// const FileUploadButtonWrapper = styled.div`
+//     width: 200px;
+//     cursor: pointer;
+// `;
 
-const FileUploadButton = styled.button`
-    width: 200px;
-    hieght: 45px;
-    margin-top: 10px;
-    background-color: black;
-    color: white;
-`;
+// const FileUploadButton = styled.button`
+//     width: 200px;
+//     hieght: 45px;
+//     margin-top: 10px;
+//     background-color: black;
+//     color: white;
+// `;
 
 const ImageWrapper = styled.div`
   display: flex;

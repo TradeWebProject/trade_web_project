@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { theme } from "../../styles/theme";
 
 const Login = () => {
@@ -14,6 +15,7 @@ const Login = () => {
     userImg: null,
     interests: "",
   });
+  const navigate = useNavigate();
 
   const toggleToLogin = () => setIsLogin(true);
   const toggleToSignup = () => setIsLogin(false);
@@ -29,6 +31,8 @@ const Login = () => {
         );
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("email", formData.email);
+        navigate("/");
+        window.location.reload();
       } else {
         const form = new FormData();
         form.append("email", formData.email);
@@ -37,7 +41,6 @@ const Login = () => {
         form.append("nickname", formData.nickname);
         form.append("userImg", formData.userImg);
         form.append("interests", formData.interests);
-        console.log(form);
         response = await axios.post(
           `${process.env.REACT_APP_API_URL}users/signup`,
           form,
@@ -47,14 +50,13 @@ const Login = () => {
             },
           }
         );
+        toggleToLogin(); 
       }
       console.log("응답 데이터:", response.data);
     } catch (error) {
       if (error.response) {
-        // 서버가 응답한 경우
         console.error("요청 실패:", error.response.data);
       } else {
-        // 요청을 보내는 동안 오류가 발생한 경우
         console.error("요청 실패:", error.message);
       }
     }

@@ -26,7 +26,7 @@ function App() {
           element={<ProductDetailManagementPage />}
         />
         <Route path="/search" element={<SearchResultPage />} />
-        <Route path="/" element={<Mainpage />} />
+        {/* <Route path="/" element={<Mainpage />} /> */}
         <Route path="/review" element={<ReviewPage />} />
       </Routes>
     </AppLayout>

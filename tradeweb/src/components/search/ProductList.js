@@ -19,4 +19,5 @@ const SearchResultList = styled.div`
   row-gap: 40px;
   column-gap: 80px;
   grid-template-columns: 200px 200px 200px 200px;
+
 `;

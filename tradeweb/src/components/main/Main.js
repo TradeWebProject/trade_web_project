@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import ImageSliderData from "./ImageSliderData";
 import styled from "styled-components";
@@ -20,7 +21,7 @@ const Main = () => {
 
   return (
     <>
-      <ImageSliderWrapper>
+ <ImageSliderWrapper>
         <ImageSlider images={ImageSliderData} width="1040px" height="330px" />
       </ImageSliderWrapper>
       <ProductListWrapper>
