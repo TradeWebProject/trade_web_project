@@ -97,7 +97,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
 export default SearchContent;
 
 const Container = styled.div`
-  margin-left: 220px;
+  margin-left: 240px;
 `;
 
 const SearchKeyword = styled.div`

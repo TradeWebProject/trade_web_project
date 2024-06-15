@@ -17,6 +17,7 @@ export default ProductList;
 const SearchResultList = styled.div`
   display: grid;
   row-gap: 40px;
-  column-gap: 20px;
-  grid-template-columns: 250px 250px 250px 250px;
+  column-gap: 80px;
+  grid-template-columns: 200px 200px 200px 200px;
+
 `;
