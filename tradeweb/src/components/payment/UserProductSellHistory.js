@@ -83,8 +83,8 @@ const UserProductSellHistory = () => {
                             
                                 return  <tr>
                                             <TableTd>{data.productId}</TableTd>
-                                            <TableTd><img src={plus}/></TableTd>
-                                            {/* <TableTd><img src={`${process.env.REACT_APP_API_URL}{data.imageUrl}`}/></TableTd> */}
+                                            {/* <TableTd><img src={plus}/></TableTd> */}
+                                            <TableTd><img src={`${process.env.REACT_APP_API_URL}{data.imageUrl}`}/></TableTd>
                                             <TableTd><a href="/product/management/detail/${data.productId}" onClick={productNameOnClick}>{data.productName}</a></TableTd>
                                             <TableTd>{data.category}</TableTd>
                                             <TableTd>{data.productQuality}</TableTd>
