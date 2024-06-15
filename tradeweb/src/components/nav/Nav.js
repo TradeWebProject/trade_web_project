@@ -1,15 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { CSSTransition } from "react-transition-group";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 //svg
 import search from "../../assets/search.svg";
 
 const Nav = () => {
   const [isSearchClicked, setIsSearchClicked] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const handleSearchButton = () => {
     setIsSearchClicked(!isSearchClicked);
+  };
+
+  const handleLogout = async () => {
+    const email = localStorage.getItem("email");
+    if (email) {
+      try {
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}users/logout`,
+          {
+            email,
+          }
+        );
+        localStorage.removeItem("email");
+        localStorage.removeItem("accessToken");
+        navigate("/"); // 로그아웃 후 메인 페이지로 이동
+        window.location.reload(); // 페이지 새로고침
+      } catch (error) {
+        if (error.response) {
+          // 서버가 응답한 경우
+          console.error("로그아웃 실패:", error.response.data);
+        } else if (error.request) {
+          // 요청이 만들어졌으나 응답을 받지 못한 경우
+          console.error("요청이 만들어졌으나 응답을 받지 못함:", error.request);
+        } else {
+          // 요청을 보내는 동안 다른 오류가 발생한 경우
+          console.error("로그아웃 요청 설정 오류:", error.message);
+        }
+      }
+    }
+  };
+
+  const handleLogin = () => {
+    navigate("/login");
   };
 
   return (
@@ -17,7 +61,12 @@ const Nav = () => {
       <Wrapper>
         <Title>Super24</Title>
         <ButtonWrapper>
-          <HomeButton>HOME</HomeButton>
+          {isLoggedIn ? (
+            <LogoutButton onClick={handleLogout}>LOGOUT</LogoutButton>
+          ) : (
+            <AuthButton onClick={handleLogin}>LOGIN</AuthButton>
+          )}
+          <HomeButton onClick={() => navigate("/")}>HOME</HomeButton>
           <SearchButton>
             <SearchImg src={search} onClick={handleSearchButton} />
             <CSSTransition
@@ -69,6 +118,7 @@ const ButtonWrapper = styled.div`
 
 const HomeButton = styled.div`
   font-size: 25px;
+  margin-left: 15px;
   margin-right: 15px;
   cursor: pointer;
 `;
@@ -112,3 +162,10 @@ const SearchInputAnimation = styled.div`
     transition: width 500ms;
   }
 `;
+
+const AuthButton = styled.div`
+  font-size: 25px;
+  cursor: pointer;
+`;
+
+const LogoutButton = styled(AuthButton)``;
