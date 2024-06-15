@@ -1,13 +1,16 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 import DropdownOptions from "../../components/common/DropdownOptions";
 import plusIcon from "../../assets/plus.svg";
 import styled from "styled-components";
+import axios from "axios";
 import ReactQuill from "react-quill";
 import "quill/dist/quill.core.css";
 import deleteIcon from "../../assets/delete.svg";
 
 const ProductModify = () => {
     const quillRef = useRef();
+    const {productId} = useParams();
     const [filesArray, setFiles] = useState([]);
     const [rawFiles, setRawFiles] = useState([]);
     const [isTextChanged, setText] = useState("");
@@ -26,8 +29,33 @@ const ProductModify = () => {
         description: '',
         files:'',
     });
-
+    
+    const token = localStorage.getItem("accessToken");
     const {productName, productPrice, startDate, endDate, category, description, productQuality, files} = inputs;
+
+    useEffect(() => {
+        async function get() {
+        
+            try {
+                await axios.get(`${process.env.REACT_APP_API_URL}product/${productId}`,
+                            {
+                                headers: {
+                                    'Content-Type': "multipart/form-data",
+                                    'Authorization': `Bearer ${token}`,
+                                }
+                            }
+                ).then(function (response) {
+                    console.log("응답 데이터:", response.data);
+                })
+               
+            } catch (error) {
+                console.error("요청 실패:", error);
+            }
+        };
+        get();
+    }, [])
+
+
 
     useEffect(() => {
         setIsInputChanged(false);

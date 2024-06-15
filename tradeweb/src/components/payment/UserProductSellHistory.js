@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { BarChart } from '@mui/x-charts/BarChart';
 import axios from "axios";
-import plus from "../../assets/plus.svg";
 
 const UserProductSellHistory = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const productId = searchParams.get("productId");
     const [navigateUrl, setNavigateUrl] = useState("");
     const [responseData, setResponseData] = useState([]);
-    const [responseImageUrl, setResponseImageUrl] = useState("");
-    const [selledStatus, setSelledStatus] = useState("");
+  
+  
     const token = localStorage.getItem("accessToken");
     const userId = 9;
     const selledProductStatus = 0;
 
     useEffect(() => {
         async function get() {
-        
             try {
-                const response  = await axios.get(`${process.env.REACT_APP_API_URL}products/user/${userId}`,
+                await axios.get(`${process.env.REACT_APP_API_URL}products/user/${userId}`,
                             {
                                 headers: {
                                     'Content-Type': "multipart/form-data",
@@ -28,8 +28,6 @@ const UserProductSellHistory = () => {
                             }
                 ).then(function (response) {
                     console.log("응답 데이터:", response.data.products);
-                    
-                    // convertToBase66(response.data.products.imageUrl);
                     const productsArray = response.data.products;
                     setResponseData(productsArray);
                 })
@@ -56,7 +54,11 @@ const UserProductSellHistory = () => {
 
     const productNameOnClick = (productId) => {
         setNavigateUrl("/product/management/detail");
-        navigate(`navigateUrl/${productId}` );
+        console.log(productId);
+        navigate(`navigateUrl/${productId}` , { state: {
+                                                 pId: productId 
+                                                } 
+                                            } );
     };
 
     const reviewButtonOnClick = () => {
