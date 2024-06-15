@@ -54,9 +54,9 @@ const UserProductSellHistory = () => {
           });
     }
 
-    const productNameOnClick = () => {
+    const productNameOnClick = (productId) => {
         setNavigateUrl("/product/management/detail");
-        navigate(navigateUrl);
+        navigate(`navigateUrl/${productId}` );
     };
 
     const reviewButtonOnClick = () => {
@@ -86,7 +86,7 @@ const UserProductSellHistory = () => {
                                             <TableTd>{data.productId}</TableTd>
                                             {/* <TableTd><img src={plus}/></TableTd> */}
                                             <TableTd><img src={`${process.env.REACT_APP_IMAGE_URL}${data.imageUrl}`}/></TableTd>
-                                            <TableTd><a href="/product/management/detail/${data.productId}" onClick={productNameOnClick}>{data.productName}</a></TableTd>
+                                            <TableTd><a href={`/product/management/detail/${data.productId}`} onClick={() => productNameOnClick(data.productId)}>{data.productName}</a></TableTd>
                                             <TableTd>{data.category}</TableTd>
                                             <TableTd>{data.productQuality}</TableTd>
                                             <TableTd>{data.productStatus == 1 ? "판매안됨" : "판매완료"}</TableTd>
