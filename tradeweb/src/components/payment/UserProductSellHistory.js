@@ -87,7 +87,7 @@ const UserProductSellHistory = () => {
                                 return  <tr>
                                             <TableTd>{data.productId}</TableTd>
                                             {/* <TableTd><img src={plus}/></TableTd> */}
-                                            <TableTd><img src={`${process.env.REACT_APP_IMAGE_URL}${data.imageUrl}`}/></TableTd>
+                                            <TableTd><TableRowImage src={`${process.env.REACT_APP_IMAGE_URL}${data.imageUrl}`}/></TableTd>
                                             <TableTd><a href={`/product/management/detail/${data.productId}`} onClick={() => productNameOnClick(data.productId)}>{data.productName}</a></TableTd>
                                             <TableTd>{data.category}</TableTd>
                                             <TableTd>{data.productQuality}</TableTd>
@@ -224,12 +224,20 @@ const TableTd = styled.td`
     text-align: center;
 `;
 
+const TableRowImage = styled.img`
+    width: 200px;
+    height: 200px;
+
+
+`;
+
 const Pagination = styled.div``;
 
 const PageButton = styled.button`
     width: 35px;
     height: 35px;
-    background-color: black;
-    color: white;
+    margin-right: 2px;
+    background-color: white;
+    color: black;
     cursor: pointer;
 `;
