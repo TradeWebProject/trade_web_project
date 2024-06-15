@@ -11,6 +11,7 @@ import deleteIcon from "../../assets/delete.svg";
 const ProductModify = () => {
     const quillRef = useRef();
     const {productId} = useParams();
+    const [produtData, setProductData] = useState("");
     const [filesArray, setFiles] = useState([]);
     const [rawFiles, setRawFiles] = useState([]);
     const [isTextChanged, setText] = useState("");
@@ -46,6 +47,8 @@ const ProductModify = () => {
                             }
                 ).then(function (response) {
                     console.log("응답 데이터:", response.data);
+                    setProductData(response.data);
+                    setFiles(response.data.imagePathUrl);
                 })
                
             } catch (error) {
@@ -53,7 +56,7 @@ const ProductModify = () => {
             }
         };
         get();
-    }, [])
+    }, [productId]);
 
 
 
@@ -206,21 +209,21 @@ const ProductModify = () => {
             <SubContentWrapper>
                 <ProductNameWrapper>
                     <ProductNameElement>상품명:</ProductNameElement>
-                    <ProductNameInput type="text" name="productName"  defaultValue="아디다스 반팔티" onChange={onChange}/>
+                    <ProductNameInput type="text" name="productName"  defaultValue={produtData.productName} onChange={onChange}/>
                 </ProductNameWrapper>
                 <ProductNameWrapper>
                     <ProductNameElement>가격:</ProductNameElement>
-                    <ProductNameInput type="text" name="productPrice" defaultValue="56000"  onChange={onChange}/>
+                    <ProductNameInput type="text" name="productPrice" defaultValue={produtData.price}  onChange={onChange}/>
                 </ProductNameWrapper>
                 <InnerWrapper>
                     <ProductSellDateWrapper>
                         <SellStartDateWrapper>
                                 <DateStartText>판매 시작일:</DateStartText>
-                                <StartDateInput type="date" name="startDate" defaultValue="2024-06-07"  onChange={onChange}/>
+                                <StartDateInput type="date" name="startDate" defaultValue={produtData.startDate}  onChange={onChange}/>
                         </SellStartDateWrapper>
                         <SellEndDateWrapper>
                                 <DateStartText>판매 종료일:</DateStartText>
-                                <EndDateInput type="date" name="endDate" defaultValue="2024-06-30"  onChange={onChange}/>
+                                <EndDateInput type="date" name="endDate" defaultValue={produtData.endDate}  onChange={onChange}/>
                         </SellEndDateWrapper>
                     </ProductSellDateWrapper>
                     <ProductSellDateWrapper>
@@ -230,9 +233,9 @@ const ProductModify = () => {
                                 <DropdownOptions
                                     name="category"
                                     options={productOptions}
-                                    title="카테고리 선택"
+                                    title={produtData.category}
                                     onSelect={onSelect}
-                                    defaultValue={isCategoryChanged}
+                                    defaultValue={produtData.category}
                                 />
                             </DropwDownElementWrapper>
                             
@@ -243,7 +246,7 @@ const ProductModify = () => {
                                 <DropdownOptions
                                     name="productQuality"
                                     options={productSellStatusOptions}
-                                    title="제품 상태 선택"
+                                    title={produtData.productQuality}
                                     onSelect={onSelect2}
                                     defaultValue={isProductQuantityChanged}
                                 />
@@ -264,14 +267,14 @@ const ProductModify = () => {
             </SubTitle>
             <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px", backgroundColor: "white", }}
                           modules={modules}  
-                          ref={quillRef} placeholder="상품에 대한 상세설명을 작성해주세요!"   name="description" defaultValue={isTextChanged}  onChange={RequillDescriptionChanged}/>
+                          ref={quillRef} placeholder="상품에 대한 상세설명을 작성해주세요!"   name="description" defaultValue={isTextChanged} value={produtData.description}  onChange={RequillDescriptionChanged}/>
             <ImageWrapper>
                 <SubTitle><h3>이미지</h3></SubTitle>
                 <MainImage>
-                    {/* <img src="https://placehold.jp/200x200.png"/> */}
-                    {files.length > 0 && (
+                    <img src={`${process.env.REACT_APP_IMAGE_URL}${produtData.thumbnailUrl}`}/>
+                    {/* {files.length > 0 && (
                         <img src={files[0]} alt="Main product" />
-                    )}
+                    )} */}
                 </MainImage>
                     <ImageInputWrapper>
                         <ImageButton>
