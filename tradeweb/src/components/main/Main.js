@@ -1,4 +1,4 @@
-// import React from "react";
+import React from "react";
 // import ImageSliderData from "./ImageSliderData";
 import styled from "styled-components";
 // import "slick-carousel/slick/slick.css";

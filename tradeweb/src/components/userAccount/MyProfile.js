@@ -1,10 +1,18 @@
-import React from 'react';
-import styled from "styled-components";
 
+import React, { useState } from 'react';
+import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
+import {Box, Tab, Tabs, Button  } from "@mui/material";
 import profile from "../../assets/profile.svg";
 import plus from "../../assets/plus.svg";
 
 const MyProfile = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [isVisible, setIsVisible] = useState(true);
+    const [currentTabIndex, setCurrentTabIndex] = useState(0);
+    const [navigateUrl, setNavigateUrl] = useState("");
+    const [reviewList, setReviewList] = useState([]);
 
     const data = [
         {
@@ -63,62 +71,63 @@ const MyProfile = () => {
             description: "미개봉 흰색 셔츠",
             productId: 4,
           },
-    ];
 
+    ];
+  
     return (
-        <>
-            <Container>
-                <Title>프로필</Title>
-                <ProfileContainer>
-                    <img src={profile} alt="profile"/>
-                    <div>Nickname</div>
-                    <div>
-                        <ChangeImgButton>사진 변경</ChangeImgButton>
-                    </div>
-                </ProfileContainer>
-                <InfoWrapper>
-                    <div>이메일</div>
-                    <InfoText>tkgksw@naver.com</InfoText>
-                </InfoWrapper>
-                <InfoWrapper>
-                    <div>주소</div>
-                    <InfoText>경기도 인천시 연수구</InfoText>
-                </InfoWrapper>
-                <InfoWrapper>
-                    <div>전화번호</div>
-                    <InfoText>010-1234-4698</InfoText>
-                </InfoWrapper>
-            </Container> 
-            <Container>
-                <Title>찜목록</Title>
-                <SearchResultList>
-                    {data.map((product) => (
-                        <SearchItem key={product.productId}>
-                            <ItemImageBox>
-                                <ItemImage src={product.files} alt={product.title} />
-                            </ItemImageBox>
-                            <ItemTitle>{product.title}</ItemTitle>
-                            <ItemInfo>{product.description}</ItemInfo>
-                            <ItemPrice>
-                                {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                            </ItemPrice>
-                            <Icon>❤️</Icon>
-                        </SearchItem>
-                    ))}
-                </SearchResultList>
-                <Pagination class="pagination">
-                    <PageButton>&laquo;</PageButton>
-                    <PageButton>1</PageButton>
-                    <PageButton>2</PageButton>
-                    <PageButton>3</PageButton>
-                    <PageButton>4</PageButton>
-                    <PageButton>5</PageButton>
-                    <PageButton>6</PageButton>
-                    <PageButton>&raquo;</PageButton>
-                </Pagination>
-            </Container>
-        </>
-         
+        <Box sx={{ p: 3 }}>
+                        <Container>
+                            <Title>프로필</Title>
+                            <ProfileContainer>
+                                <img src={profile} alt="profile"/>
+                                <div>Nickname</div>
+                                <div>
+                                    <ChangeImgButton>사진 변경</ChangeImgButton>
+                                </div>
+                            </ProfileContainer>
+                            <InfoWrapper>
+                                <div>이메일</div>
+                                <InfoText>tkgksw@naver.com</InfoText>
+                            </InfoWrapper>
+                            <InfoWrapper>
+                                <div>주소</div>
+                                <InfoText>경기도 인천시 연수구</InfoText>
+                            </InfoWrapper>
+                            <InfoWrapper>
+                                <div>전화번호</div>
+                                <InfoText>010-1234-4698</InfoText>
+                            </InfoWrapper>
+                        </Container> 
+                        <Container>
+                            <Title>찜목록</Title>
+                            <SearchResultList>
+                                {data.map((product) => (
+                                    <SearchItem key={product.productId}>
+                                        <ItemImageBox>
+                                            <ItemImage src={product.files} alt={product.title} />
+                                        </ItemImageBox>
+                                        <ItemTitle>{product.title}</ItemTitle>
+                                        <ItemInfo>{product.description}</ItemInfo>
+                                        <ItemPrice>
+                                            {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                        </ItemPrice>
+                                        <Icon>❤️</Icon>
+                                    </SearchItem>
+                                ))}
+                            </SearchResultList>
+                            <Pagination class="pagination">
+                                <PageButton>&laquo;</PageButton>
+                                <PageButton>1</PageButton>
+                                <PageButton>2</PageButton>
+                                <PageButton>3</PageButton>
+                                <PageButton>4</PageButton>
+                                <PageButton>5</PageButton>
+                                <PageButton>6</PageButton>
+                                <PageButton>&raquo;</PageButton>
+                            </Pagination>
+                        </Container>  
+                    </Box>
+
     );
 };
 
@@ -138,7 +147,6 @@ const Title  = styled.div`
     font-size: 24px;
     font-weight: bold;
 `;
-
 
 const ProfileContainer = styled.div`
     width: 600px;
@@ -182,7 +190,6 @@ const InfoText  = styled.div`
     overflow-x: auto;
 
 `;
-
 
 const SearchResultList = styled.div`
     display: grid;
