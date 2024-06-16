@@ -17,12 +17,12 @@ function App() {
   return (
     <AppLayout>
       <Routes>
-        <Route path="/detail" element={<DetailPage />} />
+        <Route path="/detail/:productId" element={<DetailPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my-page" element={<MyPage />} />
         <Route path="/write" element={<ProductWritePage />} />
         <Route
-          path="/product/management/detail/:id"
+          path="/product/management/detail/:productId"
           element={<ProductDetailManagementPage />}
         />
         <Route path="/search" element={<SearchResultPage />} />
