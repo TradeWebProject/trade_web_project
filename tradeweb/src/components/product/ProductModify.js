@@ -194,7 +194,7 @@ const ProductModify = () => {
        const renderfiles = () => {
         return filesArray.map((image, index) => (
           <ImagePreview key={index}>
-            <img src={image} alt={`Uploaded file ${index + 1}`} />
+            <img src={`${process.env.REACT_APP_IMAGE_URL}${image}`} alt={`Uploaded file ${index + 1}`} />
             <DeleteButton onClick={() => handleDeleteImage(index)} />
           </ImagePreview>
         ));
