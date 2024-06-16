@@ -1,11 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BarChart } from '@mui/x-charts/BarChart';
+import axios from "axios";
+import plus from "../../assets/plus.svg";
 
 const UserProductSellHistory = () => {
     const navigate = useNavigate();
     const [navigateUrl, setNavigateUrl] = useState("");
+    const [responseData, setResponseData] = useState([]);
+    const [responseImageUrl, setResponseImageUrl] = useState("");
+    const [selledStatus, setSelledStatus] = useState("");
+    const token = localStorage.getItem("accessToken");
+    const userId = 9;
+    const selledProductStatus = 0;
+
+    useEffect(() => {
+        async function get() {
+        
+            try {
+                const response  = await axios.get(`${process.env.REACT_APP_API_URL}products/user/${userId}`,
+                            {
+                                headers: {
+                                    'Content-Type': "multipart/form-data",
+                                    'Authorization': `Bearer ${token}`,
+                                }
+                            }
+                ).then(function (response) {
+                    console.log("응답 데이터:", response.data.products);
+                    
+                    // convertToBase66(response.data.products.imageUrl);
+                    const productsArray = response.data.products;
+                    setResponseData(productsArray);
+                })
+               
+            } catch (error) {
+                console.error("요청 실패:", error);
+            }
+        };
+        get();
+    }, []);
+
+    const convertToBase66 = (imageFile) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(imageFile);
+            fileReader.onload = () => {
+              resolve(fileReader.result);
+            };
+            fileReader.onerror = (error) => {
+              reject(error);
+            };
+          });
+    }
 
     const productNameOnClick = () => {
         setNavigateUrl("/product/management/detail");
@@ -29,91 +76,23 @@ const UserProductSellHistory = () => {
                                 <TableTh>상품명</TableTh>
                                 <TableTh>카테고리</TableTh>
                                 <TableTh>상품상태</TableTh>
-                                <TableTh>댓글 조회</TableTh>
+                                <TableTh>판매상태</TableTh>
                             </tr>
-                            <tr>
-                                <TableTd>1</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>아디다스 슬리퍼</a></TableTd>
-                                <TableTd>의류</TableTd>
-                                <TableTd>새 생품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>2</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>나이키 신발</a></TableTd>
-                                <TableTd>의류</TableTd>
-                                <TableTd>중고 상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>3</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>아디다스 반팔티</a></TableTd>
-                                <TableTd>의류</TableTd>
-                                <TableTd>새상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>4</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>갤럭시 탭s7</a></TableTd>
-                                <TableTd>가전</TableTd>
-                                <TableTd>중고 상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>5</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>애플워치</a></TableTd>
-                                <TableTd>가전</TableTd>
-                                <TableTd>중고상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>6</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>청바지</a></TableTd>
-                                <TableTd>의류</TableTd>
-                                <TableTd>새상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>7</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>긴팔 티셔츠</a></TableTd>
-                                <TableTd>의류</TableTd>
-                                <TableTd>새상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>8</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>아이패드</a></TableTd>
-                                <TableTd>가전 제품</TableTd>
-                                <TableTd>중고 상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>9</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>모니터</a></TableTd>
-                                <TableTd>가전 제품</TableTd>
-                                <TableTd>새상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>10</TableTd>
-                                <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                                <TableTd><a href="/product/management/detail/26" onClick={productNameOnClick}>반바지</a></TableTd>
-                                <TableTd>의류</TableTd>
-                                <TableTd>중고상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                        </Table>
-                        
+                            {responseData.map(function (data, index) {
+                                // const blob = new Blob(data.imageUrl, {type: "image/png"});
+                                // const url = window.URL.createObjectURL(blob);
                             
+                                return  <tr>
+                                            <TableTd>{data.productId}</TableTd>
+                                            {/* <TableTd><img src={plus}/></TableTd> */}
+                                            <TableTd><img src={`${process.env.REACT_APP_IMAGE_URL}${data.imageUrl}`}/></TableTd>
+                                            <TableTd><a href="/product/management/detail/${data.productId}" onClick={productNameOnClick}>{data.productName}</a></TableTd>
+                                            <TableTd>{data.category}</TableTd>
+                                            <TableTd>{data.productQuality}</TableTd>
+                                            <TableTd>{data.productStatus == 1 ? "판매안됨" : "판매완료"}</TableTd>
+                                        </tr>
+                            })}
+                        </Table>
                         <Pagination class="pagination">
                             <PageButton>&laquo;</PageButton>
                             <PageButton>1</PageButton>
@@ -132,62 +111,27 @@ const UserProductSellHistory = () => {
                                 <TableTh>상품번호</TableTh>
                                 <TableTh>상품명</TableTh>
                                 <TableTh>카테고리</TableTh>
-                                <TableTh>재고수량</TableTh>
                                 <TableTh>상품상태</TableTh>
-                                <TableTh>댓글 조회</TableTh>
+                                <TableTh>판매상태</TableTh>
+                                
                             </tr>
-                            
-                            <tr>
-                                <TableTd>2</TableTd>
-                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>나이키 신발</a></TableTd>
-                                <TableTd>의류</TableTd>
-                                <TableTd>0 (재고 없음)</TableTd>
-                                <TableTd>중고 상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            
-                            <tr>
-                                <TableTd>4</TableTd>
-                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>갤럭시 탭s7</a></TableTd>
-                                <TableTd>가전</TableTd>
-                                <TableTd>0 (재고 없음)</TableTd>
-                                <TableTd>중고 상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>5</TableTd>
-                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>애플워치</a></TableTd>
-                                <TableTd>가전</TableTd>
-                                <TableTd>0 (재고 없음)</TableTd>
-                                <TableTd>중고상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            
-                            
-                            <tr>
-                                <TableTd>8</TableTd>
-                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>아이패드</a></TableTd>
-                                <TableTd>가전 제품</TableTd>
-                                <TableTd>0 (재고 없음)</TableTd>
-                                <TableTd>중고 상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>9</TableTd>
-                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>모니터</a></TableTd>
-                                <TableTd>가전 제품</TableTd>
-                                <TableTd>0 (재고 없음)</TableTd>
-                                <TableTd>새상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
-                            <tr>
-                                <TableTd>10</TableTd>
-                                <TableTd><a href="/product/management/detail" onClick={productNameOnClick}>반바지</a></TableTd>
-                                <TableTd>의류</TableTd>
-                                <TableTd>0 (재고 없음)</TableTd>
-                                <TableTd>중고상품</TableTd>
-                                <TableTd><button onClick={reviewButtonOnClick}>댓글 목록</button></TableTd>
-                            </tr>
+                            {responseData.filter((data) => data.productStatus == 0 )
+                                         .map((data, index) => (
+                                            <tr>
+                                                <TableTd>{data.productId}</TableTd>
+                                                <TableTd><a href="/detail" onClick={productNameOnClick}>{data.productName}</a></TableTd>
+                                                <TableTd>{data.category}</TableTd>
+                                                <TableTd>중고 상품</TableTd>
+                                                <TableTd>판매완료</TableTd>
+                                            </tr>
+                                         ))
+                            }
+
+                            {/* {responseData.filter((data) => data.productStatus == 1 ? <div>판매완료된 상품이 없습니다</div> : <></>)  
+                                           
+                                        
+                                         
+                            } */}
                         </Table>
                         
                             
@@ -202,7 +146,7 @@ const UserProductSellHistory = () => {
                             <PageButton>&raquo;</PageButton>
                         </Pagination>
                     </Container>
-                    <Title>상품판매 현황</Title>
+                    {/* <Title>상품판매 현황</Title>
                     <div>
                     <BarChart
                         xAxis={[
@@ -225,7 +169,7 @@ const UserProductSellHistory = () => {
 
 
 
-                    </div>
+                    </div> */}
                 </div>
                 
             </ContentWrapper>
