@@ -1,27 +1,39 @@
-
 import React, { useEffect, useState } from "react";
 import ImageSliderData from "./ImageSliderData";
 import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import dummyData from "../search/dummyData";
 import { useNavigate } from "react-router-dom";
 
 //component
 import ImageSlider from "./ImageSlider";
 import ProductList from "../search/ProductList";
+import axios from "axios";
 
 const Main = () => {
   const [products, setProducts] = useState([]);
+  const [listData, setListData] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setProducts(dummyData.slice(0, 8));
+    setProducts(listData.slice(0, 8));
   }, []);
+
+  const get = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API_URL}product`)
+      .then((response) => {
+        setListData(response.data.products);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  get();
 
   return (
     <>
- <ImageSliderWrapper>
+      <ImageSliderWrapper>
         <ImageSlider images={ImageSliderData} width="1040px" height="330px" />
       </ImageSliderWrapper>
       <ProductListWrapper>
@@ -31,7 +43,7 @@ const Main = () => {
             더 많은 상품보러가기
           </ShowMoreProducts>
         </ProductListHeader>
-        <ProductList products={products} />
+        <ProductList products={listData} />
       </ProductListWrapper>
     </>
   );
