@@ -30,7 +30,8 @@ const Login = () => {
           { email: formData.email, userPassword: formData.userPassword }
         );
         localStorage.setItem("accessToken", response.data.accessToken);
-        localStorage.setItem("email", formData.email);
+        localStorage.setItem("email", response.data.userEmail);
+        localStorage.setItem("userId", response.data.userId);
         navigate("/");
         window.location.reload();
       } else {
@@ -50,7 +51,7 @@ const Login = () => {
             },
           }
         );
-        toggleToLogin(); 
+        toggleToLogin(); // 회원가입 성공 시 로그인 탭으로 전환
       }
       console.log("응답 데이터:", response.data);
     } catch (error) {
@@ -77,33 +78,6 @@ const Login = () => {
     }));
   };
 
-  const handleLogout = async () => {
-    const email = localStorage.getItem("email");
-    if (email) {
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_URL}users/logout`,
-          {
-            email,
-          }
-        );
-        localStorage.removeItem("email");
-        localStorage.removeItem("accessToken");
-      } catch (error) {
-        if (error.response) {
-          // 서버가 응답한 경우
-          console.error("로그아웃 실패:", error.response.data);
-        } else if (error.request) {
-          // 요청이 만들어졌으나 응답을 받지 못한 경우
-          console.error("요청이 만들어졌으나 응답을 받지 못함:", error.request);
-        } else {
-          // 요청을 보내는 동안 다른 오류가 발생한 경우
-          console.error("로그아웃 요청 설정 오류:", error.message);
-        }
-      }
-    }
-  };
-
   return (
     <Wrapper>
       <Title>super24</Title>
@@ -115,7 +89,6 @@ const Login = () => {
           <TabButton onClick={toggleToSignup} active={!isLogin}>
             회원가입
           </TabButton>
-          <TabButton onClick={handleLogout}>임시로그아웃</TabButton>
         </TabWrapper>
         <Form onSubmit={handleSubmit}>
           {isLogin ? (
@@ -239,8 +212,9 @@ const TabButton = styled.button`
   font-weight: bold;
   cursor: pointer;
   border: none;
-  background-color: ${({ active }) => (active ? theme.mainColor : "white")};
-  color: ${({ active }) => (active ? "white" : theme.mainColor)};
+  background-color: ${({ active }) =>
+    active ? theme.mainColor : theme.subColor};
+  color: ${({ active }) => (active ? theme.subColor : theme.mainColor)};
   border-bottom: ${({ active }) =>
     active ? `3px solid ${theme.mainColor}` : "none"};
   margin-bottom: -1px;

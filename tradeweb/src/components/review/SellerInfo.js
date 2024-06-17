@@ -44,8 +44,7 @@ const SellerWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
-  margin-top: 170px;
+  margin-top: 130px;
 `;
 
 const SellerImage = styled.img`
