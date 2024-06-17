@@ -8,6 +8,7 @@ import ChatList from "../chatlist/ChatList";
 import { theme } from "../../styles/theme";
 import { FaRegStar } from "react-icons/fa";
 import { MdStar, MdOutlineStar } from "react-icons/md";
+import { useParams } from "react-router-dom";
 
 const Detail = () => {
   const loader = useRef(null);
@@ -16,7 +17,7 @@ const Detail = () => {
   const [data, setData] = useState(null);
   const [hasBuyUserId, setHasBuyUserId] = useState(false);
 
-  const productId = 33;
+  const { productId } = useParams();
   const token = localStorage.getItem("accessToken");
   const buyUserId = localStorage.getItem("userId");
 
