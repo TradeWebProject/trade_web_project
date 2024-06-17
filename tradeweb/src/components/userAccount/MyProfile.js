@@ -1,18 +1,41 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
-import {Box, Tab, Tabs, Button  } from "@mui/material";
-import profile from "../../assets/profile.svg";
+import axios from "axios";
+import {Box } from "@mui/material";
 import plus from "../../assets/plus.svg";
 
 const MyProfile = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [isVisible, setIsVisible] = useState(true);
-    const [currentTabIndex, setCurrentTabIndex] = useState(0);
-    const [navigateUrl, setNavigateUrl] = useState("");
-    const [reviewList, setReviewList] = useState([]);
+    const [responseUserProfileData, setResponseUserProfileData] = useState("");
+    const [userInterestsArray, setUserInterestsArray] = useState([]);
+
+
+
+    const token = localStorage.getItem("accessToken");
+    const userId = 9;
+    useEffect(() => {
+        async function get() {
+            try {
+                await axios.get(`${process.env.REACT_APP_API_URL}users/${userId}`,
+                            {
+                                headers: {
+                                    'Content-Type': "multipart/form-data",
+                                    'Authorization': `Bearer ${token}`,
+                                }
+                            }
+                ).then(function (response) {
+                    console.log("응답 데이터:", response.data);
+                    setResponseUserProfileData(response.data);
+                    setUserInterestsArray(response.data.userInterests);
+                   
+                })
+               
+            } catch (error) {
+                console.error("요청 실패:", error);
+            }
+        };
+        get();
+    }, [userId]);
 
     const data = [
         {
@@ -78,24 +101,31 @@ const MyProfile = () => {
         <Box sx={{ p: 3 }}>
                         <Container>
                             <Title>프로필</Title>
+                          
                             <ProfileContainer>
-                                <img src={profile} alt="profile"/>
-                                <div>Nickname</div>
+                                <ProfileImage src={`${process.env.REACT_APP_IMAGE_URL}${responseUserProfileData.user_img}`} alt="profile"/>
+                                <div>{responseUserProfileData.user_nickname}</div>
                                 <div>
                                     <ChangeImgButton>사진 변경</ChangeImgButton>
                                 </div>
                             </ProfileContainer>
                             <InfoWrapper>
                                 <div>이메일</div>
-                                <InfoText>tkgksw@naver.com</InfoText>
-                            </InfoWrapper>
-                            <InfoWrapper>
-                                <div>주소</div>
-                                <InfoText>경기도 인천시 연수구</InfoText>
+                                <InfoText>{responseUserProfileData.email}</InfoText>
                             </InfoWrapper>
                             <InfoWrapper>
                                 <div>전화번호</div>
-                                <InfoText>010-1234-4698</InfoText>
+                                <InfoText>{responseUserProfileData.user_phone}</InfoText>
+                            </InfoWrapper>
+                            <InfoWrapper>
+                                <div>관심사</div>
+                               
+                                {userInterestsArray.map(function (interest, index) {
+                                    return  <InterestsWrapper>
+                                                <Interest>{interest}</Interest>
+                                            </InterestsWrapper>
+                                })}
+                                
                             </InfoWrapper>
                         </Container> 
                         <Container>
@@ -160,6 +190,12 @@ const ProfileContainer = styled.div`
     background-color: #F4F4F4;
 `;
 
+const ProfileImage = styled.img`
+    width: 50px;
+    heigth: 50px;
+    border-radius: 50px;
+`;
+
 const ChangeImgButton = styled.button`
     width: 100px;
     height: 37px;
@@ -188,6 +224,23 @@ const InfoText  = styled.div`
     color: #b1b5b9;
     overflow-x: auto;
 
+`;
+
+
+const InterestsWrapper = styled.div`
+    width: 644px;
+    height: 40px;
+    dispaly: flex;
+`;
+
+const Interest = styled.div`
+    width: 50px;
+    height: 20px;
+    border-radius: 40px;
+    background-color: white;
+    color: black;
+    border: 1px solid #D1D4D8;
+    text-align: center;
 `;
 
 const SearchResultList = styled.div`
