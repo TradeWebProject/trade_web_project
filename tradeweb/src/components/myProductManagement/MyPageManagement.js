@@ -7,6 +7,7 @@ import MyProfile from '../userAccount/MyProfile';
 import UserPayment from '../payment/UserPayment';
 import UserProductSellHistory from '../payment/UserProductSellHistory';
 
+
 const MyPageManagement = () => {
     const navigate = useNavigate();
 
@@ -34,7 +35,12 @@ const MyPageManagement = () => {
                     </Tabs>
                 </Box>
                 {currentTabIndex === 0 && (
-                   <MyProfile/>
+                    <Box sx={{ p: 3 }}>
+                        {
+                        <MyProfile/>
+                        }
+                    </Box>
+
                 )}
                 {currentTabIndex === 1 && (
                     <Box sx={{ p: 3 }}>
