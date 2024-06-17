@@ -141,7 +141,7 @@ const ProductRegister = () => {
      
       const registerProduct = async () => {
         try {
-          const token = "eyJhbGciOiJIUzI1NiJ9.eyJhdXRoIjpbIlJPTEVfVVNFUiJdLCJleHAiOjE3MTg2NTQ3NjMsImVtYWlsIjoidGtna3N3QG5hdmVyLmNvbSJ9.I5JpEu0erEc3F8-WFwUXDlBpHJmey1VsWJwzP41Mh4Q";
+          const token = localStorage.getItem("accessToken");
           const formData = new FormData();
           
           // FormData에 항목 추가
@@ -163,6 +163,7 @@ const ProductRegister = () => {
             formData.append("files", file);
           });
       
+          console.log(formData);
           // API 요청
           const response = await axios.post(
             `${process.env.REACT_APP_API_URL}products/register`, 
