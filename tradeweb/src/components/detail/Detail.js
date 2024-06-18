@@ -113,6 +113,8 @@ const Detail = () => {
   const totalLikesPlus = totalLikes + 1;
   const totalLikesMinus = totalLikes - 1;
 
+  console.log("test");
+
   return (
     <Wrapper>
       <Section>
