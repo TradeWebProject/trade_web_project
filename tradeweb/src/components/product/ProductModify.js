@@ -14,11 +14,13 @@ const ProductModify = () => {
     const {productId} = useParams();
     const [produtData, setProductData] = useState("");
     const [filesArray, setFiles] = useState([]);
+    const [updateFilesArray, setUpdateFilesArray] = useState([]);
     const [rawFiles, setRawFiles] = useState([]);
     const [isTextChanged, setText] = useState("");
     const [isInputChanged, setIsInputChanged] = useState(false);
     const [isCategoryChanged, setIsCategoryChanged] = useState("");
     const [isProductQuantityChanged, setIsProductQuantityChanged] = useState("");
+    const [ImageUpdateStatus, setImageUpdateStatus] = useState(false); 
     const [buttonName, setButtonName] = useState("저장");
     const [value, setValue] = useState('');
     const [inputs, setInputs] = useState({
@@ -29,11 +31,10 @@ const ProductModify = () => {
         category: '',
         productQuality: '',
         description: '',
-        files:'',
+        files:[],
     });
     
     const token = localStorage.getItem("accessToken");
-    const {productName, productPrice, startDate, endDate, category, description, productQuality, files} = inputs;
 
     useEffect(() => {
         async function get() {
@@ -50,6 +51,7 @@ const ProductModify = () => {
                     console.log("응답 데이터:", response.data);
                     setProductData(response.data);
                     setFiles(response.data.imagePathUrl);
+                    console.log("files: ", filesArray);
                 })
                
             } catch (error) {
@@ -76,15 +78,21 @@ const ProductModify = () => {
         setButtonName("수정");
     };
 
-    const RequillDescriptionChanged = (e) => {
-        setText(e);
+    const RequillDescriptionChanged = (value) => {
+        setInputs((prevData) => ({
+            ...prevData,
+            description: value,
+        }))
+
+
+        console.log(inputs.description);
         setIsInputChanged(true);
         setButtonName("수정");
     }
 
     const fileInputRef = useRef(null);
     const maxfiles = 10;
-    const remainingfiles = maxfiles - files.length;
+    const remainingfiles = maxfiles - inputs.files.length;
 
     const data = {
         productOptions: ["의류", "전자제품"],
@@ -130,60 +138,68 @@ const ProductModify = () => {
     };
 
     const handleImageChange = (e) => {
+        console.log(inputs.files.length);
         const files = e.target.files;
+        console.log(files.length);
+        if (files.length > 0) {
+            setImageUpdateStatus(true);
+        }
 
         const maxSize = 10 * 1024 * 1024; // 10MB
 
-        const formData = new FormData();
+        // const formData = new FormData();
         const newRawFiles = []; // 새로운 인코딩되지 않은 원본 파일을 저장하는 배열
 
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             if (file.size > maxSize) {
-            alert("파일 크기는 10MB를 초과할 수 없습니다.");
-            return;
+                alert("파일 크기는 10MB를 초과할 수 없습니다.");
+                return;
             }
-            formData.append("files", file); // FormData에는 인코딩된 파일을 추가
+            console.log("file: ", file);
+            // filesArray와 새로 들어간 파일을 합치는 객체를 만들어서 해보기~~
+            setUpdateFilesArray(filesArray);
+            // formData.append("files", file); // FormData에는 인코딩된 파일을 추가
             newRawFiles.push(file); // newRawFiles 배열에는 인코딩되지 않은 원본 파일을 추가
         }
 
         setRawFiles((prevRawFiles) => [...prevRawFiles, ...newRawFiles]);
 
         const promises = Array.from(files).map((file) => {
-            const reader = new FileReader();
+        const reader = new FileReader();
 
-            return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             reader.onload = (e) => {
-                resolve(e.target.result);
+            resolve(e.target.result);
             };
 
             reader.onerror = (error) => {
-                reject(error);
+            reject(error);
             };
 
             reader.readAsDataURL(file);
-            });
         });
+    });
 
-        Promise.all(promises)
-            .then((results) => {
-            setFiles((prevfiles) => {
-                const newfiles = [...prevfiles, ...results];
-                if (newfiles.length > 10) {
-                return newfiles.slice(newfiles.length - 10);
-                }
+    Promise.all(promises)
+      .then((results) => {
+        setFiles((prevfiles) => {
+          const newfiles = [...prevfiles, ...results];
+          if (newfiles.length > 10) {
+            return newfiles.slice(newfiles.length - 10);
+          }
 
-                return newfiles;
-            });
-            fileInputRef.current.value = null;
-            })
-            .catch((error) => {
-            console.error("이미지를 읽는 동안 오류가 발생했습니다.", error);
-            });
-       };
+          return newfiles;
+        });
+        fileInputRef.current.value = null;
+      })
+      .catch((error) => {
+        console.error("이미지를 읽는 동안 오류가 발생했습니다.", error);
+      });
+    };
 
        const handleDeleteImage = (index) => {
-        const newFiles = [...files];
+        const newFiles = [...inputs.files];
         const newRawFiles = [...rawFiles]; // rawFiles 복사
         newFiles.splice(index, 1); // 파일 삭제
         newRawFiles.splice(index, 1); // rawFiles에서도 삭제
@@ -192,9 +208,12 @@ const ProductModify = () => {
       };
 
        const renderfiles = () => {
+           
         return filesArray.map((image, index) => (
           <ImagePreview key={index}>
             <img src={`${process.env.REACT_APP_IMAGE_URL}${image}`} alt={`Uploaded file ${index + 1}`} />
+            {ImageUpdateStatus &&  <img src={image} alt="image"/>}
+           
             <DeleteButton onClick={() => handleDeleteImage(index)} />
           </ImagePreview>
         ));
@@ -271,8 +290,13 @@ const ProductModify = () => {
                 <h2>상품 상세 설명</h2>
             </SubTitle>
             <ReactQuill  style={{ width: "1280px", height: "600px", margin: "4px", backgroundColor: "white", }}
-                          modules={modules}  
-                          ref={quillRef} placeholder="상품에 대한 상세설명을 작성해주세요!"   name="description" defaultValue={isTextChanged} value={produtData.description}  onChange={RequillDescriptionChanged}/>
+                         modules={modules}  
+                         ref={quillRef} 
+                         placeholder="상품에 대한 상세설명을 작성해주세요!"   
+                         name="description" 
+                         defaultValue={isTextChanged} 
+                         value={produtData.description}  
+                         onChange={(e) => inputs.description = e.target}/>
             <ImageWrapper>
                 <SubTitle><h3>이미지</h3></SubTitle>
                 <MainImage>
@@ -289,11 +313,10 @@ const ProductModify = () => {
                             style={{ display: "none" }}
                             ref={fileInputRef}
                             disabled={remainingfiles <= 0}
-                            name="files"
                             />
                             <PlusIcon />
                             <div>
-                                {files.length}/{maxfiles}
+                                {inputs.files.length}/{maxfiles}
                             </div>
                         </ImageButton>
                         <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper>
