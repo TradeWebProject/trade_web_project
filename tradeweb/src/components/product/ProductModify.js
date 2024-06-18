@@ -24,13 +24,16 @@ const ProductModify = () => {
     const [buttonName, setButtonName] = useState("저장");
     const [value, setValue] = useState('');
     const [inputs, setInputs] = useState({
+        productId: '',
+        email: '',
+        password: '',
         productName: '',
-        productPrice: '',
+        prrice: '',
         startDate: '',
         endDate: '',
-        category: '',
-        productQuality: '',
         description: '',
+        productQuality: '',
+        category: '',
         files:[],
     });
     
@@ -360,9 +363,13 @@ const ProductModify = () => {
             <SaveButtonWrapper>
                 <SaveButton onClick={onClickCancelButton}>취소</SaveButton>
                 {isInputChanged &&
-                     <SaveButton onClcik={onClickUpdateButton}>수정</SaveButton>
-                     
-
+                    <div>
+                         <InfoWrapper>
+                            <div>비밀번호 확인</div>
+                            <ProductNameInput type="text" onChange={(e) => setPassword(e.target.value)} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
+                        </InfoWrapper>
+                        <SaveButton onClcik={onClickUpdateButton}>수정</SaveButton>
+                    </div>
                 }
                
             </SaveButtonWrapper>  
