@@ -51,7 +51,7 @@ const ProductModify = () => {
                     console.log("응답 데이터:", response.data);
                     setProductData(response.data);
                     setFiles(response.data.imagePathUrl);
-                    console.log("files: ", filesArray);
+                    console.log("files: ", rawFiles);
                 })
                
             } catch (error) {
@@ -66,7 +66,7 @@ const ProductModify = () => {
     useEffect(() => {
         setIsInputChanged(false);
         setButtonName("");
-    }, inputs)
+    }, [inputs])
 
     const onChange = (e) => {
         const { value, name} = e.target;
@@ -138,16 +138,13 @@ const ProductModify = () => {
     };
 
     const handleImageChange = (e) => {
-        console.log(inputs.files.length);
+       
+     
+        
         const files = e.target.files;
-        console.log(files.length);
-        if (files.length > 0) {
-            setImageUpdateStatus(true);
-        }
-
         const maxSize = 10 * 1024 * 1024; // 10MB
 
-        // const formData = new FormData();
+        const formData = new FormData();
         const newRawFiles = []; // 새로운 인코딩되지 않은 원본 파일을 저장하는 배열
 
         for (let i = 0; i < files.length; i++) {
@@ -157,13 +154,13 @@ const ProductModify = () => {
                 return;
             }
             console.log("file: ", file);
-            // filesArray와 새로 들어간 파일을 합치는 객체를 만들어서 해보기~~
-            setUpdateFilesArray(filesArray);
-            // formData.append("files", file); // FormData에는 인코딩된 파일을 추가
+          
+            formData.append("files", file); // FormData에는 인코딩된 파일을 추가
             newRawFiles.push(file); // newRawFiles 배열에는 인코딩되지 않은 원본 파일을 추가
         }
 
         setRawFiles((prevRawFiles) => [...prevRawFiles, ...newRawFiles]);
+        console.log("r: ", rawFiles);
 
         const promises = Array.from(files).map((file) => {
         const reader = new FileReader();
@@ -208,11 +205,11 @@ const ProductModify = () => {
       };
 
        const renderfiles = () => {
-           
+        setImageUpdateStatus(false);  
         return filesArray.map((image, index) => (
           <ImagePreview key={index}>
-            <img src={`${process.env.REACT_APP_IMAGE_URL}${image}`} alt={`Uploaded file ${index + 1}`} />
-            {ImageUpdateStatus &&  <img src={image} alt="image"/>}
+              {index == 0 ? <img src={`${process.env.REACT_APP_IMAGE_URL}${image}`} alt={`Uploaded file ${index + 1}`} />  : <img src={image} alt="image"/>}
+         
            
             <DeleteButton onClick={() => handleDeleteImage(index)} />
           </ImagePreview>
@@ -221,6 +218,42 @@ const ProductModify = () => {
 
       const onClickCancelButton = () => {
         navigate("/my-page");
+      }
+
+      const onClickUpdateButton = () => {
+        try {
+            const form = new FormData();
+            form.append("productId", productId);
+            form.append("email", localStorage.getItem(email));
+            form.append("password", nickname);
+            form.append("productName", inputs.productName);
+            form.append("price",inputs.price);
+            form.append("startDate", inputs.startDate);
+            form.append("endDate", inputs.endDate);
+            form.append("description", inputs.description);
+            form.append("productQuality", inputs.productQuality);
+            form.append("category",inputs.category);
+            form.append("files", inputs.files);
+            console.log("수정된 데이터: ");
+            for (let [key, value] of form.entries()) {
+                console.log(key + ", " + value);
+            }
+
+            axios.put(`${process.env.REACT_APP_API_URL}products/${productId}`,
+                      form,
+                      {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            'Authorization': `Bearer ${token}`,
+                        }
+                      }
+            ).then(function (response) {
+                console.log("응답 데이터:", response.data);
+            })
+           
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
       }
 
     return (
@@ -260,6 +293,7 @@ const ProductModify = () => {
                                     title={produtData.category}
                                     onSelect={onSelect}
                                     defaultValue={produtData.category}
+                                    onChange={onChange}
                                 />
                             </DropwDownElementWrapper>
                             
@@ -273,6 +307,7 @@ const ProductModify = () => {
                                     title={produtData.productQuality}
                                     onSelect={onSelect2}
                                     defaultValue={isProductQuantityChanged}
+                                    onChange={onChange}
                                 />
                             </DropwDownElementWrapper>
                             
@@ -325,7 +360,7 @@ const ProductModify = () => {
             <SaveButtonWrapper>
                 <SaveButton onClick={onClickCancelButton}>취소</SaveButton>
                 {isInputChanged &&
-                     <SaveButton>수정</SaveButton>
+                     <SaveButton onClcik={onClickUpdateButton}>수정</SaveButton>
                      
 
                 }
