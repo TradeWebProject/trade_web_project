@@ -176,6 +176,20 @@ const MyProfile = () => {
             description: "미개봉 흰색 셔츠",
             productId: 4,
           },
+          {
+            files: plus,
+            title: "닥터마틴 로퍼",
+            price: 270000,
+            description: "닥터마틴 로퍼 사이즈 270",
+            productId: 3,
+          },
+          {
+            files: plus,
+            title: "흰색 셔츠",
+            price: 20000,
+            description: "미개봉 흰색 셔츠",
+            productId: 4,
+          },
     ];
   
     return (
@@ -422,7 +436,7 @@ const SearchResultList = styled.div`
     display: grid;
     row-gap: 40px;
     column-gap: 20px;
-    grid-template-columns: 150px 150px 150px 150px;
+    grid-template-columns: 150px 150px 150px 150px 120px;
 `;
 
 const SearchItem = styled.div`

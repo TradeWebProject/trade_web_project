@@ -277,9 +277,7 @@ const ProductModify = () => {
                 <SubTitle><h3>이미지</h3></SubTitle>
                 <MainImage>
                     <img src={`${process.env.REACT_APP_IMAGE_URL}${produtData.thumbnailUrl}`}/>
-                    {/* {files.length > 0 && (
-                        <img src={files[0]} alt="Main product" />
-                    )} */}
+
                 </MainImage>
                     <ImageInputWrapper>
                         <ImageButton>
