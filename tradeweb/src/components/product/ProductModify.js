@@ -227,8 +227,8 @@ const ProductModify = () => {
         try {
             const form = new FormData();
             form.append("productId", productId);
-            form.append("email", localStorage.getItem(email));
-            form.append("password", nickname);
+            form.append("email", localStorage.getItem("email"));
+            form.append("password", inputs.password);
             form.append("productName", inputs.productName);
             form.append("price",inputs.price);
             form.append("startDate", inputs.startDate);
@@ -366,7 +366,7 @@ const ProductModify = () => {
                     <div>
                          <InfoWrapper>
                             <div>비밀번호 확인</div>
-                            <ProductNameInput type="text" onChange={(e) => setPassword(e.target.value)} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
+                            <ProductNameInput type="text" onChange={onChange} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
                         </InfoWrapper>
                         <SaveButton onClcik={onClickUpdateButton}>수정</SaveButton>
                     </div>
@@ -380,7 +380,6 @@ const ProductModify = () => {
 
 export default ProductModify;
 
-
 const ContentLayout = styled.div`
     width: 100%;
     height: 100%;
@@ -388,7 +387,6 @@ const ContentLayout = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    // background-color: #f7f2d2;
 `;
 
 const Wrapper = styled.div`
@@ -427,7 +425,6 @@ const ProductNameElement = styled.div`
     width: 70px;
     height: 30px;
     margin-right: 10px;
-   
 `;
 
 const ProductNameInput = styled.input`
@@ -490,82 +487,24 @@ const EndDateInput = styled.input`
     cursor: pointer;
 `;
 
-const OptionInputWrapper = styled.div`
-    width: 1280px;
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-`;
-
-const OptionContentTitleElement = styled.div`
-    width:  160px;
-    height: 30px;
-    margin-top: 30px;
-    margin-bottom: 10px;
-    background-size: cover;
-    // border: 1px solid green;
-    cursor: pointer;
-`;
-
-const OptionTitleTextElement = styled.div`
-    width:  52px;
-    height: 30px;
-    margin-right: 26px;
-    margin-bottom: 10px;
-    background-size: cover;
-    // border: 1px solid blue;
-    cursor: pointer;
-`;
-
 const OptionTitleText = styled.div`
     width:  90px;
     height: 30px;
     margin-top: 30px;
     margin-bottom: 10px;
     background-size: cover;
-    // border: 1px solid black;
     cursor: pointer;
-`;
-
-
-const OptionTextInput = styled.input`
-    width: 1060px;
-    height: 44px;
-    margin-right: 34px;
-    border: none;   
-    margin-bottom: 10px;
-`;
-
-const OptionContentInput = styled.input`
-    width:  2600px;
-    height: 44px;
-    border: none; 
 `;
 
 const InnerWrapper = styled.div`
     width: 1277px;
     height: 150px;
-    // background-color:#f0c556;
 `;
 
 const DropwDownElementWrapper = styled.div`
     width: 524px;
     height: 24px;
-    margin-left: 20px;
-    
-`;
-
-const FileUploadButtonWrapper = styled.div`
-    width: 200px;
-    cursor: pointer;
-`;
-
-const FileUploadButton = styled.button`
-    width: 200px;
-    hieght: 45px;
-    margin-top: 10px;
-    background-color: black;
-    color: white;
+    margin-left: 20px;    
 `;
 
 const ImageWrapper = styled.div`
@@ -651,6 +590,16 @@ const SaveButton = styled.button`
     color: white;
     border-radius: 5px;
 `;
+
+const InfoWrapper = styled.div`
+    width: 644px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 15px;
+    gap: 10px;
+`;
+
 
 const DeleteButton = styled.button`
   width: 15px;
