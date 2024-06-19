@@ -4,7 +4,9 @@ import close from "../../assets/close.svg";
 import ProductList from "./ProductList";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+
 import SearchFilter from "./SearchFilter";
+
 
 const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   const [listData, setListData] = useState([]);
@@ -16,6 +18,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const keyword = queryParams.get("keyword");
+
   const [loading, setLoading] = useState(false);
   const [noResults, setNoResults] = useState(false);
 
@@ -39,6 +42,39 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     }
     if (maxPrice !== "") {
       url += `&maxPrice=${maxPrice}`;
+=======
+
+  useEffect(() => {
+    console.log(keyword);
+    const get = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_API_URL}product/search?keyword=${keyword}`
+        )
+        .then((response) => {
+          console.log("검색", response.data);
+          setListData(response.data.products);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    get();
+  }, [keyword]);
+
+  // 무한스크롤
+  const loadMore = useCallback(() => {
+    const startIndex = (page - 1) * 8;
+    const endIndex = startIndex + 8;
+
+    const newItems = listData.slice(startIndex, endIndex);
+
+    if (newItems.length === 0) {
+      setHasMore(false);
+    } else {
+      setListData((prev) => [...prev, ...newItems]);
+      setPage((prev) => prev + 1);
+
     }
 
     return url;
