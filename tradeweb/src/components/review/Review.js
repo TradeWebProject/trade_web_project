@@ -1,29 +1,10 @@
-import React from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import SellerInfo from "./SellerInfo";
 import { theme } from "../../styles/theme";
-
-const reviews = [
-  {
-    id: 1,
-    userImage: "https://via.placeholder.com/50",
-    userName: "John Doe",
-    date: "2023-06-01",
-    productName: "Product A",
-    content: "This is a great product!",
-    rating: 5,
-  },
-  {
-    id: 2,
-    userImage: "https://via.placeholder.com/50",
-    userName: "Jane Smith",
-    date: "2023-06-02",
-    productName: "Product B",
-    content: "Not bad, could be better.",
-    rating: 3,
-  },
-  // 추가 리뷰 객체를 여기에 추가하세요
-];
+import { MdStar } from "react-icons/md";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const getAverageRating = (reviews) => {
   const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
@@ -54,38 +35,183 @@ const renderStars = (rating) => {
 };
 
 const Review = () => {
+  const [isPurchased, setIsPurchased] = useState(true);
+  const [reviewContent, setReviewContent] = useState("");
+  const [listData, setListData] = useState([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isClicked, setClicked] = useState([false, false, false, false, false]);
+  const [page, setPage] = useState(1);
+  const [reviews, setReviews] = useState([]);
+  const loader = useRef(null);
+
   const averageRating = getAverageRating(reviews);
   const totalReviews = reviews.length;
+  const { productId, productName } = useParams();
+
+  const fetchReviews = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}reviews/product/${productId}`
+      );
+      setReviews(response.data);
+      console.log(reviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
+
+  const starScore = (index) => {
+    let star = [...isClicked];
+    for (let i = 0; i < 5; i++) {
+      star[i] = i <= index;
+    }
+    setClicked(star);
+  };
+
+  const submitReview = async () => {
+    const rating = isClicked.filter((clicked) => clicked).length;
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}reviews?productId=${productId}&reviewContent=${reviewContent}&rating=${rating}&title=${productName}`
+      );
+      console.log("Review submitted successfully:", response.data);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    }
+  };
+
+  const starRateRendering = (data) => {
+    const result = [];
+    for (let i = 0; i < data; i++) {
+      result.push("⭐");
+    }
+    return result;
+  };
+
+  const array = [0, 1, 2, 3, 4];
+
+  const reviewData = [
+    // ... 기존 리뷰 데이터 ...
+  ];
+
+  const loadMore = useCallback(() => {
+    const startIndex = (page - 1) * 5;
+    const endIndex = startIndex + 5;
+    const newReviews = reviewData.slice(startIndex, endIndex);
+
+    if (newReviews.length === 0) {
+      setHasMore(false);
+    } else {
+      setListData((prev) => [...prev, ...newReviews]);
+      setPage((prev) => prev + 1);
+    }
+  }, [page]);
+
+  useEffect(() => {
+    fetchReviews();
+    loadMore();
+  }, []);
+
+  useEffect(() => {
+    if (!hasMore) return;
+
+    let currentLoader = loader.current;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (currentLoader) {
+      observer.observe(currentLoader);
+    }
+
+    return () => {
+      if (currentLoader) {
+        observer.unobserve(currentLoader);
+      }
+    };
+  }, [loadMore, hasMore]);
 
   return (
     <Wrapper>
       <SellerContainer>
         <SellerInfo />
       </SellerContainer>
-      <ReviewContainer>
-        <Header>
-          <AverageText>
-            {averageRating} / 5 <p>({totalReviews})</p>
-          </AverageText>
-          <StarAverage>{renderStars(parseFloat(averageRating))}</StarAverage>
-        </Header>
-        <Divider />
-        {reviews.map((review) => (
-          <React.Fragment key={review.id}>
-            <ReviewItem>
-              <UserImage src={review.userImage} alt={review.userName} />
-              <ReviewContent>
-                <UserName>{review.userName}</UserName>
-                <ReviewDate>{review.date}</ReviewDate>
-                <ProductName>{review.productName}</ProductName>
-                <ReviewText>{review.content}</ReviewText>
-                <StarContainer>{renderStars(review.rating)}</StarContainer>
-              </ReviewContent>
-            </ReviewItem>
-            <Divider />
-          </React.Fragment>
+      <ReviewWrapper>
+        {isPurchased ? (
+          <ReviewWriteContainer>
+            <ReviewIconWrapper>
+              <div>별점을 선택해주세요.</div>
+              <div>
+                {array.map((el, index) => (
+                  <span key={index} onClick={() => starScore(index)}>
+                    {isClicked[index] ? (
+                      <MdStar color="#FFC83D" />
+                    ) : (
+                      <MdStar color="#ccc" />
+                    )}
+                  </span>
+                ))}
+              </div>
+            </ReviewIconWrapper>
+            <InputElement
+              type="text"
+              value={reviewContent}
+              onChange={(e) => setReviewContent(e.target.value)}
+              placeholder="구매후기를 작성해주세요"
+            />
+            <RegisterButton onClick={submitReview}>후기 등록</RegisterButton>
+          </ReviewWriteContainer>
+        ) : (
+          <ReviewWriteContainer>
+            상품 구매후에 후기를 작성할 수 있습니다
+          </ReviewWriteContainer>
+        )}
+        {listData.map((data, index) => (
+          <ProfileContainer key={index}>
+            <ReviewHeader>
+              <img src={data.files} alt="profile" />
+              <div>{data.nickName}</div>
+              <div>{data.date}</div>
+            </ReviewHeader>
+            <StarContainer>
+              <Icon>{starRateRendering(data.clickedStarNum)}</Icon>
+            </StarContainer>
+            <div>{data.reviewContent}</div>
+          </ProfileContainer>
         ))}
-      </ReviewContainer>
+
+        <ReviewContainer>
+          <Header>
+            <AverageText>
+              {averageRating} / 5 <p>({totalReviews})</p>
+            </AverageText>
+            <StarAverage>{renderStars(parseFloat(averageRating))}</StarAverage>
+          </Header>
+          <Divider />
+          {reviews.map((review) => (
+            <React.Fragment key={review.id}>
+              <ReviewItem>
+                <UserImage src={review.userImage} alt={review.userName} />
+                <ReviewContent>
+                  <UserName>{review.userName}</UserName>
+                  <ReviewDate>{review.date}</ReviewDate>
+                  <ProductName>{review.productName}</ProductName>
+                  <ReviewText>{review.content}</ReviewText>
+                  <StarContainer>{renderStars(review.rating)}</StarContainer>
+                </ReviewContent>
+              </ReviewItem>
+              <Divider />
+            </React.Fragment>
+          ))}
+        </ReviewContainer>
+      </ReviewWrapper>
     </Wrapper>
   );
 };
@@ -94,16 +220,16 @@ export default Review;
 
 const Wrapper = styled.div`
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const SellerContainer = styled.div`
   width: 250px;
 `;
 const ReviewContainer = styled.div`
-  width: 800px;
-  margin-top: 170px;
-  padding: 20px;
+  width: 700px;
+  margin-top: 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
 `;
@@ -192,4 +318,82 @@ const AverageText = styled.div`
     font-size: 30px;
     color: #ddd;
   }
+`;
+
+const ReviewWrapper = styled.div`
+  width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: flex-start;
+`;
+
+const ReviewWriteContainer = styled.div`
+  max-width: 700px;
+  height: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  margin-top: 40px;
+  gap: 10px;
+`;
+
+const ReviewIconWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ProfileContainer = styled.div`
+  width: 700px;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  margin-top: 10px;
+  padding: 0 20px;
+  gap: 10px;
+  background-color: #f4f4f4;
+`;
+
+const ReviewHeader = styled.div`
+  display: flex;
+  align-items: center;
+  width: 200px;
+  height: 50px;
+  margin-top: 20px;
+  gap: 10px;
+`;
+
+const InputElement = styled.input`
+  width: 693px;
+  height: 200px;
+  border-radius: 10px;
+`;
+
+const RegisterButton = styled.button`
+  width: 700px;
+  height: 54px;
+  background-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 10px 0;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  }
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+`;
+
+const Icon = styled.span`
+  /* 아이콘 스타일 */
+  width: 30px;
+  font-size: 25px;
+  margin-right: 5px;
+  cursor: pointer;
 `;
