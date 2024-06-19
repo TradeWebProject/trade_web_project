@@ -8,26 +8,63 @@ import minus from "../../assets/minus.svg";
 const filters = [
   {
     title: "카테고리",
-    options: ["카테고리 1", "카테고리 2"],
+    filterTitle: "category",
+    options: [
+      "전자제품",
+      "의류",
+      "가전",
+      "문구",
+      "도서",
+      "신발",
+      "여행용품",
+      "스포츠",
+    ],
   },
   {
-    title: "가격",
-    options: ["1만원 이상", "10만원 이상"],
-  },
-  {
-    title: "상품 상태",
-    options: ["미개봉", "중고 상품"],
+    title: "제품 상태",
+    filterTitle: "quality",
+    options: ["새상품", "중고 상품"],
   },
 ];
 
-const SearchFilter = ({ selectedFilters, onFilterChange }) => {
+const SearchFilter = ({ selectedFilters, onFilterChange, onPriceChange }) => {
   const [openFilters, setOpenFilters] = useState({});
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
 
   const toggleFilter = (filterTitle) => {
     setOpenFilters((prev) => ({
       ...prev,
       [filterTitle]: !prev[filterTitle],
     }));
+  };
+
+  const handleMinPriceChange = (e) => {
+    const regex = /^[0-9\b]+$/;
+
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      setMinPrice(e.target.value);
+    }
+  };
+
+  const handleMaxPriceChange = (e) => {
+    const regex = /^[0-9\b]+$/;
+
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      setMaxPrice(e.target.value);
+    }
+  };
+
+  const handlePriceChange = () => {
+    if (minPrice <= maxPrice) {
+      onFilterChange("priceRange", `${minPrice}원 ~ ${maxPrice}원`);
+      onFilterChange("minPrice", minPrice);
+      onFilterChange("maxPrice", maxPrice);
+    } else {
+      setMinPrice("");
+      setMaxPrice("");
+      onPriceChange(minPrice, maxPrice);
+    }
   };
 
   return (
@@ -52,7 +89,9 @@ const SearchFilter = ({ selectedFilters, onFilterChange }) => {
                         selectedFilters[filter.title] &&
                         selectedFilters[filter.title].includes(option)
                       }
-                      onChange={() => onFilterChange(filter.title, option)}
+                      onChange={() =>
+                        onFilterChange(filter.filterTitle, option)
+                      }
                     />{" "}
                     {option}
                   </CheckBox>
@@ -61,6 +100,32 @@ const SearchFilter = ({ selectedFilters, onFilterChange }) => {
             )}
           </FilterBox>
         ))}
+        <FilterBox>
+          <FilterHeader onClick={() => toggleFilter("가격")}>
+            <FilterTitle>가격</FilterTitle>
+            <FilterIconBox>
+              <FilterIcon src={openFilters["가격"] ? minus : plus} />
+            </FilterIconBox>
+          </FilterHeader>
+          {openFilters["가격"] && (
+            <PriceFilterMenu>
+              <NumberInput
+                type="text"
+                value={minPrice}
+                onChange={handleMinPriceChange}
+                maxLength={7}
+              />
+              &nbsp; ~ &nbsp;
+              <NumberInput
+                type="text"
+                value={maxPrice}
+                onChange={handleMaxPriceChange}
+                maxLength={7}
+              />
+              <ApplyButton onClick={handlePriceChange}>적용</ApplyButton>
+            </PriceFilterMenu>
+          )}
+        </FilterBox>
       </Filter>
     </Container>
   );
@@ -97,6 +162,10 @@ const FilterIcon = styled.img`
 
 const FilterMenu = styled.div``;
 
+const PriceFilterMenu = styled.div`
+  margin-top: 10px;
+`;
+
 const CheckBox = styled.div`
   font-size: 14px;
   font-weight: normal;
@@ -106,4 +175,25 @@ const CheckBox = styled.div`
 const FilterHeader = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const NumberInput = styled.input`
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  width: 50px;
+  height: 18px;
+`;
+
+const ApplyButton = styled.button`
+  padding: 3px 5px;
+  margin-left: 10px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
 `;
