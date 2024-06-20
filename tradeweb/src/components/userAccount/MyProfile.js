@@ -264,7 +264,7 @@ const MyProfile = () => {
                         <div>관심사</div>
                         <InterestsWrapper>
                         {interestsOptions.map((interest) => (
-                            <Interest key={interest.id} active={userInterestsArray.includes(interest.id)}
+                            <Interest key={interest.id} isActive={userInterestsArray.includes(interest.id)}
                                                         onClick={(e) => handleClicked(e, interest.id)}>
                                                         {interest.label}
                             </Interest>
