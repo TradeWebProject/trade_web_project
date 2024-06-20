@@ -23,8 +23,8 @@ const ProductRegister = () => {
     const remainingfiles = maxfiles - files.length;
 
     const data = {
-        productOptions: ["의류", "전자제품"],
-        productSellStatusOptions: ["미개봉 상품", "중고 상품"],
+        productOptions: ["의류", "전자기기", "가전", "문구", "도서", "신발", "여행용품", "스포츠"],
+        productSellStatusOptions: ["새상품", "중고 상품"],
     };
 
     const {
