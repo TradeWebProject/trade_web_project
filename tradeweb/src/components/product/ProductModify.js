@@ -278,11 +278,15 @@ const ProductModify = () => {
             form.append("description", description);
             form.append("productQuality", productQuality);
             form.append("category",category);
-            form.append("files", UpdatedFiles );
-            console.log("수정된 데이터: ");
-            for (let [key, value] of form.entries()) {
-                console.log(key + ", " + value);
-            }
+            // form.append("files", UpdatedFiles );
+
+            UpdatedFiles.forEach((file) => {
+                form.append("files", file);
+            });
+            console.log("수정된 데이터: " , form);
+            // for (let [key, value] of form.entries()) {
+            //     console.log(key + ", " + value);
+            // }
 
             axios.put(`${process.env.REACT_APP_API_URL}products/${productId}`,
                       form,
