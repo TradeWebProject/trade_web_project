@@ -7,6 +7,7 @@ import plus from "../../assets/plus.svg";
 import plusIcon from "../../assets/plus.svg";
 import profile from "../../assets/profile.svg";
 
+
 const MyProfile = () => {
     const [responseUserProfileData, setResponseUserProfileData] = useState("");
     const [profileUpdateStatus, setProfileUpdateStatus]  = useState(false);
@@ -27,7 +28,15 @@ const MyProfile = () => {
         interests: [],
     });
   
-    const interestsOptions = ["전자기기", "의류", "가전", "문구", "도서", "신발", "여행용품", "스포츠"];
+    const interestsOptions = [{id: "전자기기", label: "전자기기" }, 
+                              {id: "의류",     label: "의류"}, 
+                              {id: "가전",     label: "가전"}, 
+                              {id: "문구",     label: "문구"},
+                              {id: "도서",     label: "도서"},
+                              {id: "신발",     label: "신발"},
+                              {id: "여행용품", label: "여행용품"},
+                              {id: "스포츠",   label: "스포츠"}, 
+                            ];
     const [isSelectedIndex, setSelectedIndex] = useState(0);
     
     const [nickname, setNickName] = useState("");
@@ -36,7 +45,7 @@ const MyProfile = () => {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState(localStorage.getItem("email"));
     const token = localStorage.getItem("accessToken");
-    const userId = localStorage.getItme("userId");
+    const userId = localStorage.getItem("userId");
     
 
     useEffect(() => {
@@ -214,9 +223,12 @@ const MyProfile = () => {
                     <InfoWrapper>
                         <div>관심사</div>
                         <InterestsWrapper>
-                        {userInterestsArray.map(function (interest, index) {
-                            return  <Interest key={index} isActive={interest == userInterestsArray[0] }>{interest}</Interest>    
-                        })}
+                        {interestsOptions.map((interest) => (
+                            <Interest key={interest.id} isActive={userInterestsArray.includes(interest.id)}
+                                                       >
+                                                        {interest.label}
+                            </Interest>
+                        ))}
                         </InterestsWrapper>
                     </InfoWrapper>
                 </Container> :
@@ -251,9 +263,12 @@ const MyProfile = () => {
                     <InfoWrapper>
                         <div>관심사</div>
                         <InterestsWrapper>
-                        {interestsOptions.map(function (option, index) {
-                            return  <Interest key={index} onClick={() => handleClicked(index)} isActive={isSelectedIndex === index}>{option}</Interest>
-                        })}
+                        {interestsOptions.map((interest) => (
+                            <Interest key={interest.id} active={userInterestsArray.includes(interest.id)}
+                                                        onClick={(e) => handleClicked(e, interest.id)}>
+                                                        {interest.label}
+                            </Interest>
+                        ))}
                     
                         </InterestsWrapper>
                     </InfoWrapper>
