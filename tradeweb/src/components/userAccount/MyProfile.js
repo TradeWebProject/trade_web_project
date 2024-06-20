@@ -36,7 +36,7 @@ const MyProfile = () => {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState(localStorage.getItem("email"));
     const token = localStorage.getItem("accessToken");
-    const userId = 9;
+    const userId = localStorage.getItme("userId");
     
 
     useEffect(() => {
