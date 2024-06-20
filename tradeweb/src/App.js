@@ -12,11 +12,14 @@ import SearchResultPage from "./pages/search/SearchResultPage";
 import Mainpage from "./pages/main/MainPage";
 import ReviewPage from "./pages/reviewPage/reviewPage";
 import ProductDetailManagementPage from "./pages/productDetailManagementPage/ProductDetailManagementPage";
+import TestDetailPage from "./pages/testDetail/TestDetailPage";
 
 function App() {
   return (
     <AppLayout>
       <Routes>
+
+        <Route path="/test/detail/:productId" element={<TestDetailPage />} />
         <Route path="/detail/:productId" element={<DetailPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/my-page" element={<MyPage />} />
