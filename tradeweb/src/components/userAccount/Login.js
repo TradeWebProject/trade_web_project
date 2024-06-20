@@ -3,6 +3,27 @@ import styled from "styled-components";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../styles/theme";
+import {
+  FaMobileAlt,
+  FaTshirt,
+  FaLaptop,
+  FaBook,
+  FaShoePrints,
+  FaSuitcase,
+  FaFootballBall,
+  FaPen,
+} from "react-icons/fa";
+
+const interestsOptions = [
+  { id: "전자기기", label: "전자기기", icon: <FaMobileAlt /> },
+  { id: "의류", label: "의류", icon: <FaTshirt /> },
+  { id: "가전", label: "가전", icon: <FaLaptop /> },
+  { id: "문구", label: "문구", icon: <FaPen /> },
+  { id: "도서", label: "도서", icon: <FaBook /> },
+  { id: "신발", label: "신발", icon: <FaShoePrints /> },
+  { id: "여행용품", label: "여행용품", icon: <FaSuitcase /> },
+  { id: "스포츠", label: "스포츠", icon: <FaFootballBall /> },
+];
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,7 +34,7 @@ const Login = () => {
     phone: "",
     nickname: "",
     userImg: null,
-    interests: "",
+    interests: [],
   });
   const navigate = useNavigate();
 
@@ -38,10 +59,13 @@ const Login = () => {
         const form = new FormData();
         form.append("email", formData.email);
         form.append("password", formData.password);
-        form.append("phone", formData.phone);
         form.append("nickname", formData.nickname);
-        form.append("userImg", formData.userImg);
-        form.append("interests", formData.interests);
+        form.append("phone", formData.phone);
+        // form.append("userImg", formData.userImg);
+        form.append("interests", formData.interests.join(","));
+        for (let [key, value] of form.entries()) {
+          console.log(key, value);
+        }
         response = await axios.post(
           `${process.env.REACT_APP_API_URL}users/signup`,
           form,
@@ -72,10 +96,20 @@ const Login = () => {
   };
 
   const handleFileChange = (e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      userImg: e.target.files[0],
-    }));
+    // setFormData((prevData) => ({
+    //   ...prevData,
+    //   userImg: e.target.files[0],
+    // }));
+  };
+
+  const handleInterestClick = (e, interest) => {
+    e.preventDefault();
+    setFormData((prevData) => {
+      const interests = prevData.interests.includes(interest)
+        ? prevData.interests.filter((i) => i !== interest)
+        : [...prevData.interests, interest];
+      return { ...prevData, interests };
+    });
   };
 
   return (
@@ -152,13 +186,19 @@ const Login = () => {
                   value={formData.nickname}
                   onChange={handleChange}
                 />
-                <StyledInput
-                  type="text"
-                  placeholder="관심사"
-                  name="interests"
-                  value={formData.interests}
-                  onChange={handleChange}
-                />
+                <FileInfo>관심사를 체크해 주세요.</FileInfo>
+                <InterestWrapper>
+                  {interestsOptions.map((interest) => (
+                    <InterestButton
+                      key={interest.id}
+                      active={formData.interests.includes(interest.id)}
+                      onClick={(e) => handleInterestClick(e, interest.id)}
+                    >
+                      {interest.icon}
+                      {interest.label}
+                    </InterestButton>
+                  ))}
+                </InterestWrapper>
               </InputWrapper>
               <SubmitButton type="submit">가입하기</SubmitButton>
             </SignupWrapper>
@@ -301,5 +341,41 @@ const FileInputWrapper = styled.div`
 const FileInfo = styled.div`
   font-size: 13px;
   color: ${theme.mainColor};
-  margin: 11px 0 36px 0;
+  margin: 10px;
+`;
+
+const InterestWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 400px;
+  margin-bottom: 20px;
+`;
+
+const InterestButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 180px;
+  margin: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  border: 2px solid ${theme.mainColor};
+  border-radius: 10px;
+  background-color: ${({ active }) => (active ? theme.mainColor : "white")};
+  color: ${({ active }) => (active ? "white" : theme.mainColor)};
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+  &:hover {
+    border-color: ${theme.mainColor};
+    background-color: ${({ active }) =>
+      active ? theme.mainColor : "theme.subColor"};
+  }
+
+  svg {
+    margin-right: 8px;
+    font-size: 24px;
+  }
 `;

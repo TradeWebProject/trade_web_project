@@ -100,6 +100,7 @@ const Detail = () => {
 
   const {
     imagePathUrl,
+    thumbnailUrl,
     description,
     userNickName,
     productName,
@@ -121,12 +122,12 @@ const Detail = () => {
         <Imagewrraper>
           {" "}
           <MainImage
-            src={`${process.env.REACT_APP_IMAGE_URL}${data.imagePathUrl}`}
+            src={`${process.env.REACT_APP_IMAGE_URL}${data.thumbnailUrl}`}
             alt="Main Image"
           />
         </Imagewrraper>
 
-        <Description>{description}</Description>
+        <Description dangerouslySetInnerHTML={{ __html: data.description }} />
         <div ref={loader}></div>
       </Section>
       <Section>
