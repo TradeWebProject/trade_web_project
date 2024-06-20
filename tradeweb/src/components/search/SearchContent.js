@@ -5,9 +5,6 @@ import ProductList from "./ProductList";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-import SearchFilter from "./SearchFilter";
-
-
 const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
@@ -42,10 +39,8 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     }
     if (maxPrice !== "") {
       url += `&maxPrice=${maxPrice}`;
-=======
-
-  useEffect(() => {
-    console.log(keyword);
+      console.log(keyword);
+    }
     const get = async () => {
       await axios
         .get(
@@ -74,7 +69,6 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     } else {
       setListData((prev) => [...prev, ...newItems]);
       setPage((prev) => prev + 1);
-
     }
 
     return url;
