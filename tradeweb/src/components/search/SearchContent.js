@@ -5,14 +5,44 @@ import ProductList from "./ProductList";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
+import SearchFilter from "./SearchFilter";
+
+
 const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
   const loader = useRef(null);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const keyword = queryParams.get("keyword");
+
+  const [loading, setLoading] = useState(false);
+  const [noResults, setNoResults] = useState(false);
+
+  const buildUrl = useCallback(() => {
+    let url = `${process.env.REACT_APP_API_URL}product/search?keyword=${keyword}&page=${page}&size=8&sort=asc`;
+
+    Object.entries(selectedFilters).forEach(([filterTitle, options]) => {
+      if (options.length > 0) {
+        options.forEach((option) => {
+          if (filterTitle == "priceRange") {
+            return;
+          } else {
+            url += `&${filterTitle}=${option}`;
+          }
+        });
+      }
+    });
+
+    if (minPrice !== "") {
+      url += `&minPrice=${minPrice}`;
+    }
+    if (maxPrice !== "") {
+      url += `&maxPrice=${maxPrice}`;
+=======
 
   useEffect(() => {
     console.log(keyword);
@@ -44,39 +74,62 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     } else {
       setListData((prev) => [...prev, ...newItems]);
       setPage((prev) => prev + 1);
+
     }
-  }, [page]);
+
+    return url;
+  }, [keyword, page, selectedFilters, minPrice, maxPrice]);
+
+  const fetchData = useCallback(async () => {
+    try {
+      setLoading(true);
+      const url = buildUrl();
+      const response = await axios.get(url);
+      const newData = response.data.products;
+
+      setListData((prevData) =>
+        page === 1 ? newData : [...prevData, ...newData]
+      );
+      setHasMore(newData.length === 8);
+      setNoResults(newData.length === 0 && page === 1);
+      console.log(url);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, [buildUrl, page, keyword]);
 
   useEffect(() => {
-    loadMore();
+    fetchData();
+  }, [fetchData]);
+
+  useEffect(() => {
+    const handleObserver = (entries) => {
+      if (entries[0].isIntersecting) {
+        setPage((prevPage) => prevPage + 1);
+      }
+    };
+
+    const observer = new IntersectionObserver(handleObserver, { threshold: 1 });
+    if (loader.current) observer.observe(loader.current);
+
+    return () => {
+      if (loader.current) observer.unobserve(loader.current);
+    };
   }, []);
 
   useEffect(() => {
-    if (!hasMore) return;
+    setPage(1);
+    fetchData();
+  }, [selectedFilters, minPrice, maxPrice]);
 
-    console.log("useEffect");
-
-    let currentLoader = loader.current;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          loadMore();
-        }
-      },
-      { threshold: 1 }
-    );
-
-    if (currentLoader) {
-      observer.observe(currentLoader);
-    }
-
-    return () => {
-      if (currentLoader) {
-        observer.unobserve(currentLoader);
-      }
-    };
-  }, [loadMore, hasMore]);
+  const handlePriceFilterRemove = () => {
+    setMinPrice("");
+    setMaxPrice("");
+    setPage(1);
+    fetchData();
+  };
 
   return (
     <>
@@ -85,7 +138,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
         <SelectedFilters>
           {Object.entries(selectedFilters).map(([filterTitle, options]) =>
             options.map((option) => (
-              <FilterTag key={option}>
+              <FilterTag key={`${filterTitle}-${option}`}>
                 {option}
                 &nbsp;
                 <CloseButton
@@ -95,9 +148,20 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
               </FilterTag>
             ))
           )}
+          {minPrice && maxPrice && (
+            <FilterTag key={`${minPrice} ~ ${maxPrice}원`}>
+              {`${minPrice} ~ ${maxPrice}원`}
+              &nbsp;
+              <CloseButton src={close} onClick={handlePriceFilterRemove} />
+            </FilterTag>
+          )}
         </SelectedFilters>
+        {loading && <LoadingMessage>로딩 중...</LoadingMessage>}
+        {!loading && noResults && (
+          <NoResultsMessage>검색 결과가 없습니다</NoResultsMessage>
+        )}
         <ProductList products={listData} />
-        <div ref={loader}></div>
+        {hasMore && <div ref={loader}></div>}
       </Container>
     </>
   );
@@ -118,34 +182,6 @@ const SearchKeyword = styled.div`
   margin: 20px 0 20px 0;
 `;
 
-const SearchResultList = styled.div`
-  display: grid;
-  row-gap: 40px;
-  column-gap: 20px;
-  grid-template-columns: 250px 250px 250px 250px;
-`;
-
-const SearchItem = styled.div`
-  width: 200px;
-`;
-
-const ItemImageBox = styled.div`
-  border-radius: 10px;
-  background-color: rgb(244, 244, 244);
-`;
-const ItemImage = styled.img`
-  width: 200px;
-`;
-
-const ItemTitle = styled.strong``;
-
-const ItemInfo = styled.div`
-  font-size: 14px;
-  margin-bottom: 10px;
-`;
-
-const ItemPrice = styled.strong``;
-
 const SelectedFilters = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -165,4 +201,20 @@ const CloseButton = styled.img`
   width: 15px;
   padding-top: 2px;
   cursor: pointer;
+`;
+
+const LoadingMessage = styled.div`
+  height: 500px;
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
+`;
+
+const NoResultsMessage = styled.div`
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: 18px;
+  margin-top: 20px;
 `;
