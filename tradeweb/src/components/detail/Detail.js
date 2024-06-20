@@ -8,7 +8,7 @@ import ChatList from "../chatlist/ChatList";
 import { theme } from "../../styles/theme";
 import { FaRegStar } from "react-icons/fa";
 import { MdStar, MdOutlineStar } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const Detail = () => {
   const loader = useRef(null);
@@ -18,6 +18,8 @@ const Detail = () => {
   const [hasBuyUserId, setHasBuyUserId] = useState(false);
 
   const { productId } = useParams();
+  const navigate = useNavigate();
+
   const token = localStorage.getItem("accessToken");
   const buyUserId = localStorage.getItem("userId");
 
@@ -65,7 +67,7 @@ const Detail = () => {
   };
 
   const userInfoClick = () => {
-    console.log("판매자클릭");
+    navigate(`/review/${productId}/${productName}`);
   };
 
   const closeChat = () => {
@@ -112,8 +114,6 @@ const Detail = () => {
 
   const totalLikesPlus = totalLikes + 1;
   const totalLikesMinus = totalLikes - 1;
-
-  console.log("test");
 
   return (
     <Wrapper>
