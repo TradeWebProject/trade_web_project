@@ -3,28 +3,8 @@ import styled from "styled-components";
 import SellerInfo from "./SellerInfo";
 import { theme } from "../../styles/theme";
 import { MdStar } from "react-icons/md";
-
-const reviews = [
-  {
-    id: 1,
-    userImage: "https://via.placeholder.com/50",
-    userName: "John Doe",
-    date: "2023-06-01",
-    productName: "Product A",
-    content: "This is a great product!",
-    rating: 5,
-  },
-  {
-    id: 2,
-    userImage: "https://via.placeholder.com/50",
-    userName: "Jane Smith",
-    date: "2023-06-02",
-    productName: "Product B",
-    content: "Not bad, could be better.",
-    rating: 3,
-  },
-  // 추가 리뷰 객체를 여기에 추가하세요
-];
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 const getAverageRating = (reviews) => {
   const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
@@ -61,10 +41,24 @@ const Review = () => {
   const [hasMore, setHasMore] = useState(true);
   const [isClicked, setClicked] = useState([false, false, false, false, false]);
   const [page, setPage] = useState(1);
+  const [reviews, setReviews] = useState([]);
   const loader = useRef(null);
 
   const averageRating = getAverageRating(reviews);
   const totalReviews = reviews.length;
+  const { productId, productName } = useParams();
+
+  const fetchReviews = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}reviews/product/${productId}`
+      );
+      setReviews(response.data);
+      console.log(reviews);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
 
   const starScore = (index) => {
     let star = [...isClicked];
@@ -74,10 +68,17 @@ const Review = () => {
     setClicked(star);
   };
 
-  const submitReview = () => {
-    const starCount = isClicked.filter((clicked) => clicked).length;
-    console.log(`Star count: ${starCount}`);
-    console.log(`Review content: ${reviewContent}`);
+  const submitReview = async () => {
+    const rating = isClicked.filter((clicked) => clicked).length;
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}reviews?productId=${productId}&reviewContent=${reviewContent}&rating=${rating}&title=${productName}`
+      );
+      console.log("Review submitted successfully:", response.data);
+    } catch (error) {
+      console.error("Error submitting review:", error);
+    }
   };
 
   const starRateRendering = (data) => {
@@ -108,6 +109,7 @@ const Review = () => {
   }, [page]);
 
   useEffect(() => {
+    fetchReviews();
     loadMore();
   }, []);
 

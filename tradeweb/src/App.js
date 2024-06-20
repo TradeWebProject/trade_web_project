@@ -30,7 +30,10 @@ function App() {
         />
         <Route path="/search" element={<SearchResultPage />} />
         <Route path="/" element={<Mainpage />} />
-        <Route path="/review" element={<ReviewPage />} />
+        <Route
+          path="/review/:productId/:productName"
+          element={<ReviewPage />}
+        />
       </Routes>
     </AppLayout>
   );
