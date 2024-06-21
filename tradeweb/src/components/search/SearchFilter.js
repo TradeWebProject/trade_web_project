@@ -109,19 +109,21 @@ const SearchFilter = ({ selectedFilters, onFilterChange, onPriceChange }) => {
           </FilterHeader>
           {openFilters["가격"] && (
             <PriceFilterMenu>
-              <NumberInput
-                type="text"
-                value={minPrice}
-                onChange={handleMinPriceChange}
-                maxLength={7}
-              />
-              &nbsp; ~ &nbsp;
-              <NumberInput
-                type="text"
-                value={maxPrice}
-                onChange={handleMaxPriceChange}
-                maxLength={7}
-              />
+              <NumberInputWrapper>
+                <NumberInput
+                  type="text"
+                  value={minPrice}
+                  onChange={handleMinPriceChange}
+                  maxLength={7}
+                />
+                &nbsp; ~ &nbsp;
+                <NumberInput
+                  type="text"
+                  value={maxPrice}
+                  onChange={handleMaxPriceChange}
+                  maxLength={7}
+                />
+              </NumberInputWrapper>
               <ApplyButton onClick={handlePriceChange}>적용</ApplyButton>
             </PriceFilterMenu>
           )}
@@ -164,6 +166,7 @@ const FilterMenu = styled.div``;
 
 const PriceFilterMenu = styled.div`
   margin-top: 10px;
+  display: flex;
 `;
 
 const CheckBox = styled.div`
@@ -176,24 +179,19 @@ const FilterHeader = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-
+const NumberInputWrapper = styled.div``;
 const NumberInput = styled.input`
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
   width: 50px;
-  height: 18px;
+  height: 20px;
 `;
 
 const ApplyButton = styled.button`
-  padding: 3px 5px;
+  padding: 2px 5px 2px 5px;
   margin-left: 10px;
   font-size: 14px;
   border: none;
   border-radius: 5px;
-  background-color: #007bff;
+  background-color: #392e3f;
   color: white;
   cursor: pointer;
 `;

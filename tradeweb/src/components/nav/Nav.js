@@ -132,6 +132,7 @@ const Wrapper = styled.div`
 
 const Title = styled.h2`
   cursor: pointer;
+  font-size: 30px;
 `;
 
 const ButtonWrapper = styled.div`
