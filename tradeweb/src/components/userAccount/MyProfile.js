@@ -10,11 +10,11 @@ import profile from "../../assets/profile.svg";
 
 const MyProfile = () => {
     const [responseUserProfileData, setResponseUserProfileData] = useState("");
-    const [profileUpdateStatus, setProfileUpdateStatus]  = useState(false);
+    const [profileUpdateStatus, setProfileUpdateStatus] = useState(false);
     const [userInterestsArray, setUserInterestsArray] = useState([]);
     const [responseData, setResponseData] = useState("");
-    const [ImageUpdateStatus, setImageUpdateStatus] = useState(false); 
-    const [Image, setImage] = useState(profile);  // (1)번 설명
+    const [ImageUpdateStatus, setImageUpdateStatus] = useState(false);
+    const [Image, setImage] = useState(profile);
     const [files, setFiles] = useState([]);
     const [rawFiles, setRawFiles] = useState([]);
     const fileInputRef = useRef(null);
@@ -27,102 +27,96 @@ const MyProfile = () => {
         userImg: null,
         interests: [],
     });
-  
-    const interestsOptions = [{id: "전자기기", label: "전자기기" }, 
-                              {id: "의류",     label: "의류"}, 
-                              {id: "가전",     label: "가전"}, 
-                              {id: "문구",     label: "문구"},
-                              {id: "도서",     label: "도서"},
-                              {id: "신발",     label: "신발"},
-                              {id: "여행용품", label: "여행용품"},
-                              {id: "스포츠",   label: "스포츠"}, 
-                            ];
-    const [isSelectedIndex, setSelectedIndex] = useState(0);
-    
+
+    const interestsOptions = [
+        { id: "전자기기", label: "전자기기" },
+        { id: "의류", label: "의류" },
+        { id: "가전", label: "가전" },
+        { id: "문구", label: "문구" },
+        { id: "도서", label: "도서" },
+        { id: "신발", label: "신발" },
+        { id: "여행용품", label: "여행용품" },
+        { id: "스포츠", label: "스포츠" },
+    ];
+
+    const [isSelectedIndex, setSelectedIndex] = useState([]);
     const [nickname, setNickName] = useState("");
     const [phone, setPhone] = useState("");
-    const [interests, setInserests] = useState("");
+    const [interests, setInterests] = useState([]);
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState(localStorage.getItem("email"));
     const token = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("userId");
-    
 
     useEffect(() => {
         async function get() {
             try {
-                await axios.get(`${process.env.REACT_APP_API_URL}users/${userId}`,
-                            {
-                                headers: {
-                                    'Content-Type': "multipart/form-data",
-                                    'Authorization': `Bearer ${token}`,
-                                }
-                            }
-                ).then(function (response) {
-                    console.log("응답 데이터:", response.data);
-                    setResponseUserProfileData(response.data);
-                    setUserInterestsArray(response.data.userInterests);
-                   
-                })
-               
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}users/${userId}`, {
+                    headers: {
+                        'Content-Type': "multipart/form-data",
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+                console.log("응답 데이터:", response.data);
+                setResponseUserProfileData(response.data);
+                setUserInterestsArray(response.data.userInterests);
             } catch (error) {
                 console.error("요청 실패:", error);
             }
         };
-        get();
-    }, [userId]);
+        if (userId && token) {
+            get();
+        }
+    }, [userId, token]);
 
     const profileUpdateOnClick = () => {
         setProfileUpdateStatus(true);
     };
 
-  
-
     const handleImageChange = (e) => {
         setFormData((prevData) => ({
             ...prevData,
             userImg: e.target.files[0],
-        }));     
+        }));
     };
 
-    const handleClicked = idx =>  {
-        console.log("idx: ", idx);
-        setSelectedIndex(idx);
-        setInserests(interestsOptions[idx]);
+    const handleClicked = (interestId) => {
+        console.log("interestId: ", interestId);
+        if (!interests.includes(interestId)) {
+            setSelectedIndex(interestId);
+            setInterests([...interests, interestId]);
+        } else {
+            setInterests(interests.filter(id => id !== interestId));
+        }
     };
 
     const handleProfileUpdate = () => {
-        update();  
+        update();
     };
-    
-    const update = () => {
+
+    const update = async () => {
         try {
             const form = new FormData();
             form.append("email", email);
             form.append("password", password);
             form.append("nickname", nickname);
             form.append("phone", phone);
-            form.append("interests",interests);
+            form.append("interests", interests.join(','));
             form.append("userImg", formData.userImg);
             console.log("수정된 데이터: ");
             for (let [key, value] of form.entries()) {
                 console.log(key + ", " + value);
             }
 
-            axios.put(`${process.env.REACT_APP_API_URL}users/edit/${userId}`,
-                      form,
-                      {
-                        headers: {
-                            "Content-Type": "multipart/form-data",
-                            'Authorization': `Bearer ${token}`,
-                        }
-                      }
-            ).then(function (response) {
-                console.log("응답 데이터:", response.data.products);
-                const productsArray = response.data.products;
-                setResponseData(productsArray);
-            })
-           
+            const response = await axios.put(`${process.env.REACT_APP_API_URL}users/edit/${userId}`, form, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+            console.log("응답 데이터:", response.data.products);
+            const productsArray = response.data.products;
+            setResponseData(productsArray);
         } catch (error) {
             console.error("요청 실패:", error);
         }
@@ -203,111 +197,130 @@ const MyProfile = () => {
   
     return (
         <Box sx={{ p: 3 }}>
-            {profileUpdateStatus == false ? <Container>
-                    <Title>프로필</Title>
-                    <ProfileContainer>
-                        <ProfileImage src={`${process.env.REACT_APP_IMAGE_URL}${responseUserProfileData.user_img}`} alt="profile"/>
-                        <div>{responseUserProfileData.user_nickname}</div>
-                        <div>
-                            <ChangeImgButton onClick={profileUpdateOnClick}>프로필 수정</ChangeImgButton>
-                        </div>
-                    </ProfileContainer>
-                    <InfoWrapper>
-                        <div>이메일</div>
-                        <InfoText>{responseUserProfileData.email}</InfoText>
-                    </InfoWrapper>
-                    <InfoWrapper>
-                        <div>전화번호</div>
-                        <InfoText>{responseUserProfileData.user_phone}</InfoText>
-                    </InfoWrapper>
-                    <InfoWrapper>
-                        <div>관심사</div>
-                        <InterestsWrapper>
+        {!profileUpdateStatus ? (
+            <Container>
+                <Title>프로필</Title>
+                <ProfileContainer>
+                    <ProfileImage src={`${process.env.REACT_APP_IMAGE_URL}${responseUserProfileData.user_img}`} alt="profile" />
+                    <div>{responseUserProfileData.user_nickname}</div>
+                    <div>
+                        <ChangeImgButton onClick={profileUpdateOnClick}>프로필 수정</ChangeImgButton>
+                    </div>
+                </ProfileContainer>
+                <InfoWrapper>
+                    <div>이메일</div>
+                    <InfoText>{responseUserProfileData.email}</InfoText>
+                </InfoWrapper>
+                <InfoWrapper>
+                    <div>전화번호</div>
+                    <InfoText>{responseUserProfileData.user_phone}</InfoText>
+                </InfoWrapper>
+                <InfoWrapper>
+                    <div>관심사</div>
+                    <InterestsWrapper>
                         {interestsOptions.map((interest) => (
-                            <Interest key={interest.id} isActive={userInterestsArray.includes(interest.id)}
-                                                       >
-                                                        {interest.label}
+                            <Interest
+                                key={interest.id}
+                                isActive={userInterestsArray.includes(interest.id)}
+                            >
+                                {interest.label}
                             </Interest>
                         ))}
-                        </InterestsWrapper>
-                    </InfoWrapper>
-                </Container> :
-                <Container>
-                    <Title>프로필 수정</Title>
-                    <ProfileContainer>
-                        {ImageUpdateStatus == false ?  <ProfileImage src={`${process.env.REACT_APP_IMAGE_URL}${responseUserProfileData.user_img}`} alt="profile"/> :
-                        <ProfileImage src={formData.userImg} alt="profile"/>}
-                        <ImageButton>
-                            <input
+                    </InterestsWrapper>
+                </InfoWrapper>
+            </Container>
+        ) : (
+            <Container>
+                <Title>프로필 수정</Title>
+                <ProfileContainer>
+                    {!ImageUpdateStatus ? (
+                        <ProfileImage src={`${process.env.REACT_APP_IMAGE_URL}${responseUserProfileData.user_img}`} alt="profile" />
+                    ) : (
+                        <ProfileImage src={URL.createObjectURL(formData.userImg)} alt="profile" />
+                    )}
+                    <ImageButton>
+                        <input
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
                             style={{ display: "none" }}
-                            />
-                            
-                            <PlusIcon />
-                        </ImageButton>
-                        
-                        <div>
-                            <ChangeImgButton onClick={handleProfileUpdate}>프로필 저장</ChangeImgButton>
-                        </div>
-                    </ProfileContainer>
-                    <InfoWrapper>
-                        <div>닉네임</div>
-                        <ProductNameInput type="text" onChange={(e) => setNickName(e.target.value)} defaultValue={responseUserProfileData.user_nickname}/>
-                    </InfoWrapper>
-                    <InfoWrapper>
-                        <div>전화번호</div>
-                        <ProductNameInput type="text" onChange={(e) => setPhone(e.target.value)} defaultValue={responseUserProfileData.user_phone}/>
-                    </InfoWrapper>
-                    <InfoWrapper>
-                        <div>관심사</div>
-                        <InterestsWrapper>
+                        />
+                        <PlusIcon />
+                    </ImageButton>
+                    <div>
+                        <ChangeImgButton onClick={handleProfileUpdate}>프로필 저장</ChangeImgButton>
+                    </div>
+                </ProfileContainer>
+                <InfoWrapper>
+                    <div>닉네임</div>
+                    <ProductNameInput
+                        type="text"
+                        onChange={(e) => setNickName(e.target.value)}
+                        defaultValue={responseUserProfileData.user_nickname}
+                    />
+                </InfoWrapper>
+                <InfoWrapper>
+                    <div>전화번호</div>
+                    <ProductNameInput
+                        type="text"
+                        onChange={(e) => setPhone(e.target.value)}
+                        defaultValue={responseUserProfileData.user_phone}
+                    />
+                </InfoWrapper>
+                <InfoWrapper>
+                    <div>관심사</div>
+                    <InterestsWrapper>
                         {interestsOptions.map((interest) => (
-                            <Interest key={interest.id} isActive={userInterestsArray.includes(interest.id)}
-                                                        onClick={(e) => handleClicked(e, interest.id)}>
-                                                        {interest.label}
+                            <Interest
+                                key={interest.id}
+                                isActive={interests.includes(interest.id)}
+                                onClick={() => handleClicked(interest.id)}
+                            >
+                                {interest.label}
                             </Interest>
                         ))}
-                    
-                        </InterestsWrapper>
-                    </InfoWrapper>
-                    <InfoWrapper>
-                        <div>비밀번호 확인</div>
-                        <ProductNameInput type="text" onChange={(e) => setPassword(e.target.value)} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
-                    </InfoWrapper>
-                </Container>
-            }
-                    
-                <Container>
-                    <Title>찜목록</Title>
-                    <SearchResultList>
-                        {data.map((product) => (
-                            <SearchItem key={product.productId}>
-                                <ItemImageBox>
-                                    <ItemImage src={product.files} alt={product.title} />
-                                </ItemImageBox>
-                                <ItemTitle>{product.title}</ItemTitle>
-                                <ItemInfo>{product.description}</ItemInfo>
-                                <ItemPrice>
-                                    {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                </ItemPrice>
-                                <Icon>❤️</Icon>
-                            </SearchItem>
-                        ))}
-                    </SearchResultList>
-                    <Pagination class="pagination">
-                        <PageButton>&laquo;</PageButton>
-                        <PageButton>1</PageButton>
-                        <PageButton>2</PageButton>
-                        <PageButton>3</PageButton>
-                        <PageButton>4</PageButton>
-                        <PageButton>5</PageButton>
-                        <PageButton>6</PageButton>
-                        <PageButton>&raquo;</PageButton>
-                    </Pagination>
-                </Container>  
-        </Box>
+                    </InterestsWrapper>
+                </InfoWrapper>
+                <InfoWrapper>
+                    <div>비밀번호 확인</div>
+                    <ProductNameInput
+                        type="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"
+                    />
+                </InfoWrapper>
+            </Container>
+        )}
+
+        <Container>
+            <Title>찜목록</Title>
+            <SearchResultList>
+                {data.map((product) => (
+                    <SearchItem key={product.productId}>
+                        <ItemImageBox>
+                            <ItemImage src={product.files} alt={product.title} />
+                        </ItemImageBox>
+                        <ItemTitle>{product.title}</ItemTitle>
+                        <ItemInfo>{product.description}</ItemInfo>
+                        <ItemPrice>
+                            {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                        </ItemPrice>
+                        <Icon>❤️</Icon>
+                    </SearchItem>
+                ))}
+            </SearchResultList>
+            <Pagination>
+                <PageButton>&laquo;</PageButton>
+                <PageButton>1</PageButton>
+                <PageButton>2</PageButton>
+                <PageButton>3</PageButton>
+                <PageButton>4</PageButton>
+                <PageButton>5</PageButton>
+                <PageButton>6</PageButton>
+                <PageButton>&raquo;</PageButton>
+            </Pagination>
+        </Container>
+    </Box>
 
     );
 };
