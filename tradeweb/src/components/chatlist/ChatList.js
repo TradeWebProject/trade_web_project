@@ -1,135 +1,206 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import MessageTime from "./MessageTime";
+import axios from "axios";
 import { theme } from "../../styles/theme";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-
-const dummyData = [
-  {
-    name: "현서",
-    photo: "https://via.placeholder.com/40",
-    messages: [
-      {
-        sender: "me",
-        text: "Hi, how are you?",
-        time: new Date("2024-06-09T10:00:00").toISOString(),
-      },
-      {
-        sender: "buyer",
-        text: "I'm good, thanks!",
-        time: new Date("2024-06-09T10:05:00").toISOString(),
-      },
-    ],
-  },
-  {
-    name: "영호",
-    photo: "https://via.placeholder.com/40",
-    messages: [
-      {
-        sender: "me",
-        text: "Hello!",
-        time: new Date("2024-06-09T10:10:00").toISOString(),
-      },
-      {
-        sender: "buyer",
-        text: "Hi!",
-        time: new Date("2024-06-09T10:15:00").toISOString(),
-      },
-    ],
-  },
-  {
-    name: "Buyer 3",
-    photo: "https://via.placeholder.com/40",
-    messages: [],
-  },
-];
-
-const sortMessagesByTime = (messages) => {
-  return messages.sort((a, b) => {
-    return new Date(a.time) - new Date(b.time);
-  });
-};
-
-const truncateText = (text, maxLength) => {
-  return text.length > maxLength ? text.substring(0, maxLength) + "..." : text;
-};
-
-const getLastMessageText = (messages) => {
-  if (messages.length === 0) return "";
-  return truncateText(messages[messages.length - 1].text, 15);
-};
+import MessageTime from "./MessageTime";
 
 const ChatList = ({ visible, onClose }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [rooms] = useState(dummyData);
+  const [rooms, setRooms] = useState([]);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isRoomListMinimized, setIsRoomListMinimized] = useState(false);
+  const [currentView, setCurrentView] = useState("buyer");
+  const [lastMessages, setLastMessages] = useState({});
   const chatRef = useRef(null);
+  const chatMessagesRef = useRef(null);
+  const socket = useRef(null);
 
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("accessToken");
+
+  // 방 클릭 시 메시지 가져오기
   const handleRoomClick = (room) => {
     setSelectedRoom(room);
-    setMessages(sortMessagesByTime(room.messages));
+    fetchMessages(room.chatRoomid);
   };
 
+  // 해당 방의 메시지 가져오기
+  const fetchMessages = async (roomId) => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}chat/messages?chatRoomId=${roomId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setMessages(sortMessagesByTime(response.data));
+    } catch (error) {
+      console.error("Failed to fetch messages:", error);
+    }
+  };
+
+  // WebSocket 연결 및 메시지 처리
+  useEffect(() => {
+    if (selectedRoom) {
+      const socketUrl = `${process.env.REACT_APP_CHAT_URL}chat?chatRoomId=${selectedRoom.chatRoomid}&token=${token}`;
+      socket.current = new WebSocket(socketUrl);
+
+      socket.current.onopen = () => {
+        console.log("WebSocket 연결 성공");
+      };
+
+      socket.current.onmessage = (event) => {
+        const message = JSON.parse(event.data);
+        setMessages((prevMessages) => [...prevMessages, message]);
+        setLastMessages((prevLastMessages) => ({
+          ...prevLastMessages,
+          [selectedRoom.chatRoomid]: message.message,
+        }));
+      };
+
+      socket.current.onerror = (error) => {
+        console.error("WebSocket 에러 발생:", error);
+      };
+
+      socket.current.onclose = () => {
+        console.log("WebSocket 연결 종료");
+      };
+
+      return () => {
+        socket.current.close();
+      };
+    }
+  }, [selectedRoom]);
+
+  // 메시지 전송 함수
   const handleSendMessage = () => {
     if (inputValue.trim() && selectedRoom) {
       const newMessage = {
-        sender: "me",
-        text: inputValue,
-        time: new Date().toISOString(),
+        messageContent: inputValue,
+        messageType: "TEXT",
+        chatRoomId: selectedRoom.chatRoomid, // 메시지에 방 정보 추가
       };
-      const newMessages = sortMessagesByTime([...messages, newMessage]);
-      setMessages(newMessages);
+
+      // 웹 소켓을 통해 메시지 전송
+      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        socket.current.send(JSON.stringify(newMessage));
+      } else {
+        console.error(
+          "WebSocket is not open or not initialized. Current state:",
+          socket.current
+            ? socket.current.readyState
+            : "WebSocket instance is not defined"
+        );
+      }
+      // 입력값 초기화
       setInputValue("");
-      selectedRoom.messages = newMessages;
+
+      // Update last message
+      setLastMessages((prevLastMessages) => ({
+        ...prevLastMessages,
+        [selectedRoom.chatRoomid]: newMessage.messageContent,
+      }));
     }
   };
 
+  // 방 목록 가져오기
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (chatRef.current && !chatRef.current.contains(event.target)) {
-        onClose();
+    const fetchRooms = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}chat/rooms`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setRooms(response.data);
+        const latestMessages = response.data.reduce((acc, room, index) => {
+          acc[room.chatRoomid] = room.latestMessage;
+          return acc;
+        }, {});
+        setLastMessages(latestMessages);
+      } catch (error) {
+        console.error("Failed to fetch rooms:", error);
       }
     };
 
-    if (visible) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+    fetchRooms();
+  }, [token]);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [visible, onClose]);
-
-  const chatMessagesRef = useRef(null);
-
+  // 채팅 메시지 창 자동 스크롤
   useEffect(() => {
-    // 채팅 메시지가 업데이트될 때마다 스크롤을 가장 아래로 이동
-    if (chatMessagesRef.current) {
-      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
-    }
+    const scrollToBottom = () => {
+      if (chatMessagesRef.current) {
+        chatMessagesRef.current.scrollTop =
+          chatMessagesRef.current.scrollHeight;
+      }
+    };
+
+    // 메시지 업데이트 후에 스크롤 처리
+    scrollToBottom();
   }, [messages]);
+
+  // 메시지 시간별 정렬
+  const sortMessagesByTime = (messages) => {
+    return messages.sort((a, b) => new Date(a.sentTime) - new Date(b.sentTime));
+  };
+
+  // 필터된 방 목록 설정
+  const filteredRooms = rooms.filter((room) => {
+    if (currentView === "buyer") {
+      return room.buyerId === parseInt(userId);
+    } else if (currentView === "seller") {
+      return room.sellerId === parseInt(userId);
+    }
+    return false;
+  });
 
   return (
     <ChatContainer visible={visible} ref={chatRef}>
       <RoomList isMinimized={isRoomListMinimized}>
-        <ChatHeader />
+        <ChatListHeader>
+          <ToggleViewButton
+            onClick={() =>
+              setCurrentView(currentView === "buyer" ? "seller" : "buyer")
+            }
+          >
+            {currentView === "buyer" ? "판매" : "구매"}
+          </ToggleViewButton>
+        </ChatListHeader>
 
-        {rooms.map((room, index) => (
+        {filteredRooms.map((room, index) => (
           <RoomItem
             key={index}
             onClick={() => handleRoomClick(room)}
             isSelected={selectedRoom === room}
             isMinimized={isRoomListMinimized}
           >
-            <img src={room.photo} alt={room.name} />
-            {!isRoomListMinimized && (
+            <img
+              src={currentView === "buyer" ? room.buyerPhoto : room.buyerPhoto}
+              alt={" "}
+            />
+            {!isRoomListMinimized ? (
               <div>
-                <RoomName>{room.name}</RoomName>
-                <LastMessage>{getLastMessageText(room.messages)}</LastMessage>
+                <RoomName>
+                  {currentView === "buyer"
+                    ? room.buyerNickname
+                    : room.sellerNickname}
+                </RoomName>
+                <LastMessage>{lastMessages[room.chatRoomid]}</LastMessage>
+              </div>
+            ) : (
+              <div>
+                <RoomName>
+                  {currentView === "buyer"
+                    ? room.buyerNickname
+                    : room.sellerNickname}
+                </RoomName>
               </div>
             )}
           </RoomItem>
@@ -148,28 +219,32 @@ const ChatList = ({ visible, onClose }) => {
         </ChatHeader>
         <ChatMessages ref={chatMessagesRef}>
           {selectedRoom ? (
-            messages.length > 0 ? (
+            messages && messages.length > 0 ? (
               messages.map((message, index) => (
-                <Message key={index} isMe={message.sender === "me"}>
-                  {message.sender !== "me" && (
+                <Message
+                  key={index}
+                  isMe={message.senderId === parseInt(userId)}
+                >
+                  {message.senderId !== parseInt(userId) && (
                     <SenderImage
-                      src={selectedRoom.photo}
-                      alt={selectedRoom.name}
+                      src={
+                        currentView === "buyer"
+                          ? selectedRoom.sellerPhoto
+                          : selectedRoom.buyerPhoto
+                      }
+                      alt={
+                        currentView === "buyer"
+                          ? selectedRoom.sellerNickname
+                          : selectedRoom.buyerNickname
+                      }
                     />
                   )}
-                  {message.sender === "me" && (
-                    <MessageTimeStyle>
-                      <MessageTime time={new Date(message.time)} />
-                    </MessageTimeStyle>
-                  )}
-                  <MessageText isMe={message.sender === "me"}>
-                    {message.text}
+                  <MessageTimeStyle>
+                    <MessageTime time={new Date(message.sentTime)} />
+                  </MessageTimeStyle>
+                  <MessageText isMe={message.senderId === parseInt(userId)}>
+                    {message.message}
                   </MessageText>
-                  {message.sender !== "me" && (
-                    <MessageTimeStyle>
-                      <MessageTime time={new Date(message.time)} />
-                    </MessageTimeStyle>
-                  )}
                 </Message>
               ))
             ) : (
@@ -212,10 +287,13 @@ const ChatContainer = styled.div`
 `;
 
 const RoomList = styled.div`
-  width: ${(props) => (props.isMinimized ? "7%" : "50%")};
+  min-width: ${(props) => (props.isMinimized ? "10%" : "30%")};
+  width: auto;
   display: flex;
   flex-direction: column;
   border-right: 1px solid #ddd;
+  overflow-wrap: break-word;
+  word-break: break-all;
 `;
 
 const RoomItem = styled.div`
@@ -232,15 +310,12 @@ const RoomItem = styled.div`
 
   img {
     border-radius: 50%;
-    margin-right: ${(props) => (props.isMinimized ? "0" : "10px")};
-  }
-
-  div {
-    display: ${(props) => (props.isMinimized ? "none" : "block")};
   }
 `;
 
-const RoomName = styled.div``;
+const RoomName = styled.div`
+  margin-right: 10px;
+`;
 
 const LastMessage = styled.div`
   font-size: 0.8em;
@@ -266,6 +341,18 @@ const ChatBox = styled.div`
 const ChatHeader = styled.div`
   display: flex;
   justify-content: end;
+  align-items: center;
+  padding: 10px;
+  background-color: ${theme.mainColor};
+  color: white;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  height: 25px;
+`;
+
+const ChatListHeader = styled.div`
+  display: flex;
+  justify-content: center;
   align-items: center;
   padding: 10px;
   background-color: ${theme.mainColor};
@@ -336,16 +423,28 @@ const ChatInput = styled.input`
 
 const ToggleButton = styled.button`
   position: absolute;
-  left: ${(props) => (props.isMinimized ? "6%" : "30%")};
-  top: 50%;
+  left: 0;
+  top: 25px;
   transform: translateY(-50%);
   background: transparent;
   border: none;
   color: #ddd;
-  font-size: 1.5rem; // Increase font-size for the arrow icons
+  font-size: 1.5rem;
   cursor: pointer;
 
   &:hover {
     color: #ccc;
+  }
+`;
+
+const ToggleViewButton = styled.button`
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+
+  &:hover {
+    color: #ddd;
   }
 `;
