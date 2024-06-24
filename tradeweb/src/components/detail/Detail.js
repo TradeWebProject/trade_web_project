@@ -80,15 +80,12 @@ const Detail = () => {
           },
         }
       );
-
-      // 요청이 성공적으로 완료되었을 때의 처리
-      console.log("Response:", response.data);
     } catch (error) {
       // 요청이 실패했을 때의 처리
       console.error("Error:", error);
     }
 
-    // setChatVisible(!isChatVisible);
+    setChatVisible(!isChatVisible);
   };
 
   const userInfoClick = () => {
@@ -112,8 +109,6 @@ const Detail = () => {
           },
         }
       );
-
-      console.log("Like request successful:", response.data);
     } catch (error) {
       console.error("Error liking product:", error);
     }
