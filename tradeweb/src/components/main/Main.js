@@ -13,9 +13,11 @@ import axios from "axios";
 const Main = () => {
   const [products, setProducts] = useState([]);
   const [listData, setListData] = useState([]);
+  const [interestListData, setInterestListData] = useState([]);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  //최신 상품
   useEffect(() => {
     const get = async () => {
       await axios
@@ -31,12 +33,33 @@ const Main = () => {
     setProducts(listData.slice(0, 8));
   }, []);
 
+  //로그인 시 관심상품
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    let interest = [];
+
     if (token) {
       setLoggedIn(true);
-      console.log("로그인상태");
+
+      // const decodeToken = jwt_decode(token);
+      // interest = decodeToken.userInterests || [];
+      localStorage.setItem("productId", interest.join(","));
     }
+
+    const getInterest = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_API_URL}product/search?category=${interest[0]}`
+        )
+        .then((response) => {
+          setInterestListData(response.data.products);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getInterest();
+    setProducts(interestListData.slice(0, 8));
   }, []);
 
   return (
@@ -57,12 +80,12 @@ const Main = () => {
         <>
           <ProductListWrapper>
             <ProductListHeader>
-              <ProductListTitle>추천 상품</ProductListTitle>
+              <ProductListTitle>회원님의 관심 상품</ProductListTitle>
               <ShowMoreProducts onClick={() => navigate("/search")}>
                 더 많은 상품보러가기
               </ShowMoreProducts>
             </ProductListHeader>
-            <ProductList products={listData} />
+            <ProductList products={interestListData} />
           </ProductListWrapper>
         </>
       ) : (
