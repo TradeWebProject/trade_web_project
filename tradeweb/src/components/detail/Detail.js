@@ -62,8 +62,33 @@ const Detail = () => {
     fetchData();
   }, []);
 
-  const ChatbuttonOnClick = () => {
-    setChatVisible(!isChatVisible);
+  const ChatbuttonOnClick = async () => {
+    localStorage.setItem("productId", productId);
+
+    try {
+      const apiUrl = `${process.env.REACT_APP_API_URL}chat/rooms`;
+
+      const response = await axios.post(
+        apiUrl,
+        {
+          productId: productId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // 요청이 성공적으로 완료되었을 때의 처리
+      console.log("Response:", response.data);
+    } catch (error) {
+      // 요청이 실패했을 때의 처리
+      console.error("Error:", error);
+    }
+
+    // setChatVisible(!isChatVisible);
   };
 
   const userInfoClick = () => {

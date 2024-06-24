@@ -53,6 +53,7 @@ const Login = () => {
         localStorage.setItem("accessToken", response.data.accessToken);
         localStorage.setItem("email", response.data.userEmail);
         localStorage.setItem("userId", response.data.userId);
+        localStorage.setItem("buyer_id", response.data.userId);
         navigate("/");
         window.location.reload();
       } else {
@@ -61,7 +62,7 @@ const Login = () => {
         form.append("password", formData.password);
         form.append("nickname", formData.nickname);
         form.append("phone", formData.phone);
-        // form.append("userImg", formData.userImg);
+        form.append("userImg", formData.userImg);
         form.append("interests", formData.interests.join(","));
         for (let [key, value] of form.entries()) {
           console.log(key, value);
@@ -96,10 +97,10 @@ const Login = () => {
   };
 
   const handleFileChange = (e) => {
-    // setFormData((prevData) => ({
-    //   ...prevData,
-    //   userImg: e.target.files[0],
-    // }));
+    setFormData((prevData) => ({
+      ...prevData,
+      userImg: e.target.files[0],
+    }));
   };
 
   const handleInterestClick = (e, interest) => {
