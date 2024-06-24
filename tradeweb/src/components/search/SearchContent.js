@@ -25,7 +25,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     Object.entries(selectedFilters).forEach(([filterTitle, options]) => {
       if (options.length > 0) {
         options.forEach((option) => {
-          if (filterTitle == "priceRange") {
+          if (filterTitle === "priceRange") {
             return;
           } else {
             url += `&${filterTitle}=${option}`;
@@ -39,36 +39,6 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     }
     if (maxPrice !== "") {
       url += `&maxPrice=${maxPrice}`;
-      console.log(keyword);
-    }
-    const get = async () => {
-      await axios
-        .get(
-          `${process.env.REACT_APP_API_URL}product/search?keyword=${keyword}`
-        )
-        .then((response) => {
-          console.log("검색", response.data);
-          setListData(response.data.products);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    };
-    get();
-  }, [keyword]);
-
-  // 무한스크롤
-  const loadMore = useCallback(() => {
-    const startIndex = (page - 1) * 8;
-    const endIndex = startIndex + 8;
-
-    const newItems = listData.slice(startIndex, endIndex);
-
-    if (newItems.length === 0) {
-      setHasMore(false);
-    } else {
-      setListData((prev) => [...prev, ...newItems]);
-      setPage((prev) => prev + 1);
     }
 
     return url;
@@ -92,7 +62,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     } finally {
       setLoading(false);
     }
-  }, [buildUrl, page, keyword]);
+  }, [buildUrl, page]);
 
   useEffect(() => {
     fetchData();
@@ -100,7 +70,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
 
   useEffect(() => {
     const handleObserver = (entries) => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && hasMore && !loading) {
         setPage((prevPage) => prevPage + 1);
       }
     };
@@ -111,7 +81,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     return () => {
       if (loader.current) observer.unobserve(loader.current);
     };
-  }, []);
+  }, [hasMore, loading]);
 
   useEffect(() => {
     setPage(1);

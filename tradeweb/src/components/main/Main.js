@@ -13,23 +13,31 @@ import axios from "axios";
 const Main = () => {
   const [products, setProducts] = useState([]);
   const [listData, setListData] = useState([]);
+  const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
+    const get = async () => {
+      await axios
+        .get(`${process.env.REACT_APP_API_URL}product`)
+        .then((response) => {
+          setListData(response.data.products);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    get();
     setProducts(listData.slice(0, 8));
   }, []);
 
-  const get = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API_URL}product`)
-      .then((response) => {
-        setListData(response.data.products);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  get();
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setLoggedIn(true);
+      console.log("로그인상태");
+    }
+  }, []);
 
   return (
     <>
@@ -45,6 +53,21 @@ const Main = () => {
         </ProductListHeader>
         <ProductList products={listData} />
       </ProductListWrapper>
+      {isLoggedIn ? (
+        <>
+          <ProductListWrapper>
+            <ProductListHeader>
+              <ProductListTitle>추천 상품</ProductListTitle>
+              <ShowMoreProducts onClick={() => navigate("/search")}>
+                더 많은 상품보러가기
+              </ShowMoreProducts>
+            </ProductListHeader>
+            <ProductList products={listData} />
+          </ProductListWrapper>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

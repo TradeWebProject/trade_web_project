@@ -6,6 +6,7 @@ import {Box, Tab, Tabs, Button  } from "@mui/material";
 import MyProfile from '../userAccount/MyProfile';
 import UserPayment from '../payment/UserPayment';
 import UserProductSellHistory from '../payment/UserProductSellHistory';
+import MyWishList from '../userAccount/MyWishList';
 
 
 const MyPageManagement = () => {
@@ -29,9 +30,10 @@ const MyPageManagement = () => {
             <Wrapper>
                 <Box sx={{display: 'flex', alignItems: 'flex-start', width: 1230}}>
                     <Tabs value={currentTabIndex} onChange={handleTabChange} variant="fullWidth">
-                        <Tab style={{width: '140px'}} label='마이 프로필' />
+                        <Tab style={{width: '160px'}} label='마이 프로필' />
                         <Tab label='결제 내역' />
                         <Tab label='판매 내역' />
+                        <Tab label='찜 목록' />
                     </Tabs>
                 </Box>
                 {currentTabIndex === 0 && (
@@ -58,6 +60,13 @@ const MyPageManagement = () => {
                             {<UserProductSellHistory/>}
                         </BoxWrapper>
                     </Box>
+                )}
+                {currentTabIndex === 3 && (
+                 <Box sx={{ p: 3 }}>
+                     {
+                         <MyWishList/>
+                     }
+                 </Box>
                 )}
             </Wrapper>
         </ContentLayout>
