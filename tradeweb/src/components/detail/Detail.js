@@ -80,6 +80,7 @@ const Detail = () => {
           },
         }
       );
+      console.log(response.data);
     } catch (error) {
       // 요청이 실패했을 때의 처리
       console.error("Error:", error);
