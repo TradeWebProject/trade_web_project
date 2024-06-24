@@ -17,6 +17,25 @@ const Main = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  function base64UrlDecode(str) {
+    let base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+    let jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  }
+
+  // JWT 디코딩 함수
+  function decodeJWT(token) {
+    const payload = token.split(".")[1];
+    return base64UrlDecode(payload);
+  }
+
   //최신 상품
   useEffect(() => {
     const get = async () => {
@@ -41,9 +60,10 @@ const Main = () => {
     if (token) {
       setLoggedIn(true);
 
-      // const decodeToken = jwt_decode(token);
-      // interest = decodeToken.userInterests || [];
+      const decodedToken = decodeJWT(token);
+      interest = decodedToken.userInterests || [];
       localStorage.setItem("productId", interest.join(","));
+      console.log(interest);
     }
 
     const getInterest = async () => {
@@ -76,7 +96,7 @@ const Main = () => {
         </ProductListHeader>
         <ProductList products={listData} />
       </ProductListWrapper>
-      {isLoggedIn ? (
+      {isLoggedIn && interestListData.length != 0 ? (
         <>
           <ProductListWrapper>
             <ProductListHeader>
