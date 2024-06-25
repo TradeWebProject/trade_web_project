@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { theme } from "../../styles/theme";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaAngleLeft, FaAngleRight, FaShoppingCart } from "react-icons/fa";
 import MessageTime from "./MessageTime";
 
 const ChatList = ({ visible, onClose }) => {
@@ -13,6 +13,7 @@ const ChatList = ({ visible, onClose }) => {
   const [isRoomListMinimized, setIsRoomListMinimized] = useState(false);
   const [currentView, setCurrentView] = useState("buyer");
   const [lastMessages, setLastMessages] = useState({});
+  const [isModalVisible, setIsModalVisible] = useState(false); // 모달 상태 추가
   const chatRef = useRef(null);
   const chatMessagesRef = useRef(null);
   const socket = useRef(null);
@@ -20,13 +21,11 @@ const ChatList = ({ visible, onClose }) => {
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("accessToken");
 
-  // 방 클릭 시 메시지 가져오기
   const handleRoomClick = (room) => {
     setSelectedRoom(room);
     fetchMessages(room.chatRoomid);
   };
 
-  // 해당 방의 메시지 가져오기
   const fetchMessages = async (roomId) => {
     try {
       const response = await axios.get(
@@ -43,7 +42,6 @@ const ChatList = ({ visible, onClose }) => {
     }
   };
 
-  // WebSocket 연결 및 메시지 처리
   useEffect(() => {
     if (selectedRoom) {
       const socketUrl = `${process.env.REACT_APP_CHAT_URL}chat?chatRoomId=${selectedRoom.chatRoomid}&token=${token}`;
@@ -76,18 +74,23 @@ const ChatList = ({ visible, onClose }) => {
     }
   }, [selectedRoom]);
 
-  // 메시지 전송 함수
   const handleSendMessage = () => {
     if (inputValue.trim() && selectedRoom) {
       const newMessage = {
-        messageContent: inputValue,
+        message: inputValue,
         messageType: "TEXT",
-        chatRoomId: selectedRoom.chatRoomid, // 메시지에 방 정보 추가
+        chatRoomId: selectedRoom.chatRoomid,
       };
 
-      // 웹 소켓을 통해 메시지 전송
       if (socket.current && socket.current.readyState === WebSocket.OPEN) {
         socket.current.send(JSON.stringify(newMessage));
+        console.log(`Sent message: ${newMessage.message}`); // 메시지 전송 로그 추가
+        setInputValue(""); // 메시지 입력값 초기화
+
+        setLastMessages((prevLastMessages) => ({
+          ...prevLastMessages,
+          [selectedRoom.chatRoomid]: newMessage.message,
+        }));
       } else {
         console.error(
           "WebSocket is not open or not initialized. Current state:",
@@ -96,18 +99,9 @@ const ChatList = ({ visible, onClose }) => {
             : "WebSocket instance is not defined"
         );
       }
-      // 입력값 초기화
-      setInputValue("");
-
-      // Update last message
-      setLastMessages((prevLastMessages) => ({
-        ...prevLastMessages,
-        [selectedRoom.chatRoomid]: newMessage.messageContent,
-      }));
     }
   };
 
-  // 방 목록 가져오기
   useEffect(() => {
     const fetchRooms = async () => {
       try {
@@ -120,8 +114,7 @@ const ChatList = ({ visible, onClose }) => {
           }
         );
         setRooms(response.data);
-        console.log(response.data);
-        const latestMessages = response.data.reduce((acc, room, index) => {
+        const latestMessages = response.data.reduce((acc, room) => {
           acc[room.chatRoomid] = room.latestMessage;
           return acc;
         }, {});
@@ -134,7 +127,6 @@ const ChatList = ({ visible, onClose }) => {
     fetchRooms();
   }, [token]);
 
-  // 채팅 메시지 창 자동 스크롤
   useEffect(() => {
     const scrollToBottom = () => {
       if (chatMessagesRef.current) {
@@ -143,16 +135,13 @@ const ChatList = ({ visible, onClose }) => {
       }
     };
 
-    // 메시지 업데이트 후에 스크롤 처리
     scrollToBottom();
   }, [messages]);
 
-  // 메시지 시간별 정렬
   const sortMessagesByTime = (messages) => {
     return messages.sort((a, b) => new Date(a.sentTime) - new Date(b.sentTime));
   };
 
-  // 필터된 방 목록 설정
   const filteredRooms = rooms.filter((room) => {
     if (currentView === "buyer") {
       return room.buyerId === parseInt(userId);
@@ -162,9 +151,72 @@ const ChatList = ({ visible, onClose }) => {
     return false;
   });
 
+  const BuyButtonClick = () => {
+    setIsModalVisible(true);
+  };
+
+  const confirmPurchase = async () => {
+    console.log("구매 확인");
+    setIsModalVisible(false);
+
+    // productId를 가져오는 부분 (selectedRoom에 있는 경우)
+    const productId = selectedRoom ? selectedRoom.productId : null;
+
+    if (!productId) {
+      console.error("Product ID is not available.");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}purchase`,
+        { productId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Purchase response:", response.data);
+      sendPurchaseCompleteMessage();
+    } catch (error) {
+      console.error("Failed to complete purchase:", error);
+    }
+  };
+
+  const cancelPurchase = () => {
+    setIsModalVisible(false);
+  };
+
+  const sendPurchaseCompleteMessage = () => {
+    if (selectedRoom) {
+      const purchaseMessage = {
+        senderId: parseInt(userId),
+        message: "구매가 완료되었습니다.",
+        messageType: "TEXT",
+        chatRoomId: selectedRoom.chatRoomid,
+      };
+
+      if (socket.current && socket.current.readyState === WebSocket.OPEN) {
+        socket.current.send(JSON.stringify(purchaseMessage));
+      } else {
+        console.error(
+          "WebSocket is not open or not initialized. Current state:",
+          socket.current
+            ? socket.current.readyState
+            : "WebSocket instance is not defined"
+        );
+      }
+    }
+  };
+
+  const ToggleButtonClick = () => {
+    setIsRoomListMinimized(!isRoomListMinimized);
+  };
+
   return (
     <ChatContainer visible={visible} ref={chatRef}>
-      <RoomList isMinimized={isRoomListMinimized}>
+      <RoomListWrapper isMinimized={isRoomListMinimized}>
         <ChatListHeader>
           <ToggleViewButton
             onClick={() =>
@@ -174,48 +226,48 @@ const ChatList = ({ visible, onClose }) => {
             {currentView === "buyer" ? "구매" : "판매"}
           </ToggleViewButton>
         </ChatListHeader>
-
-        {filteredRooms.map((room, index) => (
-          <RoomItem
-            key={index}
-            onClick={() => handleRoomClick(room)}
-            isSelected={selectedRoom === room}
+        <RoomList>
+          {filteredRooms.map((room, index) => (
+            <RoomItem
+              key={index}
+              onClick={() => handleRoomClick(room)}
+              isSelected={selectedRoom === room}
+              isMinimized={isRoomListMinimized}
+            >
+              <img
+                src={
+                  currentView === "buyer" ? room.sellerImgUrl : room.buyerImgUrl
+                }
+                alt={" "}
+              />
+              {!isRoomListMinimized ? (
+                <div>
+                  <RoomName>
+                    {currentView === "buyer"
+                      ? room.productName
+                      : room.buyerNickname}
+                  </RoomName>
+                  <LastMessage>{lastMessages[room.chatRoomid]}</LastMessage>
+                </div>
+              ) : (
+                <div>
+                  <RoomName>
+                    {currentView === "buyer"
+                      ? room.productName
+                      : room.buyerNickname}
+                  </RoomName>
+                </div>
+              )}
+            </RoomItem>
+          ))}
+          <ToggleButton
+            onClick={ToggleButtonClick}
             isMinimized={isRoomListMinimized}
           >
-            <img
-              src={
-                currentView === "buyer" ? room.sellerImgUrl : room.buyerImgUrl
-              }
-              alt={" "}
-            />
-            {!isRoomListMinimized ? (
-              <div>
-                <RoomName>
-                  {currentView === "buyer"
-                    ? room.sellerNickname
-                    : room.buyerNickname}
-                </RoomName>
-                <LastMessage>{lastMessages[room.chatRoomid]}</LastMessage>
-              </div>
-            ) : (
-              <div>
-                <RoomName>
-                  {currentView === "buyer"
-                    ? room.sellerNickname
-                    : room.buyerNickname}
-                </RoomName>
-              </div>
-            )}
-          </RoomItem>
-        ))}
-        <ToggleButton
-          onClick={() => setIsRoomListMinimized(!isRoomListMinimized)}
-          isMinimized={isRoomListMinimized}
-        >
-          {isRoomListMinimized ? <FaAngleRight /> : <FaAngleLeft />}
-        </ToggleButton>
-      </RoomList>
-
+            {isRoomListMinimized ? <FaAngleRight /> : <FaAngleLeft />}
+          </ToggleButton>
+        </RoomList>
+      </RoomListWrapper>
       <ChatBox>
         <ChatHeader>
           <CloseButton onClick={onClose}>X</CloseButton>
@@ -251,24 +303,38 @@ const ChatList = ({ visible, onClose }) => {
                 </Message>
               ))
             ) : (
-              <div>No messages</div>
+              <div>메시지가 없습니다</div>
             )
           ) : (
-            <div>No messages</div>
+            <div>메시지가 없습니다</div>
           )}
         </ChatMessages>
 
         {selectedRoom && (
           <ChatInputContainer>
+            <IconButton onClick={BuyButtonClick}>
+              <FaShoppingCart />
+            </IconButton>
             <ChatInput
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-              placeholder="Type a message..."
+              placeholder="메시지를 입력하세요..."
             />
           </ChatInputContainer>
         )}
       </ChatBox>
+      {isModalVisible && (
+        <Modal>
+          <ModalContent>
+            <ModalText>구매하시겠습니까?</ModalText>
+            <ButtonContainer>
+              <ConfirmButton onClick={confirmPurchase}>확인</ConfirmButton>
+              <CancelButton onClick={cancelPurchase}>취소</CancelButton>
+            </ButtonContainer>
+          </ModalContent>
+        </Modal>
+      )}
     </ChatContainer>
   );
 };
@@ -289,14 +355,20 @@ const ChatContainer = styled.div`
   display: ${(props) => (props.visible ? "flex" : "none")};
 `;
 
-const RoomList = styled.div`
-  min-width: ${(props) => (props.isMinimized ? "10%" : "30%")};
+const RoomListWrapper = styled.div`
+  min-width: ${(props) => (props.isMinimized ? "10%" : "50%")};
   width: auto;
   display: flex;
   flex-direction: column;
   border-right: 1px solid #ddd;
   overflow-wrap: break-word;
   word-break: break-all;
+  overflow: auto;
+`;
+
+const RoomList = styled.div`
+  border-right: 1px solid #ddd;
+  overflow: auto;
 `;
 
 const RoomItem = styled.div`
@@ -413,15 +485,30 @@ const MessageTimeStyle = styled.span`
 `;
 
 const ChatInputContainer = styled.div`
+  display: flex;
+  align-items: center;
   padding: 10px;
   border-top: 1px solid #ddd;
 `;
 
 const ChatInput = styled.input`
-  width: 100%;
+  flex: 1;
   padding: 10px 0;
   border: 1px solid #ddd;
   border-radius: 5px;
+`;
+
+const IconButton = styled.button`
+  height: 30px;
+  background: transparent;
+  border: none;
+  color: #ddd;
+  font-size: 1.5rem;
+  cursor: pointer;
+
+  &:hover {
+    color: #ccc;
+  }
 `;
 
 const ToggleButton = styled.button`
@@ -449,5 +536,61 @@ const ToggleViewButton = styled.button`
 
   &:hover {
     color: #ddd;
+  }
+`;
+
+const Modal = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+`;
+
+const ModalText = styled.p`
+  margin-bottom: 20px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+const ConfirmButton = styled.button`
+  background-color: ${theme.mainColor};
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${theme.mainColorDark};
+  }
+`;
+
+const CancelButton = styled.button`
+  background-color: grey;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darkgrey;
   }
 `;
