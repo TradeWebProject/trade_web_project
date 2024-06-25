@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import Pagination from '../pagination/Pagination';
 
 const UserProductSellHistory = () => {
     const navigate = useNavigate();
@@ -91,7 +92,7 @@ const UserProductSellHistory = () => {
                                         </tr>
                             })}
                         </Table>
-                        <Pagination class="pagination">
+                        {/* <Pagination class="pagination">
                             <PageButton>&laquo;</PageButton>
                             <PageButton>1</PageButton>
                             <PageButton>2</PageButton>
@@ -100,7 +101,8 @@ const UserProductSellHistory = () => {
                             <PageButton>5</PageButton>
                             <PageButton>6</PageButton>
                             <PageButton>&raquo;</PageButton>
-                        </Pagination>
+                        </Pagination> */}
+                        <Pagination/>
                     </Container>
                     <Container>
                         <Title>판매완료된 상품 목록</Title>
@@ -133,7 +135,7 @@ const UserProductSellHistory = () => {
                         </Table>
                         
                             
-                        <Pagination class="pagination">
+                        {/* <Pagination class="pagination">
                             <PageButton>&laquo;</PageButton>
                             <PageButton>1</PageButton>
                             <PageButton>2</PageButton>
@@ -142,7 +144,8 @@ const UserProductSellHistory = () => {
                             <PageButton>5</PageButton>
                             <PageButton>6</PageButton>
                             <PageButton>&raquo;</PageButton>
-                        </Pagination>
+                        </Pagination> */}
+                        <Pagination/>
                     </Container>
                     {/* <Title>상품판매 현황</Title>
                     <div>
@@ -224,13 +227,13 @@ const TableRowImage = styled.img`
     height: 200px;
 `;
 
-const Pagination = styled.div``;
+// const Pagination = styled.div``;
 
-const PageButton = styled.button`
-    width: 35px;
-    height: 35px;
-    margin-right: 2px;
-    background-color: white;
-    color: black;
-    cursor: pointer;
-`;
+// const PageButton = styled.button`
+//     width: 35px;
+//     height: 35px;
+//     margin-right: 2px;
+//     background-color: white;
+//     color: black;
+//     cursor: pointer;
+// `;
