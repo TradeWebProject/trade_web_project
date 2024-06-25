@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
-import SellerInfo from "./SellerInfo";
 import { theme } from "../../styles/theme";
 import { MdStar } from "react-icons/md";
 import { useParams } from "react-router-dom";
@@ -47,16 +46,48 @@ const Review = () => {
   const averageRating = getAverageRating(reviews);
   const totalReviews = reviews.length;
   const { productId, productName } = useParams();
+  const token = localStorage.getItem("accessToken");
+  const [sellerInfo, setSellerInfo] = useState({});
 
   const fetchReviews = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}reviews/product/${productId}`
+      const reviewResponse = await axios.get(
+        `${process.env.REACT_APP_API_URL}reviews/product/${productId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
-      setReviews(response.data);
+      const reviews = reviewResponse.data;
+      setReviews(reviews);
       console.log(reviews);
+
+      const sellerId = reviews?.[0]?.sellerId;
+
+      if (sellerId) {
+        const sellerResponse = await axios.get(
+          `${process.env.REACT_APP_API_URL}reviews/seller/${sellerId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const sellerData = sellerResponse.data;
+        setSellerInfo({
+          sellerImage: sellerData.sellerProfileImageUrl,
+          sellerName: sellerData.sellerNickname,
+          productCount: sellerData.totalSales,
+          averageRating: sellerData.averageRating,
+          ratedCount: sellerData.totalReviews,
+        });
+        console.log(sellerData);
+      } else {
+        console.warn("No sellerId found in reviews.");
+      }
     } catch (error) {
-      console.error("Error fetching reviews:", error);
+      console.error("Error fetching reviews or seller data:", error);
     }
   };
 
@@ -73,7 +104,13 @@ const Review = () => {
 
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}reviews?productId=${productId}&reviewContent=${reviewContent}&rating=${rating}&title=${productName}`
+        `${process.env.REACT_APP_API_URL}reviews?productId=${productId}&reviewContent=${reviewContent}&rating=${rating}&title=${productName}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       console.log("Review submitted successfully:", response.data);
     } catch (error) {
@@ -89,16 +126,10 @@ const Review = () => {
     return result;
   };
 
-  const array = [0, 1, 2, 3, 4];
-
-  const reviewData = [
-    // ... 기존 리뷰 데이터 ...
-  ];
-
   const loadMore = useCallback(() => {
     const startIndex = (page - 1) * 5;
     const endIndex = startIndex + 5;
-    const newReviews = reviewData.slice(startIndex, endIndex);
+    const newReviews = reviews.slice(startIndex, endIndex);
 
     if (newReviews.length === 0) {
       setHasMore(false);
@@ -106,11 +137,10 @@ const Review = () => {
       setListData((prev) => [...prev, ...newReviews]);
       setPage((prev) => prev + 1);
     }
-  }, [page]);
+  }, [page, reviews]);
 
   useEffect(() => {
     fetchReviews();
-    loadMore();
   }, []);
 
   useEffect(() => {
@@ -141,7 +171,19 @@ const Review = () => {
   return (
     <Wrapper>
       <SellerContainer>
-        <SellerInfo />
+        <SellerWrapper>
+          <SellerImage
+            src={sellerInfo.sellerImage}
+            alt={sellerInfo.sellerName}
+          />
+          <div>
+            <SellerName>{sellerInfo.sellerName}</SellerName>
+            <SellerRating>
+              {renderStars(sellerInfo.averageRating)} ({sellerInfo.ratedCount})
+            </SellerRating>
+            <ProductCount>{sellerInfo.productCount} products</ProductCount>
+          </div>
+        </SellerWrapper>
       </SellerContainer>
       <ReviewWrapper>
         {isPurchased ? (
@@ -149,7 +191,7 @@ const Review = () => {
             <ReviewIconWrapper>
               <div>별점을 선택해주세요.</div>
               <div>
-                {array.map((el, index) => (
+                {[0, 1, 2, 3, 4].map((el, index) => (
                   <span key={index} onClick={() => starScore(index)}>
                     {isClicked[index] ? (
                       <MdStar color="#FFC83D" />
@@ -200,11 +242,11 @@ const Review = () => {
               <ReviewItem>
                 <UserImage src={review.userImage} alt={review.userName} />
                 <ReviewContent>
+                  <StarContainer>{renderStars(review.rating)}</StarContainer>
                   <UserName>{review.userName}</UserName>
                   <ReviewDate>{review.date}</ReviewDate>
-                  <ProductName>{review.productName}</ProductName>
-                  <ReviewText>{review.content}</ReviewText>
-                  <StarContainer>{renderStars(review.rating)}</StarContainer>
+                  <ProductName>{review.reviewTitle}</ProductName>
+                  <ReviewText>{review.reviewContent}</ReviewText>
                 </ReviewContent>
               </ReviewItem>
               <Divider />
@@ -212,6 +254,7 @@ const Review = () => {
           ))}
         </ReviewContainer>
       </ReviewWrapper>
+      <div ref={loader} />
     </Wrapper>
   );
 };
@@ -227,6 +270,7 @@ const Wrapper = styled.div`
 const SellerContainer = styled.div`
   width: 250px;
 `;
+
 const ReviewContainer = styled.div`
   width: 700px;
   margin-top: 20px;
@@ -396,4 +440,32 @@ const Icon = styled.span`
   font-size: 25px;
   margin-right: 5px;
   cursor: pointer;
+`;
+
+const SellerWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 130px;
+`;
+
+const SellerImage = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-right: 10px;
+`;
+
+const SellerName = styled.div`
+  font-weight: bold;
+`;
+
+const SellerRating = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+`;
+
+const ProductCount = styled.div`
+  margin-top: 5px;
 `;
