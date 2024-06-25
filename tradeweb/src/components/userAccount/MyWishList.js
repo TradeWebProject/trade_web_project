@@ -1,82 +1,34 @@
-import React from 'react';
+import React, {useEffect,  useState} from 'react';
 import styled from "styled-components";
+import axios from "axios";
 import plus from "../../assets/plus.svg";
 import {Box } from "@mui/material";
 
 const MyWishList = () => {
-    const data = [
-        {
-          files: plus,
-          title: "나이키 신발",
-          price: 240000,
-          description: "나이키 운동화 사이즈 300",
-          productId: 1,
-        },
-        {
-          files: plus,
-          title: "아디다스 신발",
-          price: 340000,
-          description: "아디다스 삼선 슬리퍼 사이즈260",
-          productId: 2,
-        },
-        {
-          files: plus,
-          title: "닥터마틴 로퍼",
-          price: 270000,
-          description: "닥터마틴 로퍼 사이즈 270",
-          productId: 3,
-        },
-        {
-          files: plus,
-          title: "흰색 셔츠",
-          price: 20000,
-          description: "미개봉 흰색 셔츠",
-          productId: 4,
-        },
-        {
-            files: plus,
-            title: "나이키 신발",
-            price: 240000,
-            description: "나이키 운동화 사이즈 300",
-            productId: 1,
-          },
-          {
-            files: plus,
-            title: "아디다스 신발",
-            price: 340000,
-            description: "아디다스 삼선 슬리퍼 사이즈260",
-            productId: 2,
-          },
-          {
-            files: plus,
-            title: "닥터마틴 로퍼",
-            price: 270000,
-            description: "닥터마틴 로퍼 사이즈 270",
-            productId: 3,
-          },
-          {
-            files: plus,
-            title: "흰색 셔츠",
-            price: 20000,
-            description: "미개봉 흰색 셔츠",
-            productId: 4,
-          },
-          {
-            files: plus,
-            title: "닥터마틴 로퍼",
-            price: 270000,
-            description: "닥터마틴 로퍼 사이즈 270",
-            productId: 3,
-          },
-          {
-            files: plus,
-            title: "흰색 셔츠",
-            price: 20000,
-            description: "미개봉 흰색 셔츠",
-            productId: 4,
-          },
-    ];
+    const [responseData, setResponseData] = useState([]);
+    const token = localStorage.getItem("accessToken");
+    const userId = localStorage.getItem("userId");
 
+    useEffect(() => {
+        async function get() {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}likes/user/${userId}`, {
+                    headers: {
+                        'Content-Type': "multipart/form-data",
+                        'Authorization': `Bearer ${token}`,
+                    }
+                });
+                console.log("응답 데이터:", response.data.products);
+                setResponseData(response.data.products)
+               
+            } catch (error) {
+                console.error("요청 실패:", error);
+            }
+        };
+        if (userId && token) {
+            get();
+        }
+    }, [userId, token]); 
 
 
 
@@ -86,13 +38,12 @@ const MyWishList = () => {
             <Container>
                 <Title>찜목록</Title>
                 <SearchResultList>
-                    {data.map((product) => (
+                    {responseData.map((product) => (
                         <SearchItem key={product.productId}>
                             <ItemImageBox>
-                                <ItemImage src={product.files} alt={product.title} />
+                                <ItemImage src={`${process.env.REACT_APP_IMAGE_URL}${product.imageUrl}`} alt={product.productName} />
                             </ItemImageBox>
-                            <ItemTitle>{product.title}</ItemTitle>
-                            <ItemInfo>{product.description}</ItemInfo>
+                            <ItemTitle>{product.productName}</ItemTitle>
                             <ItemPrice>
                                 {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                             </ItemPrice>
@@ -100,16 +51,7 @@ const MyWishList = () => {
                         </SearchItem>
                     ))}
                 </SearchResultList>
-                <Pagination>
-                    <PageButton>&laquo;</PageButton>
-                    <PageButton>1</PageButton>
-                    <PageButton>2</PageButton>
-                    <PageButton>3</PageButton>
-                    <PageButton>4</PageButton>
-                    <PageButton>5</PageButton>
-                    <PageButton>6</PageButton>
-                    <PageButton>&raquo;</PageButton>
-                </Pagination>
+              
             </Container>
         </Box>
     );
@@ -133,10 +75,10 @@ const Title  = styled.div`
 
 
 const SearchResultList = styled.div`
-    display: grid;
+    display: flex;
     row-gap: 40px;
     column-gap: 20px;
-    grid-template-columns: 150px 150px 150px 150px 120px;
+    // grid-template-columns: 150px 150px 150px 150px 120px;
 `;
 
 const SearchItem = styled.div`
@@ -148,7 +90,8 @@ const ItemImageBox = styled.div`
     background-color: rgb(244, 244, 244);
 `;
 const ItemImage = styled.img`
-    width: 120px;
+    width: 200px;
+    height:200px;
 `;
 
 const ItemTitle = styled.div`
@@ -179,4 +122,20 @@ const PageButton = styled.button`
     background-color: black;
     color: white;
     cursor: pointer;
+`;
+
+const InterestsWrapper = styled.div`
+    width: 644px;
+    height: 40px;
+    dispaly: flex;
+`;
+
+const Interest = styled.div`
+    width: 50px;
+    height: 20px;
+    border-radius: 40px;
+    background-color: white;
+    color: black;
+    border: 1px solid #D1D4D8;
+    text-align: center;
 `;
