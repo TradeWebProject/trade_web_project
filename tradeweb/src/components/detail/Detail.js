@@ -62,7 +62,30 @@ const Detail = () => {
     fetchData();
   }, []);
 
-  const ChatbuttonOnClick = () => {
+  const ChatbuttonOnClick = async () => {
+    localStorage.setItem("productId", productId);
+
+    try {
+      const apiUrl = `${process.env.REACT_APP_API_URL}chat/rooms`;
+
+      const response = await axios.post(
+        apiUrl,
+        {
+          productId: productId,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      // 요청이 실패했을 때의 처리
+      console.error("Error:", error);
+    }
+
+
     setChatVisible(!isChatVisible);
   };
 
@@ -87,8 +110,6 @@ const Detail = () => {
           },
         }
       );
-
-      console.log("Like request successful:", response.data);
     } catch (error) {
       console.error("Error liking product:", error);
     }
@@ -100,6 +121,7 @@ const Detail = () => {
 
   const {
     imagePathUrl,
+    thumbnailUrl,
     description,
     userNickName,
     productName,
@@ -121,12 +143,12 @@ const Detail = () => {
         <Imagewrraper>
           {" "}
           <MainImage
-            src={`${process.env.REACT_APP_IMAGE_URL}${data.imagePathUrl}`}
+            src={`${process.env.REACT_APP_IMAGE_URL}${data.thumbnailUrl}`}
             alt="Main Image"
           />
         </Imagewrraper>
 
-        <Description>{description}</Description>
+        <Description dangerouslySetInnerHTML={{ __html: data.description }} />
         <div ref={loader}></div>
       </Section>
       <Section>
