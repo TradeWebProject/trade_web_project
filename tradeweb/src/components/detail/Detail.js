@@ -86,6 +86,7 @@ const Detail = () => {
       console.error("Error:", error);
     }
 
+
     setChatVisible(!isChatVisible);
   };
 
