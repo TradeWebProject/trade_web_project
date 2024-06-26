@@ -80,14 +80,12 @@ const Detail = () => {
           },
         }
       );
-      console.log(response.data);
+
+      setChatVisible(!isChatVisible);
     } catch (error) {
       // 요청이 실패했을 때의 처리
       console.error("Error:", error);
     }
-
-
-    setChatVisible(!isChatVisible);
   };
 
   const userInfoClick = () => {
@@ -194,7 +192,11 @@ const Detail = () => {
           </Buttons>
         </ProductInfo>
       </Section>
-      <ChatList visible={isChatVisible} onClose={closeChat} />
+      <ChatList
+        visible={isChatVisible}
+        onClose={closeChat}
+        productName={productName}
+      />
     </Wrapper>
   );
 };

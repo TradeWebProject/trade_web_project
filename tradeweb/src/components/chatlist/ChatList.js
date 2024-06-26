@@ -5,7 +5,7 @@ import { theme } from "../../styles/theme";
 import { FaAngleLeft, FaAngleRight, FaShoppingCart } from "react-icons/fa";
 import MessageTime from "./MessageTime";
 
-const ChatList = ({ visible, onClose }) => {
+const ChatList = ({ visible, onClose, productName }) => {
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -125,7 +125,7 @@ const ChatList = ({ visible, onClose }) => {
     };
 
     fetchRooms();
-  }, [token]);
+  }, [token, visible]);
 
   useEffect(() => {
     const scrollToBottom = () => {
@@ -153,6 +153,7 @@ const ChatList = ({ visible, onClose }) => {
 
   const BuyButtonClick = () => {
     setIsModalVisible(true);
+    localStorage.setItem("productId", selectedRoom.productId);
   };
 
   const confirmPurchase = async () => {
@@ -325,7 +326,8 @@ const ChatList = ({ visible, onClose }) => {
       {isModalVisible && (
         <Modal>
           <ModalContent>
-            <ModalText>구매하시겠습니까?</ModalText>
+            <ModalText>{productName}을(를) 구매하시겠습니까?</ModalText>
+
             <ButtonContainer>
               <ConfirmButton onClick={confirmPurchase}>확인</ConfirmButton>
               <CancelButton onClick={cancelPurchase}>취소</CancelButton>

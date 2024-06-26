@@ -50,19 +50,18 @@ const Nav = () => {
             email,
           }
         );
-        localStorage.removeItem("email");
         localStorage.removeItem("accessToken");
-        navigate("/"); // 로그아웃 후 메인 페이지로 이동
-        window.location.reload(); // 페이지 새로고침
+        localStorage.removeItem("email");
+        localStorage.removeItem("userId");
+        localStorage.removeItem("buyer_id");
+        navigate("/");
+        window.location.reload();
       } catch (error) {
         if (error.response) {
-          // 서버가 응답한 경우
           console.error("로그아웃 실패:", error.response.data);
         } else if (error.request) {
-          // 요청이 만들어졌으나 응답을 받지 못한 경우
           console.error("요청이 만들어졌으나 응답을 받지 못함:", error.request);
         } else {
-          // 요청을 보내는 동안 다른 오류가 발생한 경우
           console.error("로그아웃 요청 설정 오류:", error.message);
         }
       }
