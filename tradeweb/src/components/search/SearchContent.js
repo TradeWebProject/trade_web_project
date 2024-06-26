@@ -1,4 +1,4 @@
-import React, { lazy, useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import close from "../../assets/close.svg";
 import ProductList from "./ProductList";
@@ -9,8 +9,6 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
   const loader = useRef(null);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -85,7 +83,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   useEffect(() => {
     setPage(1);
     fetchData();
-  }, [selectedFilters, minPrice, maxPrice]);
+  }, [selectedFilters]);
 
   return (
     <>

@@ -37,16 +37,20 @@ const Main = () => {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     const interest = localStorage.getItem("interest").split(",");
+    let randomValue = Math.random();
+    let int = 0;
 
     if (token) {
       setLoggedIn(true);
-      console.log(interest);
+      let length = interest.length;
+      int = Math.floor(randomValue * length);
+      console.log(int);
     }
 
     const getInterest = async () => {
       await axios
         .get(
-          `${process.env.REACT_APP_API_URL}product/search?category=${interest[0]}`
+          `${process.env.REACT_APP_API_URL}product/search?category=${interest[int]}`
         )
         .then((response) => {
           setInterestListData(response.data.products);
