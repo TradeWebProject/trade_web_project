@@ -17,6 +17,7 @@ const Main = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+
   //최신 상품
   useEffect(() => {
     const get = async () => {

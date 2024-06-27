@@ -24,9 +24,23 @@ const SearchResult = () => {
     });
   };
 
-  const handleFilterRemove = (filterTitle, option) => {
+  // const handleFilterRemove = (filterTitle, option) => {
+  //   setSelectedFilters((prev) => {
+  //     const newFilters = { ...prev };
+  //     newFilters[filterTitle] = newFilters[filterTitle].filter(
+  //       (item) => item !== option
+  //     );
+  //     if (newFilters[filterTitle].length === 0) {
+  //       delete newFilters[filterTitle];
+  //     }
+  //     return newFilters;
+  //   });
+  // };
+
+  const handleFilterRemove = (filterTitle) => {
     setSelectedFilters((prev) => {
       const newFilters = { ...prev };
+
       if (option) {
         newFilters[filterTitle] = newFilters[filterTitle].filter(
           (item) => item !== option

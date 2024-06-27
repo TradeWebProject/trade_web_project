@@ -120,6 +120,7 @@ const ChatList = ({ visible, onClose }) => {
           }
         );
         setRooms(response.data);
+        console.log(response.data);
         const latestMessages = response.data.reduce((acc, room, index) => {
           acc[room.chatRoomid] = room.latestMessage;
           return acc;
@@ -170,7 +171,7 @@ const ChatList = ({ visible, onClose }) => {
               setCurrentView(currentView === "buyer" ? "seller" : "buyer")
             }
           >
-            {currentView === "buyer" ? "판매" : "구매"}
+            {currentView === "buyer" ? "구매" : "판매"}
           </ToggleViewButton>
         </ChatListHeader>
 
@@ -182,15 +183,17 @@ const ChatList = ({ visible, onClose }) => {
             isMinimized={isRoomListMinimized}
           >
             <img
-              src={currentView === "buyer" ? room.buyerPhoto : room.buyerPhoto}
+              src={
+                currentView === "buyer" ? room.sellerImgUrl : room.buyerImgUrl
+              }
               alt={" "}
             />
             {!isRoomListMinimized ? (
               <div>
                 <RoomName>
                   {currentView === "buyer"
-                    ? room.buyerNickname
-                    : room.sellerNickname}
+                    ? room.sellerNickname
+                    : room.buyerNickname}
                 </RoomName>
                 <LastMessage>{lastMessages[room.chatRoomid]}</LastMessage>
               </div>
@@ -198,8 +201,8 @@ const ChatList = ({ visible, onClose }) => {
               <div>
                 <RoomName>
                   {currentView === "buyer"
-                    ? room.buyerNickname
-                    : room.sellerNickname}
+                    ? room.sellerNickname
+                    : room.buyerNickname}
                 </RoomName>
               </div>
             )}
@@ -229,13 +232,13 @@ const ChatList = ({ visible, onClose }) => {
                     <SenderImage
                       src={
                         currentView === "buyer"
-                          ? selectedRoom.sellerPhoto
-                          : selectedRoom.buyerPhoto
+                          ? selectedRoom.sellerImgUrl
+                          : selectedRoom.buyerImgUrl
                       }
                       alt={
                         currentView === "buyer"
-                          ? selectedRoom.sellerNickname
-                          : selectedRoom.buyerNickname
+                          ? selectedRoom.sellerImgUrl
+                          : selectedRoom.buyerImgUrl
                       }
                     />
                   )}

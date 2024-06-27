@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { lazy, useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import close from "../../assets/close.svg";
 import ProductList from "./ProductList";
@@ -84,6 +84,7 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     setPage(1);
     fetchData();
   }, [selectedFilters]);
+
 
   return (
     <>
