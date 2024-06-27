@@ -10,7 +10,7 @@ const filters = [
     title: "카테고리",
     filterTitle: "category",
     options: [
-      "전자제품",
+      "전자기기",
       "의류",
       "가전",
       "문구",
@@ -27,7 +27,7 @@ const filters = [
   },
 ];
 
-const SearchFilter = ({ selectedFilters, onFilterChange, onPriceChange }) => {
+const SearchFilter = ({ selectedFilters, onFilterChange, onFilterRemove }) => {
   const [openFilters, setOpenFilters] = useState({});
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -56,14 +56,13 @@ const SearchFilter = ({ selectedFilters, onFilterChange, onPriceChange }) => {
   };
 
   const handlePriceChange = () => {
-    if (minPrice <= maxPrice) {
-      onFilterChange("priceRange", `${minPrice}원 ~ ${maxPrice}원`);
-      onFilterChange("minPrice", minPrice);
-      onFilterChange("maxPrice", maxPrice);
+    onFilterRemove("priceRange"); // 가격 필터 초기화
+    if (parseInt(minPrice) <= parseInt(maxPrice)) {
+      onFilterChange("priceRange", minPrice);
+      onFilterChange("priceRange", maxPrice);
     } else {
       setMinPrice("");
       setMaxPrice("");
-      onPriceChange(minPrice, maxPrice);
     }
   };
 

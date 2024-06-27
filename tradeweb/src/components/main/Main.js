@@ -13,9 +13,30 @@ import axios from "axios";
 const Main = () => {
   const [products, setProducts] = useState([]);
   const [listData, setListData] = useState([]);
+  const [interestListData, setInterestListData] = useState([]);
   const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
+  function base64UrlDecode(str) {
+    let base64 = str.replace(/-/g, "+").replace(/_/g, "/");
+    let jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
+    return JSON.parse(jsonPayload);
+  }
+
+  // JWT 디코딩 함수
+  function decodeJWT(token) {
+    const payload = token.split(".")[1];
+    return base64UrlDecode(payload);
+  }
+
+  //최신 상품
   useEffect(() => {
     const get = async () => {
       await axios
@@ -31,12 +52,34 @@ const Main = () => {
     setProducts(listData.slice(0, 8));
   }, []);
 
+  //로그인 시 관심상품
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
+    let interest = [];
+
     if (token) {
       setLoggedIn(true);
-      console.log("로그인상태");
+
+      const decodedToken = decodeJWT(token);
+      interest = decodedToken.userInterests || [];
+      localStorage.setItem("productId", interest.join(","));
+      console.log(interest);
     }
+
+    const getInterest = async () => {
+      await axios
+        .get(
+          `${process.env.REACT_APP_API_URL}product/search?category=${interest[0]}`
+        )
+        .then((response) => {
+          setInterestListData(response.data.products);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    };
+    getInterest();
+    setProducts(interestListData.slice(0, 8));
   }, []);
 
   return (
@@ -53,16 +96,16 @@ const Main = () => {
         </ProductListHeader>
         <ProductList products={listData} />
       </ProductListWrapper>
-      {isLoggedIn ? (
+      {isLoggedIn && interestListData.length != 0 ? (
         <>
           <ProductListWrapper>
             <ProductListHeader>
-              <ProductListTitle>추천 상품</ProductListTitle>
+              <ProductListTitle>회원님의 관심 상품</ProductListTitle>
               <ShowMoreProducts onClick={() => navigate("/search")}>
                 더 많은 상품보러가기
               </ShowMoreProducts>
             </ProductListHeader>
-            <ProductList products={listData} />
+            <ProductList products={interestListData} />
           </ProductListWrapper>
         </>
       ) : (

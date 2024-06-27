@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { lazy, useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import close from "../../assets/close.svg";
 import ProductList from "./ProductList";
@@ -24,8 +24,14 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
 
     Object.entries(selectedFilters).forEach(([filterTitle, options]) => {
       if (options.length > 0) {
+        let price = [];
         options.forEach((option) => {
           if (filterTitle === "priceRange") {
+            price.push(option);
+            if (price.length >= 2) {
+              url += `&minPrice=${price[0]}&maxPrice=${price[1]}`;
+            }
+
             return;
           } else {
             url += `&${filterTitle}=${option}`;
@@ -34,15 +40,8 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
       }
     });
 
-    if (minPrice !== "") {
-      url += `&minPrice=${minPrice}`;
-    }
-    if (maxPrice !== "") {
-      url += `&maxPrice=${maxPrice}`;
-    }
-
     return url;
-  }, [keyword, page, selectedFilters, minPrice, maxPrice]);
+  }, [keyword, page, selectedFilters]);
 
   const fetchData = useCallback(async () => {
     try {
@@ -88,36 +87,35 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     fetchData();
   }, [selectedFilters, minPrice, maxPrice]);
 
-  const handlePriceFilterRemove = () => {
-    setMinPrice("");
-    setMaxPrice("");
-    setPage(1);
-    fetchData();
-  };
-
   return (
     <>
       <Container>
         <SearchKeyword>{keyword} 에 대한 검색 결과</SearchKeyword>
         <SelectedFilters>
           {Object.entries(selectedFilters).map(([filterTitle, options]) =>
-            options.map((option) => (
-              <FilterTag key={`${filterTitle}-${option}`}>
-                {option}
-                &nbsp;
-                <CloseButton
-                  src={close}
-                  onClick={() => onFilterRemove(filterTitle, option)}
-                />
-              </FilterTag>
-            ))
-          )}
-          {minPrice && maxPrice && (
-            <FilterTag key={`${minPrice} ~ ${maxPrice}원`}>
-              {`${minPrice} ~ ${maxPrice}원`}
-              &nbsp;
-              <CloseButton src={close} onClick={handlePriceFilterRemove} />
-            </FilterTag>
+            options.map((option) =>
+              filterTitle !== "priceRange" ? (
+                <FilterTag key={`${filterTitle}-${option}`}>
+                  {option}
+                  &nbsp;
+                  <CloseButton
+                    src={close}
+                    onClick={() => onFilterRemove(filterTitle, option)}
+                  />
+                </FilterTag>
+              ) : (
+                <>
+                  <FilterTag key={`${filterTitle}-${option}`}>
+                    {`${option} 원`}
+                    &nbsp;
+                    <CloseButton
+                      src={close}
+                      onClick={() => onFilterRemove(filterTitle, option)}
+                    />
+                  </FilterTag>
+                </>
+              )
+            )
           )}
         </SelectedFilters>
         {loading && <LoadingMessage>로딩 중...</LoadingMessage>}
