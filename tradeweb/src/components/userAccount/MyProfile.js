@@ -74,6 +74,7 @@ const MyProfile = () => {
     };
 
     const handleImageChange = (e) => {
+        setImageUpdateStatus(true);
         setFormData((prevData) => ({
             ...prevData,
             userImg: e.target.files[0],

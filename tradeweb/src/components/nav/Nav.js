@@ -72,16 +72,15 @@ const Nav = () => {
     navigate("/login");
   };
 
+  const handleMypage = () => {
+    navigate("/my-page");
+  };
+
   return (
     <Container>
       <Wrapper>
         <Title onClick={() => navigate("/")}>Super24</Title>
         <ButtonWrapper>
-          {isLoggedIn ? (
-            <LogoutButton onClick={handleLogout}>LOGOUT</LogoutButton>
-          ) : (
-            <AuthButton onClick={handleLogin}>LOGIN</AuthButton>
-          )}
           <SearchButton>
             <SearchImg src={search} onClick={handleSearchButton} />
             <CSSTransition
@@ -100,6 +99,14 @@ const Nav = () => {
               </SearchInputAnimation>
             </CSSTransition>
           </SearchButton>
+          {isLoggedIn ? (
+            <>
+              <MypageButton onClick={handleMypage}>Mypage</MypageButton>
+              <LogoutButton onClick={handleLogout}>LOGOUT</LogoutButton>
+            </>
+          ) : (
+            <AuthButton onClick={handleLogin}>LOGIN</AuthButton>
+          )}
         </ButtonWrapper>
       </Wrapper>
     </Container>
@@ -153,6 +160,7 @@ const AuthButton = styled.div`
 `;
 
 const LogoutButton = styled(AuthButton)``;
+const MypageButton = styled(AuthButton)``;
 
 const SearchImg = styled.img`
   width: 25px;

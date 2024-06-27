@@ -72,7 +72,7 @@ const UserPayment = () => {
                     <TableTd>결제완료</TableTd>
                 </tr>
                 </Table>
-                <Pagination class="pagination">
+                {/* <Pagination class="pagination">
                     <PageButton>&laquo;</PageButton>
                     <PageButton>1</PageButton>
                     <PageButton>2</PageButton>
@@ -81,7 +81,8 @@ const UserPayment = () => {
                     <PageButton>5</PageButton>
                     <PageButton>6</PageButton>
                     <PageButton>&raquo;</PageButton>
-                </Pagination>
+                </Pagination> */}
+                <Pagination/>
             </Container>
             <Container>
                 <Title>내가 작성한 리뷰</Title>
@@ -164,16 +165,7 @@ const UserPayment = () => {
                     <TableTd>2024.05.06</TableTd>
                 </tr>
                 </Table>
-                <Pagination class="pagination">
-                    <PageButton>&laquo;</PageButton>
-                    <PageButton>1</PageButton>
-                    <PageButton>2</PageButton>
-                    <PageButton>3</PageButton>
-                    <PageButton>4</PageButton>
-                    <PageButton>5</PageButton>
-                    <PageButton>6</PageButton>
-                    <PageButton>&raquo;</PageButton>
-                </Pagination>
+                <Pagination/>
             </Container>
         </>
     );

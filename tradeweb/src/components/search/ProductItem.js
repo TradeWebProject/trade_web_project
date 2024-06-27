@@ -18,7 +18,7 @@ const ProductItem = ({ product }) => {
         />
       </ItemImageBox>
       <ItemTitle>{product.productName}</ItemTitle>
-      <ItemInfo>설명</ItemInfo>
+
       <ItemPrice>
         {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
       </ItemPrice>
@@ -48,10 +48,8 @@ const ItemImage = styled.img`
   object-fit: contain;
 `;
 
-const ItemTitle = styled.strong``;
-
-const ItemInfo = styled.div`
-  font-size: 14px;
+const ItemTitle = styled.div`
+  font-weight: bold;
   margin-bottom: 10px;
 `;
 

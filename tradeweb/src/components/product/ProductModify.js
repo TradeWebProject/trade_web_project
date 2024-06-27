@@ -48,8 +48,8 @@ const ProductModify = () => {
     const [UpdatedFiles, setUpdatedFiles]= useState([]);
     const [hasFile, setHasFile] = useState(false);
     const [serverFileLength, setServerFileLength] = useState(0);
-    let newRawFiles = [];
     let prevFilesLength = 0;
+    let newRawFiles = []; // 새로운 인코딩되지 않은 원본 파일을 저장하는 배열
     // ${process.env.REACT_APP_IMAGE_URL}${produtData.thumbnailUrl};
     
     const token = localStorage.getItem("accessToken");
@@ -147,7 +147,7 @@ const ProductModify = () => {
         const maxSize = 10 * 1024 * 1024; // 10MB
 
         const formData = new FormData();
-        const newRawFiles = []; // 새로운 인코딩되지 않은 원본 파일을 저장하는 배열
+        // const newRawFiles = []; // 새로운 인코딩되지 않은 원본 파일을 저장하는 배열
 
         for (let i = 0; i < files.length; i++) {
             let file = files[i];
@@ -189,20 +189,6 @@ const ProductModify = () => {
         });
     });
 
-    // let fileURLs = [];    
-
-
-
-    // for (let i = filesArray.length; i < newRawFiles.length; i++) {
-    //     let file = newRawFiles[i];
-    //     let reader = new FileReader();
-    //     reader.onload = () => {
-    //         fileURLs[i] = reader.result;
-    //         setFilesArray([...fileURLs]);
-    //     };
-    //     reader.readAsDataURL(file);
-    // }
-
     Promise.all(promises)
       .then((results) => {
         setFilesArray((prevfiles) => {
@@ -226,9 +212,6 @@ const ProductModify = () => {
 
        
        const renderfiles = () => {
-        //    if (newRawFiles.length > 0) {
-        //     console.log("newrawFiles.length: ", newRawFiles.length);
-        //    }
            
            console.log("filesArray: " , filesArray);
            console.log("filesArray.length: " , filesArray.length);
@@ -244,21 +227,15 @@ const ProductModify = () => {
       };
 
       const handleDeleteImage = (index) => {
-        const newFiles = [...inputs.files];
+        const newFiles = [...filesArray];
+        console.log("1. : " + newFiles);
         const newRawFiles = [...rawFiles]; // rawFiles 복사
         newFiles.splice(index, 1); // 파일 삭제
+        console.log(newFiles);
         newRawFiles.splice(index, 1); // rawFiles에서도 삭제
         setFilesArray(newFiles); // 파일 상태 업데이트
-        setRawFiles(newRawFiles); // rawFiles 상태 업데이트
+        setUpdatedFiles(newRawFiles); // rawFiles 상태 업데이트
       };
-
-
-    //   const changeHasFile = (hasFile) => {
-    //        return setHasFile(!hasFile);
-    //   }
-
-
-
 
       const onClickCancelButton = () => {
         navigate("/my-page");
