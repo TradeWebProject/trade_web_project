@@ -77,7 +77,7 @@ const Login = () => {
             },
           }
         );
-        toggleToLogin(); // 회원가입 성공 시 로그인 탭으로 전환
+        toggleToLogin();
       }
       console.log("응답 데이터:", response.data);
     } catch (error) {
