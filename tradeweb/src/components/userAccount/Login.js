@@ -54,6 +54,7 @@ const Login = () => {
         localStorage.setItem("email", response.data.userEmail);
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem("buyer_id", response.data.userId);
+        localStorage.setItem("interest", response.data.userInterests);
         navigate("/");
         window.location.reload();
       } else {

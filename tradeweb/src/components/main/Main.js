@@ -17,24 +17,6 @@ const Main = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  function base64UrlDecode(str) {
-    let base64 = str.replace(/-/g, "+").replace(/_/g, "/");
-    let jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split("")
-        .map(function (c) {
-          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-        })
-        .join("")
-    );
-    return JSON.parse(jsonPayload);
-  }
-
-  // JWT 디코딩 함수
-  function decodeJWT(token) {
-    const payload = token.split(".")[1];
-    return base64UrlDecode(payload);
-  }
 
   //최신 상품
   useEffect(() => {
@@ -55,21 +37,21 @@ const Main = () => {
   //로그인 시 관심상품
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    let interest = [];
+    const interest = localStorage.getItem("interest").split(",");
+    let randomValue = Math.random();
+    let int = 0;
 
     if (token) {
       setLoggedIn(true);
-
-      const decodedToken = decodeJWT(token);
-      interest = decodedToken.userInterests || [];
-      localStorage.setItem("productId", interest.join(","));
-      console.log(interest);
+      let length = interest.length;
+      int = Math.floor(randomValue * length);
+      console.log(int);
     }
 
     const getInterest = async () => {
       await axios
         .get(
-          `${process.env.REACT_APP_API_URL}product/search?category=${interest[0]}`
+          `${process.env.REACT_APP_API_URL}product/search?category=${interest[int]}`
         )
         .then((response) => {
           setInterestListData(response.data.products);
@@ -96,7 +78,7 @@ const Main = () => {
         </ProductListHeader>
         <ProductList products={listData} />
       </ProductListWrapper>
-      {isLoggedIn && interestListData.length != 0 ? (
+      {isLoggedIn && interestListData.length !== 0 ? (
         <>
           <ProductListWrapper>
             <ProductListHeader>

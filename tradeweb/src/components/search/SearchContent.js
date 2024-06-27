@@ -9,8 +9,6 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   const [listData, setListData] = useState([]);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
   const loader = useRef(null);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -85,7 +83,8 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
   useEffect(() => {
     setPage(1);
     fetchData();
-  }, [selectedFilters, minPrice, maxPrice]);
+  }, [selectedFilters]);
+
 
   return (
     <>
