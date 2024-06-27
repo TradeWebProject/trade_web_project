@@ -156,10 +156,8 @@ const ChatList = ({ visible, onClose }) => {
   };
 
   const confirmPurchase = async () => {
-    console.log("구매 확인");
     setIsModalVisible(false);
 
-    // productId를 가져오는 부분 (selectedRoom에 있는 경우)
     const productId = selectedRoom ? selectedRoom.productId : null;
 
     if (!productId) {
