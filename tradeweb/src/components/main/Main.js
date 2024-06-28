@@ -17,7 +17,6 @@ const Main = () => {
   const [isLoggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-
   //최신 상품
   useEffect(() => {
     const get = async () => {
@@ -37,7 +36,7 @@ const Main = () => {
   //로그인 시 관심상품
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
-    const interest = localStorage.getItem("interest").split(",");
+    let interest = (localStorage.getItem("interest") || "").split(",");
     let randomValue = Math.random();
     let int = 0;
 
