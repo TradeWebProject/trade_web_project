@@ -85,7 +85,6 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
     fetchData();
   }, [selectedFilters]);
 
-
   return (
     <>
       <Container>
@@ -97,20 +96,20 @@ const SearchContent = ({ selectedFilters, onFilterRemove }) => {
                 <FilterTag key={`${filterTitle}-${option}`}>
                   {option}
                   &nbsp;
-                  <CloseButton
+                  {/* <CloseButton
                     src={close}
                     onClick={() => onFilterRemove(filterTitle, option)}
-                  />
+                  /> */}
                 </FilterTag>
               ) : (
                 <>
                   <FilterTag key={`${filterTitle}-${option}`}>
                     {`${option} 원`}
                     &nbsp;
-                    <CloseButton
+                    {/* <CloseButton
                       src={close}
                       onClick={() => onFilterRemove(filterTitle, option)}
-                    />
+                    /> */}
                   </FilterTag>
                 </>
               )
