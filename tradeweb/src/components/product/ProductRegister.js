@@ -214,6 +214,7 @@ const ProductRegister = () => {
                                 <DropwDownElementWrapper>
                                     <DropdownOptions
                                         options={productOptions}
+                                        placeholder={category}
                                         title="카테고리 선택"
                                         onSelect={handleOptionSelect}
                                         onChange={(e) => setCategory(e.target.value)}
@@ -226,6 +227,7 @@ const ProductRegister = () => {
                                 <DropwDownElementWrapper>
                                     <DropdownOptions
                                         options={productSellStatusOptions}
+                                        placeholder={productQuality}
                                         title="제품 상태 선택"
                                         onSelect={handleOptionSelect2}
                                         onChange={(e) => setProductQuality(e.target.value)}
