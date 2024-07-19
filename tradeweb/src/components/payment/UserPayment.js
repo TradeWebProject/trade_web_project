@@ -5,15 +5,15 @@ const UserPayment = () => {
     return (
         <>
             <Container>
-                <Title>결제내역</Title>
+                <Title>구매 내역</Title>
                 <Table>
                 <tr>
                     <TableTh>결제일</TableTh>
                     <TableTh>상품 이미지</TableTh>
                     <TableTh>상품명</TableTh>
-                    <TableTh>결제금액</TableTh>
+                    <TableTh>금액</TableTh>
                     <TableTh>결제번호</TableTh>
-                    <TableTh>결제상태</TableTh>
+                    <TableTh>구매상태</TableTh>
                 </tr>
                 <tr>
                     <TableTd>2024.06.08</TableTd>
@@ -21,7 +21,7 @@ const UserPayment = () => {
                     <TableTd>아디다스 슬리퍼</TableTd>
                     <TableTd>43,000원</TableTd>
                     <TableTd>0000003</TableTd>
-                    <TableTd>결제예정</TableTd>
+                    <TableTd>구매완료</TableTd>
                 </tr>
                 <tr>
                     <TableTd>2024.06.06</TableTd>
@@ -29,7 +29,7 @@ const UserPayment = () => {
                     <TableTd>나이키 신발</TableTd>
                     <TableTd>89,000원</TableTd>
                     <TableTd>0000002</TableTd>
-                    <TableTd>결제완료</TableTd>
+                    <TableTd>구매완료</TableTd>
                 </tr>
                 <tr>
                     <TableTd>2024.06.05</TableTd>
@@ -37,7 +37,7 @@ const UserPayment = () => {
                     <TableTd>나이키 티셔츠</TableTd>
                     <TableTd>56,000원</TableTd>
                     <TableTd>0000001</TableTd>
-                    <TableTd>결제완료</TableTd>
+                    <TableTd>구매완료</TableTd>
                 </tr>
                 <tr>
                     <TableTd>2024.06.04</TableTd>
@@ -45,7 +45,7 @@ const UserPayment = () => {
                     <TableTd>아디다스 슬리퍼2</TableTd>
                     <TableTd>43,000원</TableTd>
                     <TableTd>0000003</TableTd>
-                    <TableTd>결제예정</TableTd>
+                    <TableTd>구매완료</TableTd>
                 </tr>
                 <tr>
                     <TableTd>2024.06.03</TableTd>
@@ -53,23 +53,7 @@ const UserPayment = () => {
                     <TableTd>나이키 신발2</TableTd>
                     <TableTd>89,000원</TableTd>
                     <TableTd>0000002</TableTd>
-                    <TableTd>결제완료</TableTd>
-                </tr>
-                <tr>
-                    <TableTd>2024.06.02</TableTd>
-                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                    <TableTd>나이키 티셔츠2</TableTd>
-                    <TableTd>56,000원</TableTd>
-                    <TableTd>0000001</TableTd>
-                    <TableTd>결제완료</TableTd>
-                </tr>
-                <tr>
-                    <TableTd>2024.06.01</TableTd>
-                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                    <TableTd>나이키 티셔츠3</TableTd>
-                    <TableTd>56,000원</TableTd>
-                    <TableTd>0000001</TableTd>
-                    <TableTd>결제완료</TableTd>
+                    <TableTd>구매완료</TableTd>
                 </tr>
                 </Table>
                 {/* <Pagination class="pagination">

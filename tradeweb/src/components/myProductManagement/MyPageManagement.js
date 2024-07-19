@@ -31,7 +31,7 @@ const MyPageManagement = () => {
                 <Box sx={{display: 'flex', alignItems: 'flex-start', width: 1230}}>
                     <Tabs value={currentTabIndex} onChange={handleTabChange} variant="fullWidth">
                         <Tab style={{width: '160px'}} label='마이 프로필' />
-                        <Tab label='결제 내역' />
+                        <Tab label='구매 내역' />
                         <Tab label='판매 내역' />
                         <Tab label='찜 목록' />
                     </Tabs>
