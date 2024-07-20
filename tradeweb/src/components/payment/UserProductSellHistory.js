@@ -14,7 +14,7 @@ const UserProductSellHistory = () => {
   
   
     const token = localStorage.getItem("accessToken");
-    const userId = 9;
+    const userId = localStorage.getItem("userId");
     const selledProductStatus = 0;
 
     useEffect(() => {
