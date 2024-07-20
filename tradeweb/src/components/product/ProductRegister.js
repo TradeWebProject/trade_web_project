@@ -24,7 +24,7 @@ const ProductRegister = () => {
 
     const data = {
         productOptions: ["의류", "전자기기", "가전", "문구", "도서", "신발", "여행용품", "스포츠"],
-        productSellStatusOptions: ["새상품", "중고 상품"],
+        productSellStatusOptions: ["새상품", "중고상품"],
     };
 
     const {
@@ -191,21 +191,21 @@ const ProductRegister = () => {
                 <SubContentWrapper>
                     <ProductNameWrapper>
                         <ProductNameElement>상품명:</ProductNameElement>
-                        <ProductNameInput type="text"  defaultValue="아디다스 반팔티" onChange={(e) => setProductName(e.target.value)}/>
+                        <ProductNameInput type="text" placeholder='상품명을 입력하세요'  defaultValue={productName} onChange={(e) => setProductName(e.target.value)}/>
                     </ProductNameWrapper>
                     <ProductNameWrapper>
                         <ProductNameElement>가격:</ProductNameElement>
-                        <ProductNameInput type="text" defaultValue="56000" onChange={(e) => setPrice(e.target.value)}/>
+                        <ProductNameInput type="text" placeholder='상품 가격을 입력하세요' defaultValue={price} onChange={(e) => setPrice(e.target.value)}/>
                     </ProductNameWrapper>
                     <InnerWrapper>
                         <ProductSellDateWrapper>
                             <SellStartDateWrapper>
                                     <DateStartText>판매 시작일:</DateStartText>
-                                    <StartDateInput type="date" defaultValue="2024-06-07" onChange={(e) => setStartDate(e.target.value)}/>
+                                    <StartDateInput type="date" placeholder='판매 시작일을 선택해주세요' defaultValue={startDate} onChange={(e) => setStartDate(e.target.value)}/>
                             </SellStartDateWrapper>
                             <SellEndDateWrapper>
                                     <DateStartText>판매 종료일:</DateStartText>
-                                    <EndDateInput type="date" defaultValue="2024-06-30" onChange={(e) => setEndDate(e.target.value)}/>
+                                    <EndDateInput type="date" placeholder='판매 종료일을 선택해주세요' defaultValue={endDate} onChange={(e) => setEndDate(e.target.value)}/>
                             </SellEndDateWrapper>
                         </ProductSellDateWrapper>
                         <ProductSellDateWrapper>
@@ -214,6 +214,7 @@ const ProductRegister = () => {
                                 <DropwDownElementWrapper>
                                     <DropdownOptions
                                         options={productOptions}
+                                        placeholder={category}
                                         title="카테고리 선택"
                                         onSelect={handleOptionSelect}
                                         onChange={(e) => setCategory(e.target.value)}
@@ -226,6 +227,7 @@ const ProductRegister = () => {
                                 <DropwDownElementWrapper>
                                     <DropdownOptions
                                         options={productSellStatusOptions}
+                                        placeholder={productQuality}
                                         title="제품 상태 선택"
                                         onSelect={handleOptionSelect2}
                                         onChange={(e) => setProductQuality(e.target.value)}
