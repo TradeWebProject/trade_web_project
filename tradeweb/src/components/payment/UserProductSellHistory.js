@@ -7,15 +7,23 @@ import Pagination from '../pagination/Pagination';
 const UserProductSellHistory = () => {
     const navigate = useNavigate();
     const location = useLocation();
+   
     const searchParams = new URLSearchParams(location.search);
     const productId = searchParams.get("productId");
     const [navigateUrl, setNavigateUrl] = useState("");
     const [responseData, setResponseData] = useState([]);
-  
-  
+    const [viewData, setViewData] = useState(8);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pageGrupArray, setPageGroupArray] = useState([]);
+    let totalPage = Math.ceil(responseData?.length / viewData);
+    let pageGroup = Math.ceil(currentPage / responseData.length);
+    console.log("pageGroup: " , pageGroup);
+    let lastPage = pageGroup * pageGroup > totalPage ? totalPage : pageGroup * pageGroup;
+    let firstPage = lastPage - (pageGroup - 1) <= 0? 1 : lastPage = (pageGroup - 1);
     const token = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("userId");
     const selledProductStatus = 0;
+    
 
     useEffect(() => {
         async function get() {
@@ -28,9 +36,9 @@ const UserProductSellHistory = () => {
                                 }
                             }
                 ).then(function (response) {
-                    console.log("응답 데이터:", response.data.products);
                     const productsArray = response.data.products;
                     setResponseData(productsArray);
+                    setPageGroupArray(pageGroup);
                 })
                
             } catch (error) {
@@ -92,19 +100,9 @@ const UserProductSellHistory = () => {
                                         </tr>
                             })}
                         </Table>
-                        {/* <Pagination class="pagination">
-                            <PageButton>&laquo;</PageButton>
-                            <PageButton>1</PageButton>
-                            <PageButton>2</PageButton>
-                            <PageButton>3</PageButton>
-                            <PageButton>4</PageButton>
-                            <PageButton>5</PageButton>
-                            <PageButton>6</PageButton>
-                            <PageButton>&raquo;</PageButton>
-                        </Pagination> */}
-                        <Pagination/>
+                        <Pagination pageGrupArray={pageGrupArray}/>
                     </Container>
-                    <Container>
+                    {/* <Container>
                         <Title>판매완료된 상품 목록</Title>
                         <Table>
                             <tr>
@@ -126,51 +124,9 @@ const UserProductSellHistory = () => {
                                             </tr>
                                          ))
                             }
-
-                            {/* {responseData.filter((data) => data.productStatus == 1 ? <div>판매완료된 상품이 없습니다</div> : <></>)  
-                                           
-                                        
-                                         
-                            } */}
                         </Table>
-                        
-                            
-                        {/* <Pagination class="pagination">
-                            <PageButton>&laquo;</PageButton>
-                            <PageButton>1</PageButton>
-                            <PageButton>2</PageButton>
-                            <PageButton>3</PageButton>
-                            <PageButton>4</PageButton>
-                            <PageButton>5</PageButton>
-                            <PageButton>6</PageButton>
-                            <PageButton>&raquo;</PageButton>
-                        </Pagination> */}
-                        <Pagination/>
-                    </Container>
-                    {/* <Title>상품판매 현황</Title>
-                    <div>
-                    <BarChart
-                        xAxis={[
-                            {
-                            id: 'barCategories',
-                            data: ['bar A', 'bar B', 'bar C'],
-                            scaleType: 'band',
-                            },
-                        ]}
-                        series={[
-                            {
-                            data: [2, 5, 3],
-                            },
-                        ]}
-                        width={500}
-                        height={300}
-                    />
-
-
-
-
-
-                    </div> */}
+                        <Pagination pageGrupArray={pageGrupArray}/>
+                    </Container> */}
                 </div>
                 
             </ContentWrapper>

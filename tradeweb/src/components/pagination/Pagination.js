@@ -2,17 +2,12 @@ import React from 'react';
 import styled from "styled-components";
 import axios from "axios";
 
-const Pagination = () => {
+const Pagination = ({pageGrupArray}) => {
+    console.log(pageGrupArray);
     return (
        <PaginationWrapper>
-            <PageButton>&laquo;</PageButton>
-            <PageButton>1</PageButton>
-            <PageButton>2</PageButton>
-            <PageButton>3</PageButton>
-            <PageButton>4</PageButton>
-            <PageButton>5</PageButton>
-            <PageButton>6</PageButton>
-            <PageButton>&raquo;</PageButton>
+            <PageButton>{pageGrupArray}</PageButton>
+          
        </PaginationWrapper>
     );
 };
