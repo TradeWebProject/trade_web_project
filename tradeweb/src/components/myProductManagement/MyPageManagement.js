@@ -7,6 +7,7 @@ import MyProfile from '../userAccount/MyProfile';
 import UserPayment from '../payment/UserPayment';
 import UserProductSellHistory from '../payment/UserProductSellHistory';
 import MyWishList from '../userAccount/MyWishList';
+import Review from '../review/Review';
 
 
 const MyPageManagement = () => {
@@ -30,10 +31,13 @@ const MyPageManagement = () => {
             <Wrapper>
                 <Box sx={{display: 'flex', alignItems: 'flex-start', width: 1230}}>
                     <Tabs value={currentTabIndex} onChange={handleTabChange} variant="fullWidth">
-                        <Tab style={{width: '160px'}} label='마이 프로필' />
-                        <Tab label='구매 내역' />
-                        <Tab label='판매 내역' />
-                        <Tab label='찜 목록' />
+                        <Tab style={{width: '160px'}} label='프로필' />
+                        <Tab label='상품' />
+                        <Tab label='구매' />
+                        <Tab label='판매' />
+                        <Tab label='리뷰' />
+                        <Tab label='찜' />
+
                     </Tabs>
                 </Box>
                 {currentTabIndex === 0 && (
@@ -46,22 +50,37 @@ const MyPageManagement = () => {
                 )}
                 {currentTabIndex === 1 && (
                     <Box sx={{ p: 3 }}>
-                        {
-                        <UserPayment/>
-                        }
-                    </Box>
-                )}
-                {currentTabIndex === 2 && (
-                    <Box sx={{ p: 3 }}>
                         <BoxWrapper>
                             <Button style={{width: "100px",}} onClick={productAddPageButtonClick}  sx={{ mr: 2, color: "white", backgroundColor: "black", }} variant="contained" size="small">
                                 상품 등록
                             </Button>
                             {<UserProductSellHistory/>}
                         </BoxWrapper>
+                        
                     </Box>
                 )}
-                {currentTabIndex === 3 && (
+                {currentTabIndex === 2 && (
+                    <Box sx={{ p: 3 }}>
+                        {
+                        <UserPayment/>
+                        }
+                    </Box>
+                )}
+                 {currentTabIndex === 3 && (
+                    <Box sx={{ p: 3 }}>
+                        {
+                        <UserPayment/>
+                        }
+                    </Box>
+                )}
+                 {currentTabIndex === 4 && (
+                    <Box sx={{ p: 3 }}>
+                        {
+                        <Review/>
+                        }
+                    </Box>
+                )}
+                {currentTabIndex === 5 && (
                  <Box sx={{ p: 3 }}>
                      {
                          <MyWishList/>
