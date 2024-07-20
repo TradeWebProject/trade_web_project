@@ -12,14 +12,11 @@ const UserProductSellHistory = () => {
     const productId = searchParams.get("productId");
     const [navigateUrl, setNavigateUrl] = useState("");
     const [responseData, setResponseData] = useState([]);
-    const [viewData, setViewData] = useState(8);
-    const [currentPage, setCurrentPage] = useState(1);
+    const [viewData, setViewData] = useState(8);// 한페이지에 8개의 상품을 보여준다
+    const [currentPage, setCurrentPage] = useState(1); //시작페이지
     const [pageGrupArray, setPageGroupArray] = useState([]);
     let totalPage = Math.ceil(responseData?.length / viewData);
-    let pageGroup = Math.ceil(currentPage / responseData.length);
-    console.log("pageGroup: " , pageGroup);
-    let lastPage = pageGroup * pageGroup > totalPage ? totalPage : pageGroup * pageGroup;
-    let firstPage = lastPage - (pageGroup - 1) <= 0? 1 : lastPage = (pageGroup - 1);
+    console.log("totalPage: " , totalPage);
     const token = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("userId");
     const selledProductStatus = 0;
@@ -38,7 +35,7 @@ const UserProductSellHistory = () => {
                 ).then(function (response) {
                     const productsArray = response.data.products;
                     setResponseData(productsArray);
-                    setPageGroupArray(pageGroup);
+                    setPageGroupArray(totalPage);
                 })
                
             } catch (error) {

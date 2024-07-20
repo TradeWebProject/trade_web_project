@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import axios from "axios";
 
 const Pagination = ({pageGrupArray}) => {
-    console.log(pageGrupArray);
     return (
        <PaginationWrapper>
-            <PageButton>{pageGrupArray}</PageButton>
-          
+          {pageGrupArray}
        </PaginationWrapper>
     );
 };
