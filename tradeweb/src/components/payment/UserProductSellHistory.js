@@ -11,17 +11,18 @@ const UserProductSellHistory = () => {
     const searchParams = new URLSearchParams(location.search);
     const productId = searchParams.get("productId");
     const [navigateUrl, setNavigateUrl] = useState("");
-    const [responseData, setResponseData] = useState([]);
-    const [viewData, setViewData] = useState(8);// 한페이지에 8개의 상품을 보여준다
-    const [currentPage, setCurrentPage] = useState(1); //시작페이지
-    const [pageGrupArray, setPageGroupArray] = useState([]);
-    let totalPage = Math.ceil(responseData?.length / viewData);
-    console.log("totalPage: " , totalPage);
+    const [totalPosts, setResponseData] = useState([]);
+    const [postsPerPage, setPostsPerPage] = useState(8);// 한페이지에 8개의 상품을 보여준다
+    const [currentPage, setCurrentPage] = useState(2); //현재페이지
+    const [currentProduct, setCurrentProduct] = useState(0);
+    const [result, setResult] = useState(0);
+    const lastPostInedx = currentPage * postsPerPage; 
+    const firstPostIndex = lastPostInedx - postsPerPage;
+
     const token = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("userId");
     const selledProductStatus = 0;
     
-
     useEffect(() => {
         async function get() {
             try {
@@ -30,12 +31,20 @@ const UserProductSellHistory = () => {
                                 headers: {
                                     'Content-Type': "multipart/form-data",
                                     'Authorization': `Bearer ${token}`,
+                                },
+                                params : {
+                                    'page' :  currentPage,
+                                    'size' : 8,
+                                    'sort': "desc"
                                 }
                             }
                 ).then(function (response) {
                     const productsArray = response.data.products;
                     setResponseData(productsArray);
-                    setPageGroupArray(totalPage);
+                    console.log("베열 길이: " , totalPosts.length);
+                    let result = totalPosts.slice(firstPostIndex, lastPostInedx);
+                    setCurrentProduct(result);
+                    
                 })
                
             } catch (error) {
@@ -44,19 +53,6 @@ const UserProductSellHistory = () => {
         };
         get();
     }, []);
-
-    const convertToBase66 = (imageFile) => {
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.readAsDataURL(imageFile);
-            fileReader.onload = () => {
-              resolve(fileReader.result);
-            };
-            fileReader.onerror = (error) => {
-              reject(error);
-            };
-          });
-    }
 
     const productNameOnClick = (productId) => {
         setNavigateUrl("/product/management/detail");
@@ -86,7 +82,7 @@ const UserProductSellHistory = () => {
                                 <TableTh>상품상태</TableTh>
                                 <TableTh>판매상태</TableTh>
                             </tr>
-                            {responseData.map(function (data, index) {
+                            {totalPosts.map(function (data, index) {
                                 return  <tr>
                                             <TableTd>{data.productId}</TableTd>
                                             <TableTd><TableRowImage src={`${process.env.REACT_APP_IMAGE_URL}${data.imageUrl}`}/></TableTd>
@@ -97,39 +93,10 @@ const UserProductSellHistory = () => {
                                         </tr>
                             })}
                         </Table>
-                        <Pagination pageGrupArray={pageGrupArray}/>
+                        <Pagination totalPosts={totalPosts.length} postsPerPage={postsPerPage} setCurrentPage={setCurrentPage}/>
                     </Container>
-                    {/* <Container>
-                        <Title>판매완료된 상품 목록</Title>
-                        <Table>
-                            <tr>
-                                <TableTh>상품번호</TableTh>
-                                <TableTh>상품명</TableTh>
-                                <TableTh>카테고리</TableTh>
-                                <TableTh>상품상태</TableTh>
-                                <TableTh>판매상태</TableTh>
-                                
-                            </tr>
-                            {responseData.filter((data) => data.productStatus == 0 )
-                                         .map((data, index) => (
-                                            <tr>
-                                                <TableTd>{data.productId}</TableTd>
-                                                <TableTd><a href="/detail" onClick={productNameOnClick}>{data.productName}</a></TableTd>
-                                                <TableTd>{data.category}</TableTd>
-                                                <TableTd>중고 상품</TableTd>
-                                                <TableTd>판매완료</TableTd>
-                                            </tr>
-                                         ))
-                            }
-                        </Table>
-                        <Pagination pageGrupArray={pageGrupArray}/>
-                    </Container> */}
                 </div>
-                
             </ContentWrapper>
-        
-        
-        
         </>
     );
 };

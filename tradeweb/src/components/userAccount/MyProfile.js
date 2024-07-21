@@ -1,12 +1,10 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import styled from "styled-components";
 import axios from "axios";
-import {Box } from "@mui/material";
+import { Box } from "@mui/material";
 
 import plusIcon from "../../assets/plus.svg";
 import profile from "../../assets/profile.svg";
-
 
 const MyProfile = () => {
     const [responseUserProfileData, setResponseUserProfileData] = useState("");
@@ -55,7 +53,12 @@ const MyProfile = () => {
                     headers: {
                         'Content-Type': "multipart/form-data",
                         'Authorization': `Bearer ${token}`,
-                    }
+                    },
+                    // params: {
+                    //     page: 1,
+                    //     size: 8,
+                    //     sort: "desc",
+                    // }
                 });
                 console.log("응답 데이터:", response.data);
                 setResponseUserProfileData(response.data);
@@ -326,10 +329,8 @@ const ProductNameInput = styled.input`
 const InterestsWrapper = styled.div`
     width: 644px;
     height: 40px;
-    // border: 1px solid black;
     display: flex;
     flex-direction: row;
-    // flex-wrap: wrap;
     align-items: start;
     justify-content: center;
     cursor: pointer;
@@ -358,8 +359,5 @@ const InterestClicked = styled.div`
     color: white;
     border: 1px solid #D1D4D8;
     text-align: center;
-    // &: hover {
-    //     background-color: gray;
-    // }
 `;
 

@@ -2,10 +2,20 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 import axios from "axios";
 
-const Pagination = ({pageGrupArray}) => {
+const Pagination = ({ totalPosts, postsPerPage, setCurrentPage}) => {
+    let pages = [];
+
+    for (let i = 0; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+        pages.push(i + 1);
+    }
+
     return (
        <PaginationWrapper>
-          {pageGrupArray}
+          {
+            pages.map((page, index) => {
+                return <PageButton key={index} onClick={() => setCurrentPage(page + 1)}>{page}</PageButton>
+            })
+          }
        </PaginationWrapper>
     );
 };
