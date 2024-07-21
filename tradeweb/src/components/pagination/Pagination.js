@@ -1,18 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from "styled-components";
 import axios from "axios";
 
-const Pagination = () => {
+const Pagination = ({ totalPosts, postsPerPage, setCurrentPage, paginate}) => {
+    let pages = [];
+
+    for (let i = 0; i <= Math.ceil(totalPosts / postsPerPage); i++) {
+        pages.push(i + 1);
+    }
+
     return (
        <PaginationWrapper>
-            <PageButton>&laquo;</PageButton>
-            <PageButton>1</PageButton>
-            <PageButton>2</PageButton>
-            <PageButton>3</PageButton>
-            <PageButton>4</PageButton>
-            <PageButton>5</PageButton>
-            <PageButton>6</PageButton>
-            <PageButton>&raquo;</PageButton>
+          {
+            pages.map((page, index) => {
+                return <PageButton key={index} onClick={() => paginate(page)}>{page}</PageButton>
+            })
+          }
        </PaginationWrapper>
     );
 };
