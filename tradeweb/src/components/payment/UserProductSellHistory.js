@@ -13,7 +13,7 @@ const UserProductSellHistory = () => {
     const [navigateUrl, setNavigateUrl] = useState("");
     const [totalPosts, setResponseData] = useState([]);
     const [postsPerPage, setPostsPerPage] = useState(8);// 한페이지에 8개의 상품을 보여준다
-    const [currentPage, setCurrentPage] = useState(2); //현재페이지
+    const [currentPage, setCurrentPage] = useState(1); //현재페이지
     const [currentProduct, setCurrentProduct] = useState(0);
     const [result, setResult] = useState(0);
     const lastPostInedx = currentPage * postsPerPage; 
@@ -52,7 +52,9 @@ const UserProductSellHistory = () => {
             }
         };
         get();
-    }, []);
+    }, [currentPage]);
+
+    const paginate =(currentPage) => setCurrentPage(currentPage);
 
     const productNameOnClick = (productId) => {
         setNavigateUrl("/product/management/detail");
@@ -66,6 +68,7 @@ const UserProductSellHistory = () => {
     const reviewButtonOnClick = () => {
         navigate("/my-page");
     };
+
 
     return (
         <>
@@ -93,7 +96,7 @@ const UserProductSellHistory = () => {
                                         </tr>
                             })}
                         </Table>
-                        <Pagination totalPosts={totalPosts.length} postsPerPage={postsPerPage} setCurrentPage={setCurrentPage}/>
+                        <Pagination totalPosts={totalPosts.length} postsPerPage={postsPerPage} setCurrentPage={setCurrentPage} paginate={paginate}/>
                     </Container>
                 </div>
             </ContentWrapper>

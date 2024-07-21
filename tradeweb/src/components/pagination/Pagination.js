@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from "styled-components";
 import axios from "axios";
 
-const Pagination = ({ totalPosts, postsPerPage, setCurrentPage}) => {
+const Pagination = ({ totalPosts, postsPerPage, setCurrentPage, paginate}) => {
     let pages = [];
 
     for (let i = 0; i <= Math.ceil(totalPosts / postsPerPage); i++) {
@@ -13,7 +13,7 @@ const Pagination = ({ totalPosts, postsPerPage, setCurrentPage}) => {
        <PaginationWrapper>
           {
             pages.map((page, index) => {
-                return <PageButton key={index} onClick={() => setCurrentPage(page + 1)}>{page}</PageButton>
+                return <PageButton key={index} onClick={() => paginate(page)}>{page}</PageButton>
             })
           }
        </PaginationWrapper>
