@@ -8,6 +8,8 @@ const MyWishList = () => {
     const [responseData, setResponseData] = useState([]);
     const token = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("userId");
+    const [productId, setProductId] = useState(0);
+
 
     useEffect(() => {
         async function get() {
@@ -30,7 +32,30 @@ const MyWishList = () => {
         }
     }, [userId, token]); 
 
+    const dislikeClick = (productId) => {
+        console.log("disLikeProductId: ", productId);
+        setResponseData(responseData.filter(product => product.productId !== productId));
+        sendDisLikeProductId(productId);
+    }
 
+    const sendDisLikeProductId = async (productId) => {
+        try {
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}likes`, 
+                {
+                    productId: productId,
+                },
+                {
+                    headers: {
+                        'Content-Type': "multipart/form-data",
+                        'Authorization': `Bearer ${token}`,
+                    },
+                });
+            console.log("응답 데이터:", response.data.products);
+            setResponseData(response.data.products);
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
+    }
 
 
     return (
@@ -38,7 +63,7 @@ const MyWishList = () => {
             <Container>
                 <Title>찜목록</Title>
                 <SearchResultList>
-                    {responseData.map((product) => (
+                    {responseData.length > 0 ?  responseData.map((product) => (
                         <SearchItem key={product.productId}>
                             <ItemImageBox>
                                 <ItemImage src={`${process.env.REACT_APP_IMAGE_URL}${product.imageUrl}`} alt={product.productName} />
@@ -47,9 +72,10 @@ const MyWishList = () => {
                             <ItemPrice>
                                 {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
                             </ItemPrice>
-                            <Icon>❤️</Icon>
+                            <HeartIcon onClick={() => dislikeClick(product.productId)}>❤️</HeartIcon>
                         </SearchItem>
-                    ))}
+                    )) : <h1>찜한 상품이 없습니다</h1>}
+                   
                 </SearchResultList>
               
             </Container>
@@ -109,9 +135,10 @@ const ItemInfo = styled.div`
 const ItemPrice = styled.div`
     font-weight: bold;
 `;
-const Icon = styled.div`
+const HeartIcon = styled.div`
     /* 아이콘 스타일 */
     margin-right: 5px;
+    cursor:pointer;
 `;
 
 const Pagination = styled.div``;
