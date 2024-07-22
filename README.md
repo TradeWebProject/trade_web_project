@@ -4,6 +4,49 @@
 중고 물품을 등록하고 실시간채팅을 통해 거래를 이어갈수있는 프로젝트
 ```
 
+```
+src
+├── assets ───────────────  svg 파일
+│   └── svg
+│
+├── components ───────────  view 컴포넌트
+│   ├── chatlist
+│   ├── common
+│   ├── detail
+|   ├── footer
+│   ├── main
+│   ├── myProductManagement
+│   ├── nav
+|   ├── pagination
+│   ├── payment
+│   ├── product
+│   ├── review
+|   ├── search
+│   └── userAccount
+│
+├── hooks────────────── custom hooks
+│   └── useClickOutside
+│
+├── pages 
+|   ├── detail
+|   ├── main
+|   ├── myPage
+|   ├── productDtailManagementPage
+|   ├── productWritePage
+|   ├── reviewPage
+|   ├── search
+│   └── signIn
+│
+├── styles ────────────────  UI 디렉토리
+│   └── theme 
+│
+├── App.js ───────────────  Route 처리 및 Theme Context 적용
+├── index.css ────────────  공통 css
+└── index.js ─────────────  애플리케이션 엔트리 포인트
+
+```
+
+
 **기간**
 
 2024.06.03 ~ 2024.06.28
