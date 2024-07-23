@@ -60,33 +60,45 @@ const MyWishList = () => {
 
     return (
         <Box sx={{ p: 3 }}>
-            <Container>
-                <Title>찜목록</Title>
-                <SearchResultList>
-                    {responseData.length > 0 ?  responseData.map((product) => (
-                        <SearchItem key={product.productId}>
-                            <ItemImageBox>
-                                <ItemImage src={`${process.env.REACT_APP_IMAGE_URL}${product.imageUrl}`} alt={product.productName} />
-                            </ItemImageBox>
-                            <ItemTitle>{product.productName}</ItemTitle>
-                            <ItemPrice>
-                                {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                            </ItemPrice>
-                            <HeartIcon onClick={() => dislikeClick(product.productId)}>❤️</HeartIcon>
-                        </SearchItem>
-                    )) : <h1>찜한 상품이 없습니다</h1>}
-                   
-                </SearchResultList>
-              
-            </Container>
+            <Wrapper>
+                <Container>
+                    <Title>찜목록</Title>
+                    <SearchResultList>
+                        {responseData.length > 0 ?  responseData.map((product) => (
+                            <SearchItem key={product.productId}>
+                                <ItemImageBox>
+                                    <ItemImage src={`${process.env.REACT_APP_IMAGE_URL}${product.imageUrl}`} alt={product.productName} />
+                                </ItemImageBox>
+                                <ItemTitle>{product.productName}</ItemTitle>
+                                <ItemPrice>
+                                    {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                </ItemPrice>
+                                <HeartIcon onClick={() => dislikeClick(product.productId)}>❤️</HeartIcon>
+                            
+                            </SearchItem>
+                            
+                        )) : <h1>찜한 상품이 없습니다</h1>}
+                    
+                    </SearchResultList>
+                </Container>
+                <GetLikeMoreButton>더보기</GetLikeMoreButton>
+                
+            </Wrapper>
+            
         </Box>
     );
 };
 
 export default MyWishList;
 
+const Wrapper = styled.div`
+    display: flex;
+    flex-direction: row;
+`;
+
 const Container = styled.div`
     width: 1230px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -102,7 +114,6 @@ const Title  = styled.div`
 
 const SearchResultList = styled.div`
     height: 200px;
-    display: flex;
     row-gap: 40px;
     display: grid;
     row-gap: 140px;
@@ -144,6 +155,11 @@ const HeartIcon = styled.div`
     margin-right: 5px;
     margin-bottom: 20px;
     cursor:pointer;
+`;
+
+const GetLikeMoreButton = styled.button`
+     margin-top: 200px;
+
 `;
 
 const Pagination = styled.div``;
