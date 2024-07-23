@@ -101,19 +101,22 @@ const Title  = styled.div`
 
 
 const SearchResultList = styled.div`
+    height: 200px;
     display: flex;
     row-gap: 40px;
-    column-gap: 20px;
-    // grid-template-columns: 150px 150px 150px 150px 120px;
+    display: grid;
+    row-gap: 140px;
+    column-gap: 40px;
+    grid template-comumns: 200px 200px 200px 200px;
 `;
 
 const SearchItem = styled.div`
-    width: 120px;
+    width: 200px;
+    height: 200px;
 `;
 
 const ItemImageBox = styled.div`
     border-radius: 10px;
-    background-color: rgb(244, 244, 244);
 `;
 const ItemImage = styled.img`
     width: 200px;
@@ -123,6 +126,7 @@ const ItemImage = styled.img`
 const ItemTitle = styled.div`
     width: 120px;
     font-weight: bold;
+    margin-bottom: 20px;
 `;
 
 const ItemInfo = styled.div`
@@ -134,10 +138,11 @@ const ItemInfo = styled.div`
 
 const ItemPrice = styled.div`
     font-weight: bold;
+    margin-bopttom: 20px;
 `;
 const HeartIcon = styled.div`
-    /* 아이콘 스타일 */
     margin-right: 5px;
+    margin-bottom: 20px;
     cursor:pointer;
 `;
 
