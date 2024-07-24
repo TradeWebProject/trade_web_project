@@ -44,7 +44,7 @@ export default Footer;
 const Container = styled.div`
   width: 1280px;
   background-color: #ffffff;
-  margin-top: 1600px;
+  margin-top: 4000px;
   border-top: 1px solid rgba(0, 0, 0, 0.1);
   z-index: 999;
   display: flex;

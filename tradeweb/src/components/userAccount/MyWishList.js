@@ -1,189 +1,254 @@
-import React, {useEffect,  useState} from 'react';
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import plus from "../../assets/plus.svg";
-import {Box } from "@mui/material";
+import { Box } from "@mui/material";
 
 const MyWishList = () => {
-    const [responseData, setResponseData] = useState([]);
-    const token = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem("userId");
-    const [productId, setProductId] = useState(0);
+  const [responseData, setResponseData] = useState([]);
+  const [totalDataCounts, setTotalDataCounts] = useState(0); // 총 데이터 개수
+  const [page, setPage] = useState(1); // 현재 페이지
+  const [showMore, setShowMore] = useState(false); // "더보기" 상태 관리
+  const [postPerPage, setPostPerPage] = useState(8); // 한 페이지에 보여줄 데이터 개수
+  const token = localStorage.getItem("accessToken");
+  const userId = localStorage.getItem("userId");
 
+   // 총 페이지 수 계산
+   const totalPages = Math.ceil(totalDataCounts / postPerPage);
 
-    useEffect(() => {
-        async function get() {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_API_URL}likes/user/${userId}`, {
-                    headers: {
-                        'Content-Type': "multipart/form-data",
-                        'Authorization': `Bearer ${token}`,
-                    }
-                });
-                console.log("응답 데이터:", response.data.products);
-                setResponseData(response.data.products)
-               
-            } catch (error) {
-                console.error("요청 실패:", error);
-            }
-        };
-        if (userId && token) {
-            get();
-        }
-    }, [userId, token]); 
+   // 현재 페이지에 맞는 데이터 계산
+   const indexOfLastPost = page * postPerPage;
+   const indexOfFirstPost = indexOfLastPost - postPerPage;
+   const currentPosts = responseData.slice(indexOfFirstPost, indexOfLastPost);
+ 
+   // "더보기" 버튼 클릭 시 상태 변경
+   const handleShowMoreClick = () => {
+     if (page < totalPages) {
+       setPage(prevPage => prevPage + 1);
+     } else {
+       setShowMore(!showMore);
+     }
+   };
+ 
 
-    const dislikeClick = (productId) => {
-        console.log("disLikeProductId: ", productId);
-        setResponseData(responseData.filter(product => product.productId !== productId));
-        sendDisLikeProductId(productId);
+  useEffect(() => {
+    async function get() {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_API_URL}likes/user/${userId}`,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("응답 데이터:", response.data.products);
+        setResponseData(response.data.products);
+        setTotalDataCounts(response.data.products.length);
+      } catch (error) {
+        console.error("요청 실패:", error);
+      }
     }
-
-    const sendDisLikeProductId = async (productId) => {
-        try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}likes`, 
-                {
-                    productId: productId,
-                },
-                {
-                    headers: {
-                        'Content-Type': "multipart/form-data",
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-            console.log("응답 데이터:", response.data.products);
-            setResponseData(response.data.products);
-        } catch (error) {
-            console.error("요청 실패:", error);
-        }
+    if (userId && token) {
+      get();
     }
+  }, [page, userId, token, postPerPage]);
 
-
-    return (
-        <Box sx={{ p: 3 }}>
-            <Wrapper>
-                <Container>
-                    <Title>찜목록</Title>
-                    <SearchResultList>
-                        {responseData.length > 0 ?  responseData.map((product) => (
-                            <SearchItem key={product.productId}>
-                                <ItemImageBox>
-                                    <ItemImage src={`${process.env.REACT_APP_IMAGE_URL}${product.imageUrl}`} alt={product.productName} />
-                                </ItemImageBox>
-                                <ItemTitle>{product.productName}</ItemTitle>
-                                <ItemPrice>
-                                    {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                                </ItemPrice>
-                                <HeartIcon onClick={() => dislikeClick(product.productId)}>❤️</HeartIcon>
-                            
-                            </SearchItem>
-                            
-                        )) : <h1>찜한 상품이 없습니다</h1>}
-                    
-                    </SearchResultList>
-                </Container>
-                <GetLikeMoreButton>더보기</GetLikeMoreButton>
-                
-            </Wrapper>
-            
-        </Box>
+  const dislikeClick = (productId) => {
+    console.log("disLikeProductId: ", productId);
+    setResponseData(
+      responseData.filter((product) => product.productId !== productId)
     );
+    sendDisLikeProductId(productId);
+  };
+
+  const sendDisLikeProductId = async (productId) => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}likes`,
+        {
+          productId: productId,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          }
+        }
+      );
+      console.log("응답 데이터:", response.data.products);
+      setResponseData(response.data.products);
+    } catch (error) {
+      console.error("요청 실패:", error);
+    }
+  };
+
+ 
+  return (
+    <Box sx={{ p: 3 }}>
+      <Wrapper>
+        <Container>
+          <Title>찜목록</Title>
+          <SearchResultList>
+            {responseData.length > 0 ? (
+              responseData
+                .slice(0, showMore ? responseData.length : 8) // "더보기" 기능: 8개씩 보여줌
+                .map((product) => (
+                  <SearchItem key={product.productId}>
+                    <ItemImageBox>
+                      <ItemImage
+                        src={`${process.env.REACT_APP_IMAGE_URL}${product.imageUrl}`}
+                        alt={product.productName}
+                      />
+                    </ItemImageBox>
+                    <ItemTitle>{product.productName}</ItemTitle>
+                    <ItemPrice>
+                      {product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                    </ItemPrice>
+                    <HeartIcon onClick={() => dislikeClick(product.productId)}>
+                      ❤️
+                    </HeartIcon>
+                  </SearchItem>
+                ))
+            ) : (
+              <h1>찜한 상품이 없습니다</h1>
+            )}
+          </SearchResultList>
+          {/* "더보기" 버튼 */}
+          {responseData.length >= 8 && ( // 총 아이템 수가 8개 이상일 경우에만 버튼을 보여줌
+            <GetLikeMoreButton onClick={handleShowMoreClick}>
+              {showMore ? "접기" : "더보기"}
+            </GetLikeMoreButton>
+          )}
+        </Container>
+      </Wrapper>
+    </Box>
+  );
 };
 
 export default MyWishList;
 
 const Wrapper = styled.div`
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 `;
 
 const Container = styled.div`
-    width: 1230px;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
 `;
 
-const Title  = styled.div`
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
+const Title = styled.div`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
 `;
-
 
 const SearchResultList = styled.div`
-    height: 200px;
-    row-gap: 40px;
-    display: grid;
-    row-gap: 140px;
-    column-gap: 40px;
-    grid template-comumns: 200px 200px 200px 200px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4열 */
+  grid-template-rows: repeat(2, 1fr); /* 2행 */
+  gap: 40px 20px; /* 행 간격: 40px, 열 간격: 20px */
+  padding: 0 20px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr); /* 화면이 작아지면 2열 */
+    grid-template-rows: repeat(4, 1fr); /* 4행 */
+  }
 `;
 
 const SearchItem = styled.div`
-    width: 200px;
-    height: 200px;
+  border: 1px solid red;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
 `;
 
 const ItemImageBox = styled.div`
-    border-radius: 10px;
+  width: 100%;
+  height: 150px; /* 이미지 박스 높이 고정 */
+  border-radius: 10px;
+  overflow: hidden; /* 이미지가 박스를 넘지 않도록 설정 */
+  margin-bottom: 10px;
 `;
+
 const ItemImage = styled.img`
-    width: 200px;
-    height:200px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 이미지 비율을 유지하며 박스에 맞춤 */
 `;
 
 const ItemTitle = styled.div`
-    width: 120px;
-    font-weight: bold;
-    margin-bottom: 20px;
-`;
-
-const ItemInfo = styled.div`
-    width: 120px;
-    height: 24px;
-    font-size: 14px;
-    margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 16px;
+  text-align: center;
+  margin-bottom: 5px;
 `;
 
 const ItemPrice = styled.div`
-    font-weight: bold;
-    margin-bopttom: 20px;
+  font-weight: bold;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 10px;
 `;
+
 const HeartIcon = styled.div`
-    margin-right: 5px;
-    margin-bottom: 20px;
-    cursor:pointer;
+  margin-right: 5px;
+  cursor: pointer;
+  font-size: 20px;
+  color: #e74c3c;
 `;
 
 const GetLikeMoreButton = styled.button`
-     margin-top: 200px;
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 
+  &:hover {
+    background-color: #2980b9;
+  }
 `;
 
 const Pagination = styled.div``;
 
 const PageButton = styled.button`
-    width: 35px;
-    height: 35px;
-    background-color: black;
-    color: white;
-    cursor: pointer;
+  width: 35px;
+  height: 35px;
+  background-color: black;
+  color: white;
+  cursor: pointer;
+  margin: 5px;
 `;
 
 const InterestsWrapper = styled.div`
-    width: 644px;
-    height: 40px;
-    dispaly: flex;
+  width: 644px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
 `;
 
 const Interest = styled.div`
-    width: 50px;
-    height: 20px;
-    border-radius: 40px;
-    background-color: white;
-    color: black;
-    border: 1px solid #D1D4D8;
-    text-align: center;
+  width: 50px;
+  height: 20px;
+  border-radius: 40px;
+  background-color: white;
+  color: black;
+  border: 1px solid #d1d4d8;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
 `;
