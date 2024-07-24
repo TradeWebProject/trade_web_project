@@ -5,9 +5,13 @@ import { Box } from "@mui/material";
 
 const MyWishList = () => {
   const [responseData, setResponseData] = useState([]);
+  const [totalDataCounts, setTotalDataCounts] = useState(0); // 총 데이터 개수
+  const [page, setPage] = useState(1); // 현재 페이지
   const [showMore, setShowMore] = useState(false); // "더보기" 상태 관리
+  const [postPerPage, setPostPerPage] = useState(8); // 한 페이지에 보여줄 데이터 개수
   const token = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userId");
+
 
   useEffect(() => {
     async function get() {
@@ -23,6 +27,7 @@ const MyWishList = () => {
         );
         console.log("응답 데이터:", response.data.products);
         setResponseData(response.data.products);
+        setTotalDataCounts(response.data.products.length);
       } catch (error) {
         console.error("요청 실패:", error);
       }
@@ -61,9 +66,21 @@ const MyWishList = () => {
     }
   };
 
+  // 총 페이지 수 계산
+  const totalPages = Math.ceil(totalDataCounts / postPerPage);
+
+  // 현재 페이지에 맞는 데이터 계산
+  const indexOfLastPost = page * postPerPage;
+  const indexOfFirstPost = indexOfLastPost - postPerPage;
+  const currentPosts = responseData.slice(indexOfFirstPost, indexOfLastPost);
+
   // "더보기" 버튼 클릭 시 상태 변경
   const handleShowMoreClick = () => {
-    setShowMore(!showMore);
+    if (page < totalPages) {
+      setPage(prevPage => prevPage + 1);
+    } else {
+      setShowMore(!showMore);
+    }
   };
 
   return (
