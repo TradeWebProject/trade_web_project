@@ -12,6 +12,23 @@ const MyWishList = () => {
   const token = localStorage.getItem("accessToken");
   const userId = localStorage.getItem("userId");
 
+   // 총 페이지 수 계산
+   const totalPages = Math.ceil(totalDataCounts / postPerPage);
+
+   // 현재 페이지에 맞는 데이터 계산
+   const indexOfLastPost = page * postPerPage;
+   const indexOfFirstPost = indexOfLastPost - postPerPage;
+   const currentPosts = responseData.slice(indexOfFirstPost, indexOfLastPost);
+ 
+   // "더보기" 버튼 클릭 시 상태 변경
+   const handleShowMoreClick = () => {
+     if (page < totalPages) {
+       setPage(prevPage => prevPage + 1);
+     } else {
+       setShowMore(!showMore);
+     }
+   };
+ 
 
   useEffect(() => {
     async function get() {
@@ -35,7 +52,7 @@ const MyWishList = () => {
     if (userId && token) {
       get();
     }
-  }, [userId, token]);
+  }, [page, userId, token, postPerPage]);
 
   const dislikeClick = (productId) => {
     console.log("disLikeProductId: ", productId);
@@ -66,23 +83,7 @@ const MyWishList = () => {
     }
   };
 
-  // 총 페이지 수 계산
-  const totalPages = Math.ceil(totalDataCounts / postPerPage);
-
-  // 현재 페이지에 맞는 데이터 계산
-  const indexOfLastPost = page * postPerPage;
-  const indexOfFirstPost = indexOfLastPost - postPerPage;
-  const currentPosts = responseData.slice(indexOfFirstPost, indexOfLastPost);
-
-  // "더보기" 버튼 클릭 시 상태 변경
-  const handleShowMoreClick = () => {
-    if (page < totalPages) {
-      setPage(prevPage => prevPage + 1);
-    } else {
-      setShowMore(!showMore);
-    }
-  };
-
+ 
   return (
     <Box sx={{ p: 3 }}>
       <Wrapper>
