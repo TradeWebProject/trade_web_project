@@ -397,32 +397,6 @@ const EndDateInput = styled.input`
     cursor: pointer;
 `;
 
-// const OptionInputWrapper = styled.div`
-//     width: 1280px;
-//     display: flex;
-//     align-items: center;
-//     margin-bottom: 10px;
-// `;
-
-// const OptionContentTitleElement = styled.div`
-//     width:  160px;
-//     height: 30px;
-//     margin-top: 30px;
-//     margin-bottom: 10px;
-//     background-size: cover;
-//     // border: 1px solid green;
-//     cursor: pointer;
-// `;
-
-// const OptionTitleTextElement = styled.div`
-//     width:  52px;
-//     height: 30px;
-//     margin-right: 26px;
-//     margin-bottom: 10px;
-//     background-size: cover;
-//     // border: 1px solid blue;
-//     cursor: pointer;
-// `;
 
 const OptionTitleText = styled.div`
     width:  90px;
@@ -435,19 +409,6 @@ const OptionTitleText = styled.div`
 `;
 
 
-// const OptionTextInput = styled.input`
-//     width: 1060px;
-//     height: 44px;
-//     margin-right: 34px;
-//     border: none;   
-//     margin-bottom: 10px;
-// `;
-
-// const OptionContentInput = styled.input`
-//     width:  2600px;
-//     height: 44px;
-//     border: none; 
-// `;
 
 const InnerWrapper = styled.div`
     width: 1277px;
@@ -462,18 +423,6 @@ const DropwDownElementWrapper = styled.div`
     
 `;
 
-// const FileUploadButtonWrapper = styled.div`
-//     width: 200px;
-//     cursor: pointer;
-// `;
-
-// const FileUploadButton = styled.button`
-//     width: 200px;
-//     hieght: 45px;
-//     margin-top: 10px;
-//     background-color: black;
-//     color: white;
-// `;
 
 const ImageWrapper = styled.div`
   display: flex;
