@@ -22,21 +22,6 @@ const ProductModify = () => {
     const [isProductQuantityChanged, setIsProductQuantityChanged] = useState("");
     const [ImageUpdateStatus, setImageUpdateStatus] = useState(false); 
     const [buttonName, setButtonName] = useState("저장");
-    // const [value, setValue] = useState('');
-    const [inputs, setInputs] = useState({
-        productId: '',
-        email: '',
-        password: '',
-        productName: '',
-        prrice: '',
-        startDate: '',
-        endDate: '',
-        description: '',
-        productQuality: '',
-        category: '',
-        files:rawFiles,
-    });
-
     const [password, setPassword] = useState("");
     const [productName, setProductName] = useState("");
     const [price, setPrice] = useState("");
@@ -82,18 +67,17 @@ const ProductModify = () => {
         get();
     }, [productId]);
 
-    const onChange = (e) => {
-        setInputs((prevData) => ({
-            ...prevData,
-            name: e.target.value,
-        }))
-        setIsInputChanged(true);
-        setButtonName("수정");
-    };
+    // const onChange = (e) => {
+    //     setInputs((prevData) => ({
+    //         ...prevData,
+    //         name: e.target.value,
+    //     }))
+    //     setIsInputChanged(true);
+    //     setButtonName("수정");
+    // };
 
     const fileInputRef = useRef(null);
     const maxfiles = 10;
-    const remainingfiles = maxfiles - inputs.files.length;
 
     const data = {
         productOptions: ["의류", "전자기기", "가전", "문구", "도서", "신발", "여행용품", "스포츠"],
@@ -277,47 +261,46 @@ const ProductModify = () => {
             <SubContentWrapper>
                 <ProductNameWrapper>
                     <ProductNameElement>상품명:</ProductNameElement>
-                    <ProductNameInput type="text" name="productName"  defaultValue={produtData.productName} onChange={(e) => setProductName(e.target.value)}/>
+                    <ProductNameInput type="text" name="productName"  value={produtData.productName} onChange={(e) => setProductName(e.target.value)}/>
                 </ProductNameWrapper>
                 <ProductNameWrapper>
                     <ProductNameElement>가격:</ProductNameElement>
-                    <ProductNameInput type="text" name="price" defaultValue={produtData.price}  onChange={(e) => setPrice(e.target.value)}/>
+                    <ProductNameInput type="text" name="price" value={produtData.price}  onChange={(e) => setPrice(e.target.value)}/>
                 </ProductNameWrapper>
                 <InnerWrapper>
                     <ProductSellDateWrapper>
                         <SellStartDateWrapper>
                                 <DateStartText>판매 시작일:</DateStartText>
-                                <StartDateInput type="date" name="startDate" defaultValue={produtData.startDate}  onChange={(e) => setStartDate(e.target.value)}/>
+                                <StartDateInput type="date" name="startDate" value={produtData.startDate}  onChange={(e) => setStartDate(e.target.value)}/>
                         </SellStartDateWrapper>
                         <SellEndDateWrapper>
                                 <DateStartText>판매 종료일:</DateStartText>
-                                <EndDateInput type="date" name="endDate" defaultValue={produtData.endDate}  onChange={(e) => setEndDate(e.target.value)}/>
+                                <EndDateInput type="date" name="endDate" value={produtData.endDate}  onChange={(e) => setEndDate(e.target.value)}/>
                         </SellEndDateWrapper>
                     </ProductSellDateWrapper>
                     <ProductSellDateWrapper>
                         <SellStartDateWrapper>
                             <OptionTitleText>카테고리</OptionTitleText>
                             <DropwDownElementWrapper>
-                                <DropdownOptions
-                                    name="category"
-                                    options={productOptions}
-                                    title={produtData.category}
-                                    onSelect={onSelect}
-                                    defaultValue={produtData.category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                />
+                            <DropdownOptions
+                                name="category"
+                                options={["의류", "전자기기", "가전", "문구", "도서", "신발", "여행용품", "스포츠"]}
+                                title={produtData?.category || "카테고리 선택"}
+                                onSelect={setCategory}
+                                value={category}
+                            />
                             </DropwDownElementWrapper>
                             
                         </SellStartDateWrapper>
                         <SellStartDateWrapper>
                             <OptionTitleText>제품 상태</OptionTitleText>
                             <DropwDownElementWrapper>
-                                <DropdownOptions
+                            <DropdownOptions
                                     name="productQuality"
                                     options={productSellStatusOptions}
                                     title={produtData.productQuality}
                                     onSelect={onSelect2}
-                                    defaultValue={isProductQuantityChanged}
+                                    value={productQuality}
                                     onChange={(e) => setProductQuality(e.target.value)}
                                 />
                             </DropwDownElementWrapper>
@@ -340,47 +323,40 @@ const ProductModify = () => {
                          ref={quillRef} 
                          placeholder="상품에 대한 상세설명을 작성해주세요!"   
                          name="description" 
-                         value={description}
+                         value={produtData.description}
                          onChange={setDescription}/>
             <ImageWrapper>
                 <SubTitle><h3>이미지</h3></SubTitle>
                 <MainImage>
                     <img src={`${process.env.REACT_APP_IMAGE_URL}${produtData.thumbnailUrl}`}/>
-
                 </MainImage>
-                    <ImageInputWrapper>
-                        <ImageButton>
-                            <input
-                            type="file"
-                            accept="image/*"
-                            multiple
-                            onChange={handleImageChange}
-                            style={{ display: "none" }}
-                            ref={fileInputRef}
-                            disabled={remainingfiles <= 0}
-                            />
-                            <PlusIcon />
-                            <div>
-                                {inputs.files.length}/{maxfiles}
-                            </div>
-                        </ImageButton>
-                        <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper>
+                <ImageInputWrapper>
+                    <ImageButton>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={handleImageChange}
+                        style={{ display: "none" }}
+                        ref={fileInputRef}
+                        disabled={filesArray >= 5}
+                        />
+                        <PlusIcon onClick={() => fileInputRef.current.click()}/>
+                        <div>
+                            {filesArray.length}/5
+                        </div>
+                    </ImageButton>
+                    <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper>
                 </ImageInputWrapper>
             </ImageWrapper>
             <SaveButtonWrapper>
                 <SaveButton onClick={onClickCancelButton}>취소</SaveButton>
-                
-                  
-                        
-                    
-               
-               
             </SaveButtonWrapper>  
             <InfoWrapper>
-                            <div>비밀번호 확인</div>
-                            <ProductNameInput type="text" onChange={(e) => setPassword(e.target.value)} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
-                        </InfoWrapper>
-                        <UpdateButton onClick={onClickUpdateButton}>수정</UpdateButton>
+                <div>비밀번호 확인</div>
+                <ProductNameInput type="text" onChange={(e) => setPassword(e.target.value)} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
+            </InfoWrapper>
+            <UpdateButton onClick={onClickUpdateButton}>수정</UpdateButton>
         </Wrapper>
     </ContentLayout>
     );
