@@ -11,16 +11,32 @@ import deleteIcon from "../../assets/delete.svg";
 const ProductModify = () => {
     const navigate = useNavigate();
     const quillRef = useRef();
-    const { productId } = useParams();
-    const [productData, setProductData] = useState({
-        category: '',
-        productQuality: '',
+    const {productId} = useParams();
+    const [produtData, setProductData] = useState("");
+    const [filesArray, setFilesArray] = useState([]);
+    // const [updateFilesArray, setUpdateFilesArray] = useState([]);
+    const [rawFiles, setRawFiles] = useState([]);
+    const [isTextChanged, setText] = useState("");
+    const [isInputChanged, setIsInputChanged] = useState(false);
+    const [isCategoryChanged, setIsCategoryChanged] = useState("");
+    const [isProductQuantityChanged, setIsProductQuantityChanged] = useState("");
+    const [ImageUpdateStatus, setImageUpdateStatus] = useState(false); 
+    const [buttonName, setButtonName] = useState("저장");
+    // const [value, setValue] = useState('');
+    const [inputs, setInputs] = useState({
+        productId: '',
+        email: '',
+        password: '',
+        productName: '',
+        prrice: '',
+        startDate: '',
+        endDate: '',
         description: '',
-        thumbnailUrl: '',
-        imagePathUrl: []
+        productQuality: '',
+        category: '',
+        files:rawFiles,
     });
-    const [filesArray, setFilesArray] = useState([]); // 기존 이미지 URL
-    const [updatedFiles, setUpdatedFiles] = useState([]); // 새로 업로드된 이미지 데이터 URL
+
     const [password, setPassword] = useState("");
     const [productName, setProductName] = useState("");
     const [price, setPrice] = useState("");
@@ -29,9 +45,15 @@ const ProductModify = () => {
     const [description, setDescription] = useState("");
     const [productQuality, setProductQuality] = useState("");
     const [category, setCategory] = useState("");
-    const fileInputRef = useRef(null);
-    const token = localStorage.getItem("accessToken");
+    const [UpdatedFiles, setUpdatedFiles]= useState([]);
+    const [hasFile, setHasFile] = useState(false);
+    const [serverFileLength, setServerFileLength] = useState(0);
+    let prevFilesLength = 0;
+    let newRawFiles = []; // 새로운 인코딩되지 않은 원본 파일을 저장하는 배열
+  
     
+    const token = localStorage.getItem("accessToken");
+
     useEffect(() => {
         async function get() {
             try {
@@ -44,16 +66,13 @@ const ProductModify = () => {
                             }
                 ).then(function (response) {
                     console.log("응답 데이터:", response.data);
-                    const data = response.data;
-                    setProductData(data);
-                    setProductName(data.productName);
-                    setPrice(data.price);
-                    setStartDate(data.startDate);
-                    setEndDate(data.endDate);
-                    setCategory(data.category || ""); // 데이터가 없으면 빈 문자열로 설정
-                    setProductQuality(data.productQuality || ""); // 데이터가 없으면 빈 문자열로 설정
-                    setDescription(data.description || ""); // 데이터가 없으면 빈 문자열로 설정
-                    setFilesArray(data.imagePathUrl || []); // 데이터가 없으면 빈 배열로 설정
+                    setProductData(response.data);
+                    setFilesArray(response.data.imagePathUrl);
+                    setDescription(response.data.description);
+                    console.log("files: ", filesArray);
+                    prevFilesLength =  response.data.imagePaths.length;
+                    setServerFileLength(prevFilesLength);
+                    console.log("최초: ", prevFilesLength);
                 })
                
             } catch (error) {
@@ -63,85 +82,18 @@ const ProductModify = () => {
         get();
     }, [productId]);
 
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
-        const fileReaders = files.map((file) => {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result);
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        });
-
-        Promise.all(fileReaders)
-            .then((fileUrls) => {
-                setUpdatedFiles((prevFiles) => [...prevFiles, ...fileUrls]);
-            })
-            .catch((err) => console.error("Error reading file:", err));
+    const onChange = (e) => {
+        setInputs((prevData) => ({
+            ...prevData,
+            name: e.target.value,
+        }))
+        setIsInputChanged(true);
+        setButtonName("수정");
     };
 
-    const renderFiles = () => {
-        // 새 이미지와 기존 이미지를 통합
-        const allFiles = [...updatedFiles, ...filesArray];
-    
-        return allFiles.map((imageFile, index) => (
-            <ImagePreview key={index}>
-                <img src={imageFile} alt={`Uploaded file ${index}`} />
-                <DeleteButton onClick={() => handleDeleteImage(index)} />
-            </ImagePreview>
-        ));
-    };
-
-    const onClickUpdateButton = () => {
-        if (!productData) {
-            // productData가 null일 경우 처리 (예: 알림 표시)
-            console.error("상품 데이터가 로드되지 않았습니다.");
-            return;
-        }
-    
-        const form = new FormData();
-        form.append("email", localStorage.getItem("email"));
-        form.append("password", password);
-        form.append("productName", productName);
-        form.append("price", price);
-        form.append("startDate", startDate);
-        form.append("endDate", endDate);
-        form.append("description", description);
-        form.append("productQuality", productQuality || ""); // 기본값 설정
-        form.append("category", category || ""); // 기본값 설정
-        form.append("productId", productId);
-    
-        // 업데이트된 이미지 파일 추가
-        updatedFiles.forEach((file, index) => {
-            form.append("files", file);
-        });
-    
-        axios.put(`${process.env.REACT_APP_API_URL}products/${productId}`, form, {
-            headers: {
-                "Content-Type": "multipart/form-data",
-                'Authorization': `Bearer ${token}`,
-            }
-        }).then((response) => {
-            console.log("응답 데이터:", response.data);
-        }).catch((error) => {
-            console.error("요청 실패:", error);
-        });
-    };
-
-    const onClickCancelButton = () => {
-        navigate("/my-page");
-    }
-    
-    const handleDeleteImage = (index) => {
-        if (index < filesArray.length) {
-          // 기존 이미지 삭제
-          setFilesArray((prevFiles) => prevFiles.filter((_, i) => i !== index));
-        } else {
-          // 새 이미지 삭제
-          setUpdatedFiles((prevFiles) => prevFiles.filter((_, i) => i !== (index - filesArray.length)));
-        }
-    };
+    const fileInputRef = useRef(null);
+    const maxfiles = 10;
+    const remainingfiles = maxfiles - inputs.files.length;
 
     const data = {
         productOptions: ["의류", "전자기기", "가전", "문구", "도서", "신발", "여행용품", "스포츠"],
@@ -156,12 +108,19 @@ const ProductModify = () => {
      // 옵션 선택 시
     const onSelect = (option) => {
         console.log(option);
+
         setCategory(option);
+        setIsCategoryChanged(option);
+        setIsInputChanged(true);
+        setButtonName("수정");
     };
 
     const onSelect2 = (option) => {
         console.log(option);
         setProductQuality(option);
+        setIsProductQuantityChanged(option)
+        setIsInputChanged(true);
+        setButtonName("수정");
     }
 
     const modules = {
@@ -182,6 +141,132 @@ const ProductModify = () => {
         },
     };
 
+    const handleImageChange = (e) => {
+        const files = e.target.files;
+        const maxSize = 10 * 1024 * 1024; // 10MB
+        const formData = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            if (file.size > maxSize) {
+                alert("파일 크기는 10MB를 초과할 수 없습니다.");
+                return;
+            }
+        
+            formData.append("files",  file); // FormData에는 인코딩된 파일을 추가
+            newRawFiles.push(file); // newRawFiles 배열에는 인코딩되지 않은 원본 파일을 추가
+            setHasFile(true);
+        }
+
+        setUpdatedFiles([...filesArray, ...newRawFiles]);
+        console.log("서버에서 가져온 파일 개수: ", filesArray.length);
+        prevFilesLength = filesArray.length;
+        console.log("서버에서 가져온 파일 개수: ",prevFilesLength);
+        console.log("새로 추가한 파일 개수: ", newRawFiles.length);
+
+        const promises = Array.from(files).map((file) => {
+           console.log("file: " , file);
+        const reader = new FileReader();
+
+        return new Promise((resolve, reject) => {
+            reader.onload = (e) => {
+            resolve(e.target.result);
+            };
+
+            reader.onerror = (error) => {
+            reject(error);
+            };
+
+            reader.readAsDataURL(file);
+        });
+    });
+
+    Promise.all(promises)
+      .then((results) => {
+        setFilesArray((prevfiles) => {
+          const newfiles = [...prevfiles, ...results];
+          prevFilesLength =  prevfiles.length;
+          console.log("서버에서 가져온 파일 개수: ", prevfiles.length );
+          if (newfiles.length > 10) {
+            return newfiles.slice(newfiles.length - 10);
+          }
+
+          return newfiles;
+        });
+        console.log(fileInputRef , "fileInputRef");
+        fileInputRef.current.value = null;
+      })
+      .catch((error) => {
+        console.error("이미지를 읽는 동안 오류가 발생했습니다.", error);
+      });
+    };
+
+       
+       const renderfiles = () => {
+           
+           console.log("filesArray: " , filesArray);
+           console.log("filesArray.length: " , filesArray.length);
+           prevFilesLength = filesArray.length;
+           console.log("서버에서 가져온 파일 개수: ",serverFileLength);
+        return filesArray.map((imageFile, index) => (
+           <ImagePreview key={index}>
+             {(index < serverFileLength)  ? <img src={`${process.env.REACT_APP_IMAGE_URL}${imageFile}`} alt={`Uploaded file ${index}`} /> :  <img src={imageFile} alt={`Uploaded file ${index}`} />}    
+            <DeleteButton onClick={() => handleDeleteImage(index)} />
+          </ImagePreview>
+        ));
+      };
+
+      const handleDeleteImage = (index) => {
+        const newFiles = [...filesArray];
+        console.log("1. : " + newFiles);
+        const newRawFiles = [...rawFiles]; // rawFiles 복사
+        newFiles.splice(index, 1); // 파일 삭제
+        console.log(newFiles);
+        newRawFiles.splice(index, 1); // rawFiles에서도 삭제
+        setFilesArray(newFiles); // 파일 상태 업데이트
+        setUpdatedFiles(newRawFiles); // rawFiles 상태 업데이트
+      };
+
+      const onClickCancelButton = () => {
+        navigate("/my-page");
+      }
+
+      const onClickUpdateButton = () => {
+        console.log("여기");
+        try {
+            
+            const form = new FormData();
+            form.append("email", localStorage.getItem("email"));
+            form.append("password", password);
+            form.append("productName", productName);
+            form.append("price",price);
+            form.append("startDate", startDate);
+            form.append("endDate", endDate);
+            form.append("description", description);
+            form.append("productQuality", productQuality);
+            form.append("category",category);
+
+            UpdatedFiles.forEach((file) => {
+                form.append("files", file);
+            });
+          
+            axios.put(`${process.env.REACT_APP_API_URL}products/${productId}`,
+                      form,
+                      {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            'Authorization': `Bearer ${token}`,
+                        }
+                      }
+            ).then(function (response) {
+                console.log("응답 데이터:", response.data);
+            })
+           
+        } catch (error) {
+            console.error("요청 실패:", error);
+        }
+      };
+
     return (
     <ContentLayout>
         <Wrapper>
@@ -192,34 +277,35 @@ const ProductModify = () => {
             <SubContentWrapper>
                 <ProductNameWrapper>
                     <ProductNameElement>상품명:</ProductNameElement>
-                    <ProductNameInput type="text" name="productName"  value={productName} onChange={(e) => setProductName(e.target.value)}/>
+                    <ProductNameInput type="text" name="productName"  defaultValue={produtData.productName} onChange={(e) => setProductName(e.target.value)}/>
                 </ProductNameWrapper>
                 <ProductNameWrapper>
                     <ProductNameElement>가격:</ProductNameElement>
-                    <ProductNameInput type="text" name="price" value={price}  onChange={(e) => setPrice(e.target.value)}/>
+                    <ProductNameInput type="text" name="price" defaultValue={produtData.price}  onChange={(e) => setPrice(e.target.value)}/>
                 </ProductNameWrapper>
                 <InnerWrapper>
                     <ProductSellDateWrapper>
                         <SellStartDateWrapper>
                                 <DateStartText>판매 시작일:</DateStartText>
-                                <StartDateInput type="date" name="startDate" value={startDate}  onChange={(e) => setStartDate(e.target.value)}/>
+                                <StartDateInput type="date" name="startDate" defaultValue={produtData.startDate}  onChange={(e) => setStartDate(e.target.value)}/>
                         </SellStartDateWrapper>
                         <SellEndDateWrapper>
                                 <DateStartText>판매 종료일:</DateStartText>
-                                <EndDateInput type="date" name="endDate" value={endDate}  onChange={(e) => setEndDate(e.target.value)}/>
+                                <EndDateInput type="date" name="endDate" defaultValue={produtData.endDate}  onChange={(e) => setEndDate(e.target.value)}/>
                         </SellEndDateWrapper>
                     </ProductSellDateWrapper>
                     <ProductSellDateWrapper>
                         <SellStartDateWrapper>
                             <OptionTitleText>카테고리</OptionTitleText>
                             <DropwDownElementWrapper>
-                            <DropdownOptions
-                                name="category"
-                                options={["의류", "전자기기", "가전", "문구", "도서", "신발", "여행용품", "스포츠"]}
-                                title={productData?.category || "카테고리 선택"}
-                                onSelect={setCategory}
-                                value={category}
-                            />
+                                <DropdownOptions
+                                    name="category"
+                                    options={productOptions}
+                                    title={produtData.category}
+                                    onSelect={onSelect}
+                                    defaultValue={produtData.category}
+                                    onChange={(e) => setCategory(e.target.value)}
+                                />
                             </DropwDownElementWrapper>
                             
                         </SellStartDateWrapper>
@@ -229,9 +315,9 @@ const ProductModify = () => {
                                 <DropdownOptions
                                     name="productQuality"
                                     options={productSellStatusOptions}
-                                    title={productData.productQuality}
+                                    title={produtData.productQuality}
                                     onSelect={onSelect2}
-                                    value={productQuality}
+                                    defaultValue={isProductQuantityChanged}
                                     onChange={(e) => setProductQuality(e.target.value)}
                                 />
                             </DropwDownElementWrapper>
@@ -259,7 +345,7 @@ const ProductModify = () => {
             <ImageWrapper>
                 <SubTitle><h3>이미지</h3></SubTitle>
                 <MainImage>
-                    <img src={`${process.env.REACT_APP_IMAGE_URL}${productData.thumbnailUrl}`}/>
+                    <img src={`${process.env.REACT_APP_IMAGE_URL}${produtData.thumbnailUrl}`}/>
 
                 </MainImage>
                     <ImageInputWrapper>
@@ -271,24 +357,30 @@ const ProductModify = () => {
                             onChange={handleImageChange}
                             style={{ display: "none" }}
                             ref={fileInputRef}
-                            disabled={filesArray >= 5}
+                            disabled={remainingfiles <= 0}
                             />
-                            <PlusIcon onClick={() => fileInputRef.current.click()}/>
+                            <PlusIcon />
                             <div>
-                                {filesArray.length}/5
+                                {inputs.files.length}/{maxfiles}
                             </div>
                         </ImageButton>
-                        <ImagePreviewWrapper> {renderFiles()}</ImagePreviewWrapper>
+                        <ImagePreviewWrapper>{renderfiles()}</ImagePreviewWrapper>
                 </ImageInputWrapper>
             </ImageWrapper>
             <SaveButtonWrapper>
                 <SaveButton onClick={onClickCancelButton}>취소</SaveButton>
+                
+                  
+                        
+                    
+               
+               
             </SaveButtonWrapper>  
             <InfoWrapper>
-                <div>비밀번호 확인</div>
-                <ProductNameInput type="text" onChange={(e) => setPassword(e.target.value)} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
-            </InfoWrapper>
-            <UpdateButton onClick={onClickUpdateButton}>수정</UpdateButton>
+                            <div>비밀번호 확인</div>
+                            <ProductNameInput type="text" onChange={(e) => setPassword(e.target.value)} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
+                        </InfoWrapper>
+                        <UpdateButton onClick={onClickUpdateButton}>수정</UpdateButton>
         </Wrapper>
     </ContentLayout>
     );
@@ -484,12 +576,11 @@ const ImageButton = styled.label`
   cursor: pointer;
 `;
 
-const PlusIcon = styled.img.attrs({
-    src: plusIcon,
-})`
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
+const PlusIcon = styled.div`
+  width: 15px;
+  height: 15px;
+  background-image: url(${plusIcon});
+  background-size: cover;
 `;
 
 const SaveButtonWrapper = styled.div`
