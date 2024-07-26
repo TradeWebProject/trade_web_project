@@ -8,6 +8,7 @@ import UserPayment from '../payment/UserPayment';
 import UserProductSellHistory from '../payment/UserProductSellHistory';
 import MyWishList from '../userAccount/MyWishList';
 import Review from '../review/Review';
+import UserSellHistory from '../payment/UserSellHistory';
 
 
 const MyPageManagement = () => {
@@ -69,7 +70,7 @@ const MyPageManagement = () => {
                  {currentTabIndex === 3 && (
                     <Box sx={{ p: 3 }}>
                         {
-                        <UserPayment/>
+                        <UserSellHistory/>
                         }
                     </Box>
                 )}
