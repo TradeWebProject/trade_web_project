@@ -8,35 +8,10 @@ const UserPayment = () => {
     const token = localStorage.getItem("accessToken");
     console.log("token: ", token);
     const userId = localStorage.getItem("userId");
-    const [responseData, setResponseData] = useState(null);
-    const apiUrl = `${process.env.REACT_APP_API_URL}urchases/user/${userId}`;
+    console.log("userId: " , userId);
+    const [responseData, setResponseData] = useState([]);
+    const apiUrl = `${process.env.REACT_APP_API_URL}purchase/user/${userId}`;
     console.log("apiUrl: ", apiUrl);
-
-
-    // const fetchPurchaseProducts = async () => {
-    //     setLoading(true);
-    //     try {
-    //         await axios.get(`${process.env.REACT_APP_API_URL}/purchases/user/${userId}`,
-    //             {
-    //                 headers: {
-    //                     'Content-Type': "multipart/form-data",
-    //                     'Authorization': `Bearer ${token}`,
-    //                 },
-    //                 params: {
-    //                     "page": 1,
-    //                     "size": 8,
-    //                     "sort": "desc"
-    //                 }
-    //             }
-    //         ).then(function (response) {
-    //             const purchasesArray = response.data;
-    //             setResponseData(purchasesArray);
-    //             console.log("responseData: ", responseData);
-    //         })
-    //     } catch (error) {
-    //         console.log("요청 실패: ", error);
-    //     }
-    // }
 
     useEffect(() => {
         async function get() {
@@ -44,13 +19,13 @@ const UserPayment = () => {
             try {
                 await axios.get(apiUrl,
                     {
-                        withCredentials: true, // Add this line if needed
                         headers: {
+                            'Content-Type': "multipart/form-data",
                             'Authorization': `Bearer ${token}`,
                         },
                         params: {
                             "page": 1,
-                            "size": 8,
+                            "size": 10,
                             "sort": "desc"
                         }
                     }
@@ -81,14 +56,23 @@ const UserPayment = () => {
                 <Title>구매 내역</Title>
                 <Table>
                 <tr>
-                    <TableTh>결제일</TableTh>
                     <TableTh>상품 이미지</TableTh>
                     <TableTh>상품명</TableTh>
                     <TableTh>금액</TableTh>
-                    <TableTh>결제번호</TableTh>
-                    <TableTh>구매상태</TableTh>
+                    <TableTh>판매자 닉네임</TableTh>
                 </tr>
+                <tbody>
+                        {responseData.map((data, index) => (
+                            <tr key={index}>
+                                <TableTd><img src={data.imageUrl} alt="product" /></TableTd>
+                                <TableTd>{data.productName}</TableTd>
+                                <TableTd>{data.price}</TableTd>
+                                <TableTd>{data.sellerNickname}</TableTd>
+                            </tr>
+                        ))}
+                    </tbody>
                 </Table>
+
                 <Pagination/>
             </Container>
         </>
