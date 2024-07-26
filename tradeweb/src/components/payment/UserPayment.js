@@ -1,61 +1,78 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import styled from "styled-components";
+import { unstable_createMuiStrictModeTheme } from '@mui/material';
 
 const UserPayment = () => {
+    const [loading, setLoading] = useState(false);
+    const token = localStorage.getItem("accessToken");
+    console.log("token: ", token);
+    const userId = localStorage.getItem("userId");
+    console.log("userId: " , userId);
+    const [responseData, setResponseData] = useState([]);
+    const apiUrl = `${process.env.REACT_APP_API_URL}purchase/user/${userId}`;
+    console.log("apiUrl: ", apiUrl);
+
+    useEffect(() => {
+        async function get() {
+            setLoading(true);
+            try {
+                await axios.get(apiUrl,
+                    {
+                        headers: {
+                            'Content-Type': "multipart/form-data",
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        params: {
+                            "page": 1,
+                            "size": 10,
+                            "sort": "desc"
+                        }
+                    }
+                ).then(function (response) {
+                    const purchasesArray = response.data;
+                    setResponseData(purchasesArray);
+                    console.log("responseData: ", responseData);
+                })
+            } catch (error) {
+                console.log("요청 실패: ", error);
+                if (error.response) {
+                    console.log('Error data:', error.response.data);
+                    console.log('Error status:', error.response.status);
+                    console.log('Error headers:', error.response.headers);
+                }
+            } finally {
+                setLoading(false);
+            }
+
+        };
+        get();
+    }, [apiUrl, token])
+
+
     return (
         <>
             <Container>
                 <Title>구매 내역</Title>
                 <Table>
                 <tr>
-                    <TableTh>결제일</TableTh>
                     <TableTh>상품 이미지</TableTh>
                     <TableTh>상품명</TableTh>
                     <TableTh>금액</TableTh>
-                    <TableTh>결제번호</TableTh>
-                    <TableTh>구매상태</TableTh>
+                    <TableTh>판매자 닉네임</TableTh>
                 </tr>
-                <tr>
-                    <TableTd>2024.06.08</TableTd>
-                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                    <TableTd>아디다스 슬리퍼</TableTd>
-                    <TableTd>43,000원</TableTd>
-                    <TableTd>0000003</TableTd>
-                    <TableTd>구매완료</TableTd>
-                </tr>
-                <tr>
-                    <TableTd>2024.06.06</TableTd>
-                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                    <TableTd>나이키 신발</TableTd>
-                    <TableTd>89,000원</TableTd>
-                    <TableTd>0000002</TableTd>
-                    <TableTd>구매완료</TableTd>
-                </tr>
-                <tr>
-                    <TableTd>2024.06.05</TableTd>
-                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                    <TableTd>나이키 티셔츠</TableTd>
-                    <TableTd>56,000원</TableTd>
-                    <TableTd>0000001</TableTd>
-                    <TableTd>구매완료</TableTd>
-                </tr>
-                <tr>
-                    <TableTd>2024.06.04</TableTd>
-                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                    <TableTd>아디다스 슬리퍼2</TableTd>
-                    <TableTd>43,000원</TableTd>
-                    <TableTd>0000003</TableTd>
-                    <TableTd>구매완료</TableTd>
-                </tr>
-                <tr>
-                    <TableTd>2024.06.03</TableTd>
-                    <TableTd><img src="https://via.placeholder.com/200x200"/></TableTd>
-                    <TableTd>나이키 신발2</TableTd>
-                    <TableTd>89,000원</TableTd>
-                    <TableTd>0000002</TableTd>
-                    <TableTd>구매완료</TableTd>
-                </tr>
+                <tbody>
+                        {responseData.map((data, index) => (
+                            <tr key={index}>
+                                <TableTd><img src={data.imageUrl} alt="product" /></TableTd>
+                                <TableTd>{data.productName}</TableTd>
+                                <TableTd>{data.price}</TableTd>
+                                <TableTd>{data.sellerNickname}</TableTd>
+                            </tr>
+                        ))}
+                    </tbody>
                 </Table>
+
                 <Pagination/>
             </Container>
         </>
