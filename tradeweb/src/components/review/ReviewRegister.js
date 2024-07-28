@@ -33,7 +33,7 @@ const renderStars = (rating) => {
   return stars;
 };
 
-const Review = () => {
+const ReviewRegister = () => {
   const [isPurchased, setIsPurchased] = useState(true);
   const [reviewContent, setReviewContent] = useState("");
   const [listData, setListData] = useState([]);
@@ -49,6 +49,7 @@ const Review = () => {
   const token = localStorage.getItem("accessToken");
   const [sellerInfo, setSellerInfo] = useState({});
 
+  // 상품에 대한 리뷰
   const fetchReviews = async () => {
     try {
       const reviewResponse = await axios.get(
@@ -61,11 +62,12 @@ const Review = () => {
       );
       const reviews = reviewResponse.data;
       setReviews(reviews);
-      console.log(reviews);
+      console.log("reviews: " , reviews);
 
       const sellerId = reviews?.[0]?.sellerId;
 
       if (sellerId) {
+        // 판매자에 대한 리뷰
         const sellerResponse = await axios.get(
           `${process.env.REACT_APP_API_URL}reviews/seller/${sellerId}`,
           {
@@ -74,6 +76,7 @@ const Review = () => {
             },
           }
         );
+
         const sellerData = sellerResponse.data;
         setSellerInfo({
           sellerImage: sellerData.sellerProfileImageUrl,
@@ -83,10 +86,6 @@ const Review = () => {
           ratedCount: sellerData.totalReviews,
         });
         console.log(sellerData);
-
-        for (let i = 0; i < sellerData.length; i++) {
-           averageRating[i] = sellerData[i].rating;
-        }
       } else {
         console.warn("No sellerId found in reviews.");
       }
@@ -141,7 +140,7 @@ const Review = () => {
       setListData((prev) => [...prev, ...newReviews]);
       setPage((prev) => prev + 1);
     }
-  }, [page, reviews]);
+  }, [page, reviews, productId]);
 
   useEffect(() => {
     fetchReviews();
@@ -206,10 +205,10 @@ const Review = () => {
                 ))}
               </div>
             </ReviewIconWrapper>
-            {/* <AverageText>
+            <AverageText>
               {averageRating} / 5 <p>({totalReviews})</p>
-            </AverageText> */}
-            {/* <StarAverage>{renderStars(parseFloat(averageRating))}</StarAverage> */}
+            </AverageText>
+            <StarAverage>{renderStars(parseFloat(averageRating))}</StarAverage>
             <InputElement
               type="text"
               value={reviewContent}
@@ -222,11 +221,13 @@ const Review = () => {
             상품 구매후에 후기를 작성할 수 있습니다
           </ReviewWriteContainer>
         )}
-        {listData.map((data, index) => (
+        {reviews.map((data, index) => (
           <ProfileContainer key={index}>
             <ReviewHeader>
-              <img src={data.files} alt="profile" />
-              <div>{data.nickName}</div>
+              {/* <img src={data.reviewerProfileImageUrl} alt="profile" /> */}
+              <div>{data.reviewerNickname}</div>
+              <div>{data.productName}</div>
+              <div>{data.reviewContent}</div>
               <div>{data.date}</div>
             </ReviewHeader>
             <StarContainer>
@@ -266,7 +267,7 @@ const Review = () => {
   );
 };
 
-export default Review;
+export default ReviewRegister;
 
 const Wrapper = styled.div`
   display: flex;

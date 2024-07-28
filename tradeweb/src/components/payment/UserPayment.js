@@ -32,7 +32,7 @@ const UserPayment = () => {
                         }
                     }
                 ).then(function (response) {
-                    const purchasesArray = response.data;
+                    const purchasesArray = response.data.products;
                     setResponseData(purchasesArray);
                     console.log("responseData: ", responseData);
                 })
