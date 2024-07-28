@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from "styled-components";
 import { unstable_createMuiStrictModeTheme } from '@mui/material';
+import Pagination from "../pagination/Pagination";
 
 const UserPayment = () => {
     const [loading, setLoading] = useState(false);
+    const [postsPerPage, setPostsPerPage] = useState(8);// 한페이지에 8개의 상품을 보여준다
+    const [currentPage, setCurrentPage] = useState(1); //현재페이지
     const token = localStorage.getItem("accessToken");
-    console.log("token: ", token);
     const userId = localStorage.getItem("userId");
-    console.log("userId: " , userId);
     const [responseData, setResponseData] = useState([]);
     const apiUrl = `${process.env.REACT_APP_API_URL}purchase/user/${userId}`;
-    console.log("apiUrl: ", apiUrl);
+
+
 
     useEffect(() => {
         async function get() {
@@ -47,8 +49,9 @@ const UserPayment = () => {
 
         };
         get();
-    }, [apiUrl, token])
+    }, [apiUrl, token, currentPage])
 
+    const paginate =(currentPage) => setCurrentPage(currentPage);
 
     return (
         <>
@@ -72,8 +75,8 @@ const UserPayment = () => {
                         ))}
                     </tbody>
                 </Table>
-
-                <Pagination/>
+                 <Pagination  totalPosts={responseData.length} postsPerPage={postsPerPage} setCurrentPage={currentPage}  paginate={paginate}  />  
+              
             </Container>
         </>
     );
@@ -113,8 +116,6 @@ const TableTd = styled.td`
     padding: 6px 15px;
     text-align: center;
 `;
-
-const Pagination = styled.div``;
 
 const PageButton = styled.button`
     width: 35px;

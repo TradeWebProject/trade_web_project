@@ -1,16 +1,55 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from "styled-components";
+import Pagination from "../pagination/Pagination";
 
 const UserSellHistory = () => {
     const [loading, setLoading] = useState(false);
+    const [postsPerPage, setPostsPerPage] = useState(8);// 한페이지에 8개의 상품을 보여준다
+    const [currentPage, setCurrentPage] = useState(1); //현재페이지
     const token = localStorage.getItem("accessToken");
-    console.log("token: ", token);
     const userId = localStorage.getItem("userId");
-    console.log("userId: " , userId);
     const [responseData, setResponseData] = useState([]);
     const apiUrl = `${process.env.REACT_APP_API_URL}purchase/user/${userId}`;
-    console.log("apiUrl: ", apiUrl);
+
+    useEffect(() => {
+        async function get() {
+            setLoading(true);
+            try {
+                await axios.get(apiUrl,
+                    {
+                        headers: {
+                            'Content-Type': "multipart/form-data",
+                            'Authorization': `Bearer ${token}`,
+                        },
+                        params: {
+                            "page": 1,
+                            "size": 10,
+                            "sort": "desc"
+                        }
+                    }
+                ).then(function (response) {
+                    const purchasesArray = response.data;
+                    setResponseData(purchasesArray);
+                    console.log("responseData: ", responseData);
+                })
+            } catch (error) {
+                console.log("요청 실패: ", error);
+                if (error.response) {
+                    console.log('Error data:', error.response.data);
+                    console.log('Error status:', error.response.status);
+                    console.log('Error headers:', error.response.headers);
+                }
+            } finally {
+                setLoading(false);
+            }
+
+        };
+        get();
+    }, [apiUrl, token, currentPage])
+
+    const paginate =(currentPage) => setCurrentPage(currentPage);
+
   return (
     <>
         <Container>
@@ -33,8 +72,8 @@ const UserSellHistory = () => {
                         ))}
                     </tbody>
                 </Table>
-
-                <Pagination/>
+                <Pagination  totalPosts={responseData.length} postsPerPage={postsPerPage} setCurrentPage={currentPage}  paginate={paginate}  />  
+           
             </Container>
         </>
     )
@@ -74,8 +113,6 @@ const TableTd = styled.td`
     padding: 6px 15px;
     text-align: center;
 `;
-
-const Pagination = styled.div``;
 
 const PageButton = styled.button`
     width: 35px;
