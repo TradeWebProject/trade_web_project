@@ -1,3 +1,4 @@
+import { Box, Typography } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from "styled-components";
@@ -24,26 +25,10 @@ const UserSellHistory = () => {
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-
-                console.log("API 응답 데이터: ", response);
                 console.log("API 응답 데이터: ", response.data.products);
 
-                // 서버 응답 형식이 배열인지 확인
-                if (Array.isArray(response.data)) {
-                    setResponseData(response.data.products);
-                } else if (response.data.data && Array.isArray(response.data.data)) {
-                    // 만약 데이터가 { data: [...] } 형식이라면
-                    setResponseData(response.data.data);
-                } else {
-                    console.error("배열이 아닌 데이터가 반환되었습니다: ", response.data);
-                    setResponseData([]); // 안전하게 빈 배열로 초기화
-                }
-
-                for (let i = 0; i <= responseData.lengthl; i++) {
-                    if (userId === responseData[i].userId) {
-                        selledResponseData[i] = responseData[i];
-                    }
-                }
+                // 상태 업데이트
+                setResponseData( response.data.products);
 
             } catch (error) {
                 console.log("요청 실패: ", error);
@@ -60,50 +45,40 @@ const UserSellHistory = () => {
         }
 
         get();
-    }, [token, currentPage, postsPerPage]);
+    }, [token, currentPage, postsPerPage, userId]);
 
-    // 상태 업데이트 확인
-    useEffect(() => {
-        console.log("업데이트된 responseData: ", responseData);
-    }, [responseData]);
-
-    const paginate = (currentPage) => setCurrentPage(currentPage);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
-        <>
-            <Container>
-                <Title>판매 내역</Title>
-                <Table>
-                    <thead>
-                        <tr>
-                            <TableTh>상품 이미지</TableTh>
-                            <TableTh>상품명</TableTh>
-                            <TableTh>금액</TableTh>
-                            <TableTh>판매자 닉네임</TableTh>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {selledResponseData && selledResponseData.length > 0 ? (
-                            selledResponseData.map((item, index) => (
-                                <tr key={index}>
-                                    <TableTd><TableRowImage src={`${process.env.REACT_APP_IMAGE_URL}${item.imageUrl}`}/></TableTd>
-                                     {/* <TableTd><TableRowImage src={`${item.imageUrl}`}/></TableTd> */}
-                                    {/* <TableTd><TableRowImage src={item.imageUrl} alt="product" width={20}/></TableTd> */}
-                                    <TableTd>{item.productName}</TableTd>
-                                    <TableTd>{item.price}</TableTd>
-                                    <TableTd>{item.sellerNickname}</TableTd>
-                                </tr>
-                            ))
-                        ) : (
-                        <tr>
-                            <TableTd colSpan={4}>데이터가 없습니다.</TableTd>
-                        </tr>
-                        )}
-                    </tbody>
-                </Table>
-                <Pagination totalPosts={responseData.length} postsPerPage={postsPerPage} setCurrentPage={currentPage} paginate={paginate} />
-            </Container>
-        </>
+        <Container>
+            <Title>판매 완료된 상품</Title>
+            <Table>
+                <thead>
+                    <tr>
+                        <TableTh>상품 이미지</TableTh>
+                        <TableTh>상품명</TableTh>
+                        <TableTh>금액</TableTh>
+                        <TableTh>판매자 닉네임</TableTh>
+                    </tr>
+                </thead>
+                <tbody>
+                    {responseData.map((data,index) => (
+                        <tr key={index}>
+                        <TableTd><ThumnailImage src={data.imageUrl} alt="product" /></TableTd>
+                        <TableTd>{data.productName}</TableTd>
+                        <TableTd>{data.price}</TableTd>
+                        <TableTd>{data.sellerNickname}</TableTd>
+                    </tr>
+                    ))}
+                </tbody>
+            </Table>
+            <Pagination 
+                totalPosts={selledResponseData.length} 
+                postsPerPage={postsPerPage} 
+                currentPage={currentPage} 
+                paginate={paginate} 
+            />
+        </Container>
     );
 }
 
@@ -135,7 +110,6 @@ const TableTh = styled.th`
     background: #42444e;
     color: #fff;
     text-align: center;
-
 `;
 
 const TableRowImage = styled.img`
@@ -154,4 +128,61 @@ const PageButton = styled.button`
     background-color: black;
     color: white;
     cursor: pointer;
+`;
+
+
+const ReviewCard = styled(Box)`
+    display: flex;
+    align-items: flex-start;
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    background-color: #ffffff;
+`;
+
+const UserAvatar = styled.img`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 16px;
+`;
+
+const ReviewContent = styled(Box)`
+    flex: 1;
+`;
+
+const Header = styled(Box)`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+`;
+
+const UserName = styled(Typography)`
+    font-weight: bold;
+`;
+
+const Date = styled(Typography)`
+    color: #757575;
+    font-size: 14px;
+`;
+
+const ReviewText = styled(Typography)`
+    margin-top: 8px;
+    font-size: 16px;
+    color: #333333;
+`;
+
+// 추가된 AverageText 컴포넌트
+const AverageRatingText = styled(Typography)`
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #333333;
+`;
+
+const ThumnailImage = styled.img`
+    width: 200px;
+    height: 200px;
 `;

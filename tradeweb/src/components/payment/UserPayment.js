@@ -67,7 +67,7 @@ const UserPayment = () => {
                 <tbody>
                         {responseData.map((data, index) => (
                             <tr key={index}>
-                                <TableTd><img src={data.imageUrl} alt="product" /></TableTd>
+                                <TableTd><ThumnailImage src={data.imageUrl} alt="product" /></TableTd>
                                 <TableTd>{data.productName}</TableTd>
                                 <TableTd>{data.price}</TableTd>
                                 <TableTd>{data.sellerNickname}</TableTd>
@@ -123,4 +123,9 @@ const PageButton = styled.button`
     background-color: black;
     color: white;
     cursor: pointer;
+`;
+
+const ThumnailImage = styled.img`
+    width: 200px;
+    height: 200px;
 `;
