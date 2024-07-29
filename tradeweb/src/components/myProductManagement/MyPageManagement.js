@@ -7,7 +7,7 @@ import MyProfile from '../userAccount/MyProfile';
 import UserPayment from '../payment/UserPayment';
 import UserProductSellHistory from '../payment/UserProductSellHistory';
 import MyWishList from '../userAccount/MyWishList';
-import Review from '../review/Review';
+import ReviewList from '../review/ReviewList';
 import UserSellHistory from '../payment/UserSellHistory';
 
 
@@ -77,7 +77,7 @@ const MyPageManagement = () => {
                  {currentTabIndex === 4 && (
                     <Box sx={{ p: 3 }}>
                         {
-                        <Review/>
+                        <ReviewList/>
                         }
                     </Box>
                 )}
