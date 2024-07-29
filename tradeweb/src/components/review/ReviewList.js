@@ -5,7 +5,8 @@ import { Box, Typography, Rating } from '@mui/material';
 
 const ReviewList = () => {
     const token = localStorage.getItem("accessToken");
-    const userId = localStorage.getItem("userId");
+    const sellerId = localStorage.getItem("userId");
+    console.log("sellerId: " , sellerId);
 
     const [postsPerPage, setPostsPerPage] = useState(8); // 한 페이지에 8개의 상품을 보여준다
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
@@ -15,17 +16,18 @@ const ReviewList = () => {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const apiUrl = `${process.env.REACT_APP_API_URL}review/seller/${userId}?page=${currentPage}&size=${postsPerPage}&sort=desc`;
+                const apiUrl = `${process.env.REACT_APP_API_URL}reviews/seller/${sellerId}?page=${currentPage}&size=${postsPerPage}&sort=desc`;
                 const response = await axios.get(apiUrl, {
                     headers: {
                         'Content-Type': "multipart/form-data",
                         'Authorization': `Bearer ${token}`,
                     },
                 });
-
+    
+                console.log("리뷰 데이터: ", response);
                 const fetchedReviews = response.data.products;
                 setReviewsData(fetchedReviews); // 실제 리뷰 데이터로 업데이트
-
+    
                 // 평균 평점 계산
                 if (fetchedReviews.length > 0) {
                     const avgRating = fetchedReviews.reduce((acc, review) => acc + review.rating, 0) / fetchedReviews.length;
@@ -37,28 +39,32 @@ const ReviewList = () => {
                 console.error("Error fetching reviews:", error);
             }
         };
-
+    
         fetchReviews(); // 비동기 함수 호출
-    }, [userId, currentPage, postsPerPage, token]);
-
+    }, [sellerId, currentPage, postsPerPage, token]);
+    
     return (
         <Container>
             <Typography variant="h5" gutterBottom>
                 리뷰 목록
             </Typography>
             <AverageRatingText>평균 평점: {averageReviewRating.toFixed(1)} / 5</AverageRatingText>
-            {reviewsData.map((review) => (
-                <ReviewCard key={review.id}>
-                    <UserAvatar src={review.reviewerProfileImageUrl} alt={review.userName} />
-                    <ReviewContent>
-                        <Header>
-                            <Date>{review.reviewDate}</Date>
-                        </Header>
-                        <Rating value={review.rating} readOnly size="small" />
-                        <ReviewText>{review.reviewTitle}</ReviewText>
-                    </ReviewContent>
-                </ReviewCard>
-            ))}
+            {Array.isArray(reviewsData) && reviewsData.length > 0 ? (
+                reviewsData?.map((review) => (
+                    <ReviewCard key={review.id}>
+                        <UserAvatar src={review.reviewerProfileImageUrl} alt={review.userName} />
+                        <ReviewContent>
+                            <Header>
+                                <Date>{review.reviewDate}</Date>
+                            </Header>
+                            <Rating value={review.rating} readOnly size="small" />
+                            <ReviewText>{review.reviewTitle}</ReviewText>
+                        </ReviewContent>
+                    </ReviewCard>
+                ))
+            ) : (
+                <Typography>리뷰가 없습니다.</Typography>
+            )}
         </Container>
     );
 };

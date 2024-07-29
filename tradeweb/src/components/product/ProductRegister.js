@@ -175,6 +175,7 @@ const ProductRegister = () => {
               }
             }
           );
+          alert("상품이 등록되었습니다.");
           console.log("응답 데이터:", response.data);
         } catch (error) {
           console.error("요청 실패:", error);

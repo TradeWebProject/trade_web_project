@@ -54,11 +54,6 @@ const MyProfile = () => {
                         'Content-Type': "multipart/form-data",
                         'Authorization': `Bearer ${token}`,
                     },
-                    // params: {
-                    //     page: 1,
-                    //     size: 8,
-                    //     sort: "desc",
-                    // }
                 });
                 console.log("응답 데이터:", response.data);
                 setResponseUserProfileData(response.data);
@@ -82,6 +77,7 @@ const MyProfile = () => {
             ...prevData,
             userImg: e.target.files[0],
         }));
+        alert("프로필 사진이 변경 되었습니다.");
     };
 
     const handleClicked = (interestId) => {
@@ -119,6 +115,7 @@ const MyProfile = () => {
                 }
             });
             console.log("응답 데이터:", response.data.products);
+            alert("프로필 수정이 완료 되었습니다.");
             const productsArray = response.data.products;
             setResponseData(productsArray);
         } catch (error) {

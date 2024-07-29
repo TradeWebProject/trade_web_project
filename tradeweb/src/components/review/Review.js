@@ -117,6 +117,7 @@ const Review = () => {
         }
       );
       console.log("Review submitted successfully:", response.data);
+      alert("후기가 등록되었습니다.");
     } catch (error) {
       console.error("Error submitting review:", error);
     }
