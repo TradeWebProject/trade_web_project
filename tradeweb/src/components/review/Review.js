@@ -206,10 +206,10 @@ const Review = () => {
                 ))}
               </div>
             </ReviewIconWrapper>
-            {/* <AverageText>
+            <AverageText>
               {averageRating} / 5 <p>({totalReviews})</p>
-            </AverageText> */}
-            {/* <StarAverage>{renderStars(parseFloat(averageRating))}</StarAverage> */}
+            </AverageText>
+            <StarAverage>{renderStars(parseFloat(averageRating))}</StarAverage>
             <InputElement
               type="text"
               value={reviewContent}

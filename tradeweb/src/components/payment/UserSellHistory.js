@@ -10,6 +10,7 @@ const UserSellHistory = () => {
     const token = localStorage.getItem("accessToken");
     const userId = localStorage.getItem("userId");
     const [responseData, setResponseData] = useState([]); // 초기값을 빈 배열로 설정
+    const [selledResponseData, setSellectResponseData] = useState([]);
 
     useEffect(() => {
         const apiUrl = `${process.env.REACT_APP_API_URL}purchase/user/${userId}?page=${currentPage}&size=${postsPerPage}&sort=desc`;
@@ -36,6 +37,12 @@ const UserSellHistory = () => {
                 } else {
                     console.error("배열이 아닌 데이터가 반환되었습니다: ", response.data);
                     setResponseData([]); // 안전하게 빈 배열로 초기화
+                }
+
+                for (let i = 0; i <= responseData.lengthl; i++) {
+                    if (userId === responseData[i].userId) {
+                        selledResponseData[i] = responseData[i];
+                    }
                 }
 
             } catch (error) {
@@ -76,19 +83,21 @@ const UserSellHistory = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.isArray(responseData) && responseData.length > 0 ? (
-                            responseData.map((data, index) => (
+                        {selledResponseData && selledResponseData.length > 0 ? (
+                            selledResponseData.map((item, index) => (
                                 <tr key={index}>
-                                    <TableTd><img src={data.imageUrl} alt="product" /></TableTd>
-                                    <TableTd>{data.productName}</TableTd>
-                                    <TableTd>{data.price}</TableTd>
-                                    <TableTd>{data.sellerNickname}</TableTd>
+                                    <TableTd><TableRowImage src={`${process.env.REACT_APP_IMAGE_URL}${item.imageUrl}`}/></TableTd>
+                                     {/* <TableTd><TableRowImage src={`${item.imageUrl}`}/></TableTd> */}
+                                    {/* <TableTd><TableRowImage src={item.imageUrl} alt="product" width={20}/></TableTd> */}
+                                    <TableTd>{item.productName}</TableTd>
+                                    <TableTd>{item.price}</TableTd>
+                                    <TableTd>{item.sellerNickname}</TableTd>
                                 </tr>
                             ))
                         ) : (
-                            <tr>
-                                <TableTd colSpan={4}>데이터가 없습니다.</TableTd>
-                            </tr>
+                        <tr>
+                            <TableTd colSpan={4}>데이터가 없습니다.</TableTd>
+                        </tr>
                         )}
                     </tbody>
                 </Table>
@@ -126,6 +135,12 @@ const TableTh = styled.th`
     background: #42444e;
     color: #fff;
     text-align: center;
+
+`;
+
+const TableRowImage = styled.img`
+    width: 200px;
+    height: 200px;
 `;
 
 const TableTd = styled.td`

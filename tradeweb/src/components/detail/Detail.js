@@ -6,13 +6,14 @@ import profile from "../../assets/profile.svg";
 import rightarrow from "../../assets/rightarrow.svg";
 import ChatList from "../chatlist/ChatList";
 import { theme } from "../../styles/theme";
-import { FaRegStar } from "react-icons/fa";
-import { MdStar, MdOutlineStar } from "react-icons/md";
+import { MdOutlineStar } from "react-icons/md";
 import { useParams, useNavigate } from "react-router-dom";
+import ReviewForm from "../review/ReviewForm"; // 경로 수정
 
 const Detail = () => {
   const loader = useRef(null);
   const [isChatVisible, setChatVisible] = useState(false);
+  const [isReviewVisible, setReviewVisible] = useState(false); // ReviewForm 표시 여부를 관리하는 상태 추가
   const [isLiked, setLiked] = useState(false);
   const [data, setData] = useState(null);
   const [hasBuyUserId, setHasBuyUserId] = useState(false);
@@ -36,7 +37,7 @@ const Detail = () => {
         );
         setData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("데이터를 가져오는 중 오류 발생:", error);
       }
 
       try {
@@ -55,7 +56,7 @@ const Detail = () => {
         setHasBuyUserId(hasUserId);
         setLiked(hasUserId);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("데이터를 가져오는 중 오류 발생:", error);
       }
     };
 
@@ -83,13 +84,13 @@ const Detail = () => {
 
       setChatVisible(!isChatVisible);
     } catch (error) {
-      // 요청이 실패했을 때의 처리
-      console.error("Error:", error);
+      console.error("오류 발생:", error);
     }
   };
 
   const userInfoClick = () => {
-    navigate(`/review/${productId}/${productName}`);
+    // ReviewForm의 표시 상태를 토글합니다
+    setReviewVisible((prev) => !prev);
   };
 
   const closeChat = () => {
@@ -110,12 +111,12 @@ const Detail = () => {
         }
       );
     } catch (error) {
-      console.error("Error liking product:", error);
+      console.error("상품 좋아요 오류 발생:", error);
     }
   };
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <div>로딩 중...</div>;
   }
 
   const {
@@ -197,6 +198,16 @@ const Detail = () => {
         onClose={closeChat}
         productName={productName}
       />
+
+      {/* ReviewForm 컴포넌트를 조건부로 렌더링 */}
+      {isReviewVisible && (
+        <ReviewForm
+          productId={productId}
+          productName={productName}
+          token={token}
+          fetchReviews={() => console.log("리뷰를 가져오는 중")} // 이 부분은 fetchReviews를 구현하여 실제 리뷰를 불러올 때 사용합니다.
+        />
+      )}
     </Wrapper>
   );
 };
@@ -293,18 +304,18 @@ const Price = styled.div`
   margin-bottom: 20px;
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  z-index: 2;
+`;
+
 const HeartIcon = styled.div`
   font-size: 25px;
   margin-right: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
-`;
-
-const Buttons = styled.div`
-  display: flex;
-  align-items: center;
-  z-index: 2;
 `;
 
 const Button = styled.button`
