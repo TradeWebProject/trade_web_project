@@ -52,8 +52,12 @@ const ProductModify = () => {
                 ).then(function (response) {
                     console.log("응답 데이터:", response.data);
                     setProductData(response.data);
+                    setProductName(response.data.productName);
                     setFilesArray(response.data.imagePathUrl);
                     setDescription(response.data.description);
+                    setPrice(response.data.price);
+                    setStartDate(response.data.startDate);
+                    setEndDate(response.data.endDate);
                     console.log("files: ", filesArray);
                     prevFilesLength =  response.data.imagePaths.length;
                     setServerFileLength(prevFilesLength);
@@ -67,14 +71,9 @@ const ProductModify = () => {
         get();
     }, [productId]);
 
-    // const onChange = (e) => {
-    //     setInputs((prevData) => ({
-    //         ...prevData,
-    //         name: e.target.value,
-    //     }))
-    //     setIsInputChanged(true);
-    //     setButtonName("수정");
-    // };
+    useEffect(() => {
+
+    })
 
     const fileInputRef = useRef(null);
     const maxfiles = 10;
@@ -186,21 +185,17 @@ const ProductModify = () => {
     };
 
        
-       const renderfiles = () => {
-           
-           console.log("filesArray: " , filesArray);
-           console.log("filesArray.length: " , filesArray.length);
-           prevFilesLength = filesArray.length;
-           console.log("서버에서 가져온 파일 개수: ",serverFileLength);
+    const renderfiles = () => {
+        prevFilesLength = filesArray.length;
         return filesArray.map((imageFile, index) => (
            <ImagePreview key={index}>
              {(index < serverFileLength)  ? <img src={`${process.env.REACT_APP_IMAGE_URL}${imageFile}`} alt={`Uploaded file ${index}`} /> :  <img src={imageFile} alt={`Uploaded file ${index}`} />}    
             <DeleteButton onClick={() => handleDeleteImage(index)} />
           </ImagePreview>
         ));
-      };
+    };
 
-      const handleDeleteImage = (index) => {
+    const handleDeleteImage = (index) => {
         const newFiles = [...filesArray];
         console.log("1. : " + newFiles);
         const newRawFiles = [...rawFiles]; // rawFiles 복사
@@ -209,14 +204,13 @@ const ProductModify = () => {
         newRawFiles.splice(index, 1); // rawFiles에서도 삭제
         setFilesArray(newFiles); // 파일 상태 업데이트
         setUpdatedFiles(newRawFiles); // rawFiles 상태 업데이트
-      };
+    };
 
       const onClickCancelButton = () => {
         navigate("/my-page");
       }
 
       const onClickUpdateButton = () => {
-        console.log("여기");
         try {
             
             const form = new FormData();
@@ -244,6 +238,7 @@ const ProductModify = () => {
                       }
             ).then(function (response) {
                 console.log("응답 데이터:", response.data);
+                alert("상품이 수정되었습니다.");
             })
            
         } catch (error) {
@@ -261,21 +256,21 @@ const ProductModify = () => {
             <SubContentWrapper>
                 <ProductNameWrapper>
                     <ProductNameElement>상품명:</ProductNameElement>
-                    <ProductNameInput type="text" name="productName"  value={produtData.productName} onChange={(e) => setProductName(e.target.value)}/>
+                    <ProductNameInput type="text" name="productName"  value={productName} onChange={(e) => setProductName(e.target.value)}/>
                 </ProductNameWrapper>
                 <ProductNameWrapper>
                     <ProductNameElement>가격:</ProductNameElement>
-                    <ProductNameInput type="text" name="price" value={produtData.price}  onChange={(e) => setPrice(e.target.value)}/>
+                    <ProductNameInput type="text" name="price" value={price}  onChange={(e) => setPrice(e.target.value)}/>
                 </ProductNameWrapper>
                 <InnerWrapper>
                     <ProductSellDateWrapper>
                         <SellStartDateWrapper>
                                 <DateStartText>판매 시작일:</DateStartText>
-                                <StartDateInput type="date" name="startDate" value={produtData.startDate}  onChange={(e) => setStartDate(e.target.value)}/>
+                                <StartDateInput type="date" name="startDate" value={startDate}  onChange={(e) => setStartDate(e.target.value)}/>
                         </SellStartDateWrapper>
                         <SellEndDateWrapper>
                                 <DateStartText>판매 종료일:</DateStartText>
-                                <EndDateInput type="date" name="endDate" value={produtData.endDate}  onChange={(e) => setEndDate(e.target.value)}/>
+                                <EndDateInput type="date" name="endDate" value={endDate}  onChange={(e) => setEndDate(e.target.value)}/>
                         </SellEndDateWrapper>
                     </ProductSellDateWrapper>
                     <ProductSellDateWrapper>
@@ -323,7 +318,7 @@ const ProductModify = () => {
                          ref={quillRef} 
                          placeholder="상품에 대한 상세설명을 작성해주세요!"   
                          name="description" 
-                         value={produtData.description}
+                         value={description}
                          onChange={setDescription}/>
             <ImageWrapper>
                 <SubTitle><h3>이미지</h3></SubTitle>

@@ -55,6 +55,7 @@ const Login = () => {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem("buyer_id", response.data.userId);
         localStorage.setItem("interest", response.data.userInterests);
+        alert("로그인 되었습니다");
         navigate("/");
         window.location.reload();
       } else {
@@ -77,6 +78,7 @@ const Login = () => {
             },
           }
         );
+        alert("회원가입 되었습니다");
         toggleToLogin();
       }
       console.log("응답 데이터:", response.data);
