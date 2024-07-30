@@ -149,14 +149,3 @@ const TableRowImage = styled.img`
     width: 200px;
     height: 200px;
 `;
-
-// const Pagination = styled.div``;
-
-// const PageButton = styled.button`
-//     width: 35px;
-//     height: 35px;
-//     margin-right: 2px;
-//     background-color: white;
-//     color: black;
-//     cursor: pointer;
-// `;
