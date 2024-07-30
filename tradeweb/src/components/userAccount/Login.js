@@ -55,6 +55,7 @@ const Login = () => {
         localStorage.setItem("userId", response.data.userId);
         localStorage.setItem("buyer_id", response.data.userId);
         localStorage.setItem("interest", response.data.userInterests);
+        console.log("accessToken: ", localStorage.getItem("accessToken"));
         alert("로그인 되었습니다");
         navigate("/");
         window.location.reload();

@@ -1,13 +1,15 @@
 import React, { useState, useRef } from 'react';
+import {createPortal} from "react-dom";
 import styled from "styled-components";
 import ReactQuill from "react-quill";
 import axios from "axios";
 import "quill/dist/quill.core.css";
 import DropdownOptions from "../../components/common/DropdownOptions";
+import Modal2 from "../common/modal2/Modal2";
 import plusIcon from "../../assets/plus.svg";
 import deleteIcon from "../../assets/delete.svg";
 
-const ProductRegister = () => {
+const ProductRegister = ({children}) => {
     const [files, setFiles] = useState([]);
     const [rawFiles, setRawFiles] = useState([]);
     const [productName, setProductName] = useState("");
@@ -17,6 +19,8 @@ const ProductRegister = () => {
     const [description, setDescription] = useState("");
     const [productQuality, setProductQuality] = useState("");
     const [category, setCategory] = useState("");
+    const [modalOpen, setModalOpen] = useState(false);
+    const [message, setMessage] = useState("");
 
     const fileInputRef = useRef(null);
     const maxfiles = 10;
@@ -176,12 +180,18 @@ const ProductRegister = () => {
             }
           );
           alert("상품이 등록되었습니다.");
+          setModalOpen(true);
           console.log("응답 데이터:", response.data);
         } catch (error) {
           console.error("요청 실패:", error);
         }
       };
 
+      const handleButtonCloseClick = (value) => {
+        setModalOpen(false)
+        console.log(modalOpen);
+        
+      }
     return (
         <ContentLayout>
             <Wrapper>
@@ -281,6 +291,14 @@ const ProductRegister = () => {
                 </ImageWrapper>
                 <SaveButtonWrapper>
                     <SaveButton onClick={registerProduct}>저장</SaveButton>
+                    {modalOpen && (
+                        <Modal2 onOk={handleButtonCloseClick} onCancel={handleButtonCloseClick} onClose={handleButtonCloseClick} >
+                            <h1>상품 등록이 완료되었습니다.</h1>
+                            <p>상품 목록 탭으로 이동하시겠습니까?</p>
+
+                    </Modal2>
+                    )}
+                    
                 </SaveButtonWrapper>  
             </Wrapper>
         </ContentLayout>
