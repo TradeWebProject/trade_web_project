@@ -26,9 +26,9 @@ const UserPayment = () => {
                             'Authorization': `Bearer ${token}`,
                         },
                         params: {
-                            "page": 1,
-                            "size": 10,
-                            "sort": "desc"
+                            "page": currentPage,
+                            "size": 8,
+                            "sort": "asc"
                         }
                     }
                 ).then(function (response) {
