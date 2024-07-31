@@ -250,11 +250,14 @@ const ProductModify = ({children}) => {
         } catch (error) {
             console.error("요청 실패:", error);
         }
-      };
+      }
 
-      const handleButtonCloseClick = (value) => {
-        setModalOpen(false);
-      } 
+    const handleButtonCloseClick = (value) => {
+        setModalOpen(false)
+        console.log(modalOpen);
+        
+    }
+    
 
     return (
     <ContentLayout>
@@ -364,8 +367,8 @@ const ProductModify = ({children}) => {
             <UpdateButton onClick={onClickUpdateButton}>수정</UpdateButton>
             {modalOpen && (
                         <Modal2 onOk={handleButtonCloseClick} onCancel={handleButtonCloseClick} onClose={handleButtonCloseClick} >
-                            <h1>프로필 정보가 수정되었습니다.</h1>
-                            <p>프로필 페이지로 이동됩니다</p>
+                            <h1>상품 정보가 수정되었습니다.</h1>
+                            <p>상세 페이지로 이동됩니다</p>
 
                     </Modal2>
                     )}
