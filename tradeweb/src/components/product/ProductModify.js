@@ -7,14 +7,14 @@ import axios from "axios";
 import ReactQuill from "react-quill";
 import "quill/dist/quill.core.css";
 import deleteIcon from "../../assets/delete.svg";
+import Modal2 from "../common/modal2/Modal2";
 
-const ProductModify = () => {
+const ProductModify = ({children}) => {
     const navigate = useNavigate();
     const quillRef = useRef();
     const {productId} = useParams();
     const [produtData, setProductData] = useState("");
     const [filesArray, setFilesArray] = useState([]);
-    // const [updateFilesArray, setUpdateFilesArray] = useState([]);
     const [rawFiles, setRawFiles] = useState([]);
     const [isTextChanged, setText] = useState("");
     const [isInputChanged, setIsInputChanged] = useState(false);
@@ -32,6 +32,8 @@ const ProductModify = () => {
     const [category, setCategory] = useState("");
     const [UpdatedFiles, setUpdatedFiles]= useState([]);
     const [hasFile, setHasFile] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [message, setMessage] = useState("");
     const [serverFileLength, setServerFileLength] = useState(0);
     let prevFilesLength = 0;
     let newRawFiles = []; // 새로운 인코딩되지 않은 원본 파일을 저장하는 배열
@@ -228,7 +230,7 @@ const ProductModify = () => {
                 form.append("files", file);
             });
           
-            axios.put(`${process.env.REACT_APP_API_URL}products/${productId}`,
+            const response = axios.put(`${process.env.REACT_APP_API_URL}products/${productId}`,
                       form,
                       {
                         headers: {
@@ -237,14 +239,22 @@ const ProductModify = () => {
                         }
                       }
             ).then(function (response) {
-                console.log("응답 데이터:", response.data);
-                alert("상품이 수정되었습니다.");
+                if (response.status === 200) {
+                    console.log("응답 데이터:", response.data);
+                    alert("상품이 수정되었습니다.");
+                    setModalOpen(true);
+                }
+                
             })
            
         } catch (error) {
             console.error("요청 실패:", error);
         }
       };
+
+      const handleButtonCloseClick = (value) => {
+        setModalOpen(false);
+      } 
 
     return (
     <ContentLayout>
@@ -352,6 +362,13 @@ const ProductModify = () => {
                 <ProductNameInput type="text" onChange={(e) => setPassword(e.target.value)} placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"/>
             </InfoWrapper>
             <UpdateButton onClick={onClickUpdateButton}>수정</UpdateButton>
+            {modalOpen && (
+                        <Modal2 onOk={handleButtonCloseClick} onCancel={handleButtonCloseClick} onClose={handleButtonCloseClick} >
+                            <h1>프로필 정보가 수정되었습니다.</h1>
+                            <p>프로필 페이지로 이동됩니다</p>
+
+                    </Modal2>
+                    )}
         </Wrapper>
     </ContentLayout>
     );
