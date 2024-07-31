@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from "styled-components";
 import axios from "axios";
+import Modal2 from "../common/modal2/Modal2";
 import { Box } from "@mui/material";
 
 import plusIcon from "../../assets/plus.svg";
 import profile from "../../assets/profile.svg";
 
-const MyProfile = () => {
+const MyProfile = ({children}) => {
     const [responseUserProfileData, setResponseUserProfileData] = useState("");
     const [profileUpdateStatus, setProfileUpdateStatus] = useState(false);
     const [userInterestsArray, setUserInterestsArray] = useState([]);
@@ -16,6 +17,8 @@ const MyProfile = () => {
     const [files, setFiles] = useState([]);
     const [rawFiles, setRawFiles] = useState([]);
     const fileInputRef = useRef(null);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [message, setMessage] = useState("");
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -78,6 +81,7 @@ const MyProfile = () => {
             userImg: e.target.files[0],
         }));
         alert("프로필 사진이 변경 되었습니다.");
+       
     };
 
     const handleClicked = (interestId) => {
@@ -116,6 +120,7 @@ const MyProfile = () => {
             });
             console.log("응답 데이터:", response.data.products);
             alert("프로필 수정이 완료 되었습니다.");
+            setModalOpen(true);
             const productsArray = response.data.products;
             setResponseData(productsArray);
         } catch (error) {
@@ -123,6 +128,11 @@ const MyProfile = () => {
         }
     };
 
+    const handleButtonCloseClick = (value) => {
+        setModalOpen(false)
+        console.log(modalOpen);
+        
+    }
     
   
     return (
@@ -219,6 +229,13 @@ const MyProfile = () => {
                         placeholder="프로필 수정을 위해 비밀번호를 입력한 후 프로필 저장버튼을 눌러주세요"
                     />
                 </InfoWrapper>
+                {modalOpen && (
+                        <Modal2 onOk={handleButtonCloseClick} onCancel={handleButtonCloseClick} onClose={handleButtonCloseClick} >
+                            <h1>프로필 정보가 수정되었습니다.</h1>
+                            <p>프로필 페이지로 이동됩니다</p>
+
+                    </Modal2>
+                    )}
             </Container>
         )}
 

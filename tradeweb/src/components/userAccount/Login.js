@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import Modal2 from "../common/modal2/Modal2";
 import { useNavigate } from "react-router-dom";
 import { theme } from "../../styles/theme";
 import {
@@ -37,7 +38,6 @@ const Login = () => {
     interests: [],
   });
   const navigate = useNavigate();
-
   const toggleToLogin = () => setIsLogin(true);
   const toggleToSignup = () => setIsLogin(false);
 
